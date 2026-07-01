@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Modelo de Folder - Exercícios Domiciliares (Atenção Básica)</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
@@ -25,7 +24,13 @@
             .fold-guide::after { display: none !important; }
         }
 
+        /* CORREÇÃO DO PDF: Força o navegador a imprimir imagens de fundo, cores e o símbolo da APS */
         @media print {
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
             @page { size: A4 landscape; margin: 0; }
             body { background: white !important; color: black !important; padding: 0 !important; margin: 0 !important; }
             .no-print { display: none !important; }
@@ -50,7 +55,6 @@
 </head>
 <body class="bg-slate-100 min-h-screen flex flex-col relative">
 
-    <!-- TOOLBAR FLUTUANTE DE FORMATAÇÃO DE TEXTO -->
     <div id="text-toolbar" class="no-print fixed z-[200] hidden bg-slate-900 text-white rounded-lg shadow-xl p-1.5 flex items-center gap-1 opacity-0 transform -translate-y-2 pointer-events-auto">
         <button onclick="formatText('bold')" class="w-8 h-8 flex items-center justify-center rounded hover:bg-slate-700 font-serif font-bold text-base transition-colors" title="Negrito">B</button>
         <div class="w-px h-5 bg-slate-700 mx-1"></div>
@@ -58,17 +62,14 @@
         <button onclick="changeFontSize(1)" class="w-8 h-8 flex items-center justify-center rounded hover:bg-slate-700 font-bold text-lg transition-colors" title="Aumentar Fonte">A+</button>
     </div>
 
-    <!-- TELA DE LOGIN (MODAL) -->
+    <!-- TELA DE LOGIN -->
     <div id="login-modal" class="fixed inset-0 z-[100] bg-slate-900 flex items-center justify-center p-4 transition-opacity duration-300">
         <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 text-center">
             <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
             </div>
             <h2 class="text-2xl font-black text-slate-800 mb-2">Acesso Restrito</h2>
             <p class="text-sm text-slate-500 mb-6">Faça login para editar e salvar os folders da unidade.</p>
-            
             <form id="login-form" class="space-y-4 text-left">
                 <div>
                     <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-1">E-mail</label>
@@ -86,7 +87,7 @@
         </div>
     </div>
 
-    <!-- CABEÇALHO DA FERRAMENTA -->
+    <!-- CABEÇALHO -->
     <header id="main-header" class="no-print bg-slate-900 text-white shadow-md p-4 sticky top-0 z-50 hidden">
         <div class="max-w-7xl mx-auto flex flex-col lg:flex-row justify-between items-center gap-4">
             
@@ -104,11 +105,21 @@
             </div>
 
             <div class="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto flex-wrap justify-center">
-                <div class="flex items-center gap-3 bg-slate-800 px-4 py-2 rounded-xl">
+                
+                <!-- SELETOR DE TEMAS COM OPÇÃO MULTICOLORIDA -->
+                <div class="flex items-center gap-2.5 bg-slate-800 px-3.5 py-2 rounded-xl">
                     <button onclick="mudarTema('sus-blue')" class="w-6 h-6 rounded-full bg-cyan-600 border-2 border-slate-700 hover:scale-110 transition-transform" title="Azul SUS"></button>
                     <button onclick="mudarTema('sus-green')" class="w-6 h-6 rounded-full bg-emerald-600 border-2 border-slate-700 hover:scale-110 transition-transform" title="Verde Saúde"></button>
                     <button onclick="mudarTema('outubro-rosa')" class="w-6 h-6 rounded-full bg-pink-500 border-2 border-slate-700 hover:scale-110 transition-transform" title="Outubro Rosa"></button>
                     <button onclick="mudarTema('novembro-azul')" class="w-6 h-6 rounded-full bg-blue-600 border-2 border-slate-700 hover:scale-110 transition-transform" title="Novembro Azul"></button>
+                    
+                    <div class="w-px h-5 bg-slate-600 mx-1"></div>
+                    
+                    <!-- NOVO BOTÃO DE COR PERSONALIZADA -->
+                    <label class="relative cursor-pointer hover:scale-110 transition-transform" title="Escolher Cor Personalizada">
+                        <div class="w-6 h-6 rounded-full border-2 border-slate-700" style="background: conic-gradient(red, yellow, lime, aqua, blue, magenta, red);"></div>
+                        <input type="color" id="customColorPicker" class="opacity-0 absolute inset-0 w-0 h-0 cursor-pointer">
+                    </label>
                 </div>
 
                 <div class="inline-flex rounded-xl border border-slate-700 bg-slate-950 p-1 w-full sm:w-auto">
@@ -139,11 +150,12 @@
 
     <!-- TEMPLATE PADRÃO DO FOLDER -->
     <template id="default-template">
+        <!-- PÁGINA 1: EXTERNA -->
         <div id="pagina-externa" class="print-page bg-white shadow-xl rounded-3xl mx-auto border border-slate-200 p-6 md:p-8 relative transition-all duration-300">
             <div class="fold-guide fold-left p-4 flex flex-col justify-between h-full bg-slate-50/50 rounded-2xl border border-slate-100">
                 <div>
-                    <div class="theme-badge inline-block text-[10px] font-black px-2.5 py-1 rounded bg-teal-100 text-teal-900 uppercase tracking-widest mb-4" contenteditable="true">Dicas Importantes</div>
-                    <h3 class="text-base font-black theme-text text-teal-700 mb-3 uppercase tracking-tight" contenteditable="true">Preparando o Corpo</h3>
+                    <div class="theme-badge inline-block text-[10px] font-black px-2.5 py-1 rounded uppercase tracking-widest mb-4" contenteditable="true">Dicas Importantes</div>
+                    <h3 class="text-base font-black theme-text mb-3 uppercase tracking-tight" contenteditable="true">Preparando o Corpo</h3>
                     <p class="text-xs text-slate-600 mb-4 leading-relaxed font-medium" contenteditable="true">A prática regular de exercícios em casa melhora flexibilidade, equilíbrio e reduz dores crônicas.</p>
                     
                     <div class="space-y-3">
@@ -170,7 +182,8 @@
                 <div class="text-center">
                     <div class="theme-bg-light p-4 rounded-2xl mb-4 flex justify-center border border-slate-50">
                         <div class="flex items-center gap-2 font-black text-sm tracking-widest text-slate-800">
-                            <svg class="w-6 h-6 text-emerald-600 theme-text-svg" fill="currentColor" viewBox="0 0 24 24">
+                            <!-- ÍCONE APS COM A CLASSE theme-text-svg PARA COLORIR NO PDF -->
+                            <svg class="w-6 h-6 theme-text-svg" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M19 10.5h-5.5V5c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v5.5H5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5h5.5V19c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-5.5H19c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5z"/>
                             </svg>
                             <span contenteditable="true">SUS / APS</span>
@@ -199,7 +212,7 @@
                 </div>
             </div>
 
-            <div class="p-4 flex flex-col justify-between h-full rounded-2xl relative overflow-hidden bg-gradient-to-br from-emerald-50/40 to-white text-center">
+            <div class="p-4 flex flex-col justify-between h-full rounded-2xl relative overflow-hidden bg-gradient-to-br from-slate-50 to-white text-center">
                 <div class="text-right flex justify-end gap-1 mb-2">
                     <span class="w-2.5 h-2.5 rounded-full theme-bg"></span>
                     <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
@@ -221,7 +234,7 @@
                     
                     <h1 class="text-2xl font-black text-slate-800 leading-tight uppercase tracking-tight" contenteditable="true">Mexa-se<br>Com Saúde!</h1>
                     <div class="w-12 h-1.5 theme-bg mx-auto my-4 rounded-full"></div>
-                    <h2 class="text-xs font-black theme-text text-teal-600 uppercase tracking-widest" contenteditable="true">Exercícios Domiciliares</h2>
+                    <h2 class="text-xs font-black theme-text uppercase tracking-widest" contenteditable="true">Exercícios Domiciliares</h2>
                     <p class="text-xs text-slate-500 mt-3 max-w-[220px] mx-auto leading-relaxed" contenteditable="true">Pequenos hábitos, grandes resultados para o seu dia a dia.</p>
                 </div>
 
@@ -232,6 +245,7 @@
             </div>
         </div>
 
+        <!-- PÁGINA 2: INTERNA -->
         <div id="pagina-interna" class="print-page bg-white shadow-xl rounded-3xl mx-auto border border-slate-200 p-4 md:p-6 relative transition-all duration-300 hidden">
             <!-- COLUNA 1 -->
             <div class="fold-guide fold-left p-3 flex flex-col gap-3 h-full bg-slate-50/50 rounded-2xl border border-slate-100">
@@ -241,15 +255,16 @@
                             <span class="w-5 h-5 rounded-full theme-bg text-white font-black text-[10px] flex items-center justify-center shrink-0" contenteditable="true">1</span>
                             <h3 class="text-xs font-black text-slate-800 uppercase tracking-tight leading-tight" contenteditable="true">Pescoço</h3>
                         </div>
-                        <div class="img-upload-area w-full h-[72px] theme-bg-light rounded-xl mb-2 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden" onclick="triggerImageUpload(this, 'rect')">
+                        <!-- ALTURA DA IMAGEM AUMENTADA (h-[100px]) -->
+                        <div class="img-upload-area w-full h-[100px] theme-bg-light rounded-xl mb-2 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden" onclick="triggerImageUpload(this, 'rect')">
                             <div id="container-img-ex1" class="w-full h-full flex items-center justify-center">
-                                <svg class="w-8 h-8 theme-text-svg text-teal-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M10 14h4" /></svg>
+                                <svg class="w-10 h-10 theme-text-svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M10 14h4" /></svg>
                             </div>
                             <div class="absolute inset-0 bg-blue-500/80 hidden group-hover:flex items-center justify-center text-[9px] font-bold text-white uppercase backdrop-blur-sm">📷 Add Foto</div>
                         </div>
-                        <p class="text-[10px] text-slate-700 leading-tight font-medium mb-2" contenteditable="true"><strong>Como fazer:</strong> Incline a cabeça lentamente em direção ao ombro. Mantenha os ombros relaxados.</p>
+                        <p class="text-[10px] text-slate-700 leading-tight font-medium mb-1.5" contenteditable="true"><strong>Como fazer:</strong> Incline a cabeça lentamente em direção ao ombro. Mantenha os ombros relaxados.</p>
                         
-                        <div class="bg-white p-2 rounded-lg shadow-sm border border-slate-200 space-y-1 mb-2">
+                        <div class="bg-white p-2 rounded-lg shadow-sm border border-slate-200 space-y-1 mb-1.5">
                             <div class="flex justify-between text-[9px] border-b border-slate-100 pb-1">
                                 <span class="text-slate-500 font-semibold" contenteditable="true">Séries:</span><span class="font-black text-slate-800" contenteditable="true">3 de 10x</span>
                             </div>
@@ -263,7 +278,7 @@
                     </div>
                 </div>
 
-                <hr class="border-dashed border-slate-200 my-1">
+                <hr class="border-dashed border-slate-200 my-0.5">
 
                 <div class="flex-1 flex flex-col justify-between">
                     <div>
@@ -271,15 +286,15 @@
                             <span class="w-5 h-5 rounded-full theme-bg text-white font-black text-[10px] flex items-center justify-center shrink-0" contenteditable="true">2</span>
                             <h3 class="text-xs font-black text-slate-800 uppercase tracking-tight leading-tight" contenteditable="true">Girar Ombros</h3>
                         </div>
-                        <div class="img-upload-area w-full h-[72px] theme-bg-light rounded-xl mb-2 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden" onclick="triggerImageUpload(this, 'rect')">
+                        <div class="img-upload-area w-full h-[100px] theme-bg-light rounded-xl mb-2 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden" onclick="triggerImageUpload(this, 'rect')">
                             <div id="container-img-ex2" class="w-full h-full flex items-center justify-center">
-                                <svg class="w-8 h-8 theme-text-svg text-teal-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
+                                <svg class="w-10 h-10 theme-text-svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
                             </div>
                             <div class="absolute inset-0 bg-blue-500/80 hidden group-hover:flex items-center justify-center text-[9px] font-bold text-white uppercase backdrop-blur-sm">📷 Add Foto</div>
                         </div>
-                        <p class="text-[10px] text-slate-700 leading-tight font-medium mb-2" contenteditable="true"><strong>Como fazer:</strong> Faça movimentos circulares com os ombros para trás e depois para frente, suavemente.</p>
+                        <p class="text-[10px] text-slate-700 leading-tight font-medium mb-1.5" contenteditable="true"><strong>Como fazer:</strong> Faça movimentos circulares com os ombros para trás e depois para frente, suavemente.</p>
                         
-                        <div class="bg-white p-2 rounded-lg shadow-sm border border-slate-200 space-y-1 mb-2">
+                        <div class="bg-white p-2 rounded-lg shadow-sm border border-slate-200 space-y-1 mb-1.5">
                             <div class="flex justify-between text-[9px] border-b border-slate-100 pb-1">
                                 <span class="text-slate-500 font-semibold" contenteditable="true">Séries:</span><span class="font-black text-slate-800" contenteditable="true">3 de 10x</span>
                             </div>
@@ -302,15 +317,15 @@
                             <span class="w-5 h-5 rounded-full theme-bg text-white font-black text-[10px] flex items-center justify-center shrink-0" contenteditable="true">3</span>
                             <h3 class="text-xs font-black text-slate-800 uppercase tracking-tight leading-tight" contenteditable="true">Sentar e Levantar</h3>
                         </div>
-                        <div class="img-upload-area w-full h-[72px] theme-bg-light rounded-xl mb-2 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden" onclick="triggerImageUpload(this, 'rect')">
+                        <div class="img-upload-area w-full h-[100px] theme-bg-light rounded-xl mb-2 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden" onclick="triggerImageUpload(this, 'rect')">
                             <div id="container-img-ex3" class="w-full h-full flex items-center justify-center">
-                                <svg class="w-8 h-8 theme-text-svg text-teal-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg>
+                                <svg class="w-10 h-10 theme-text-svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg>
                             </div>
                             <div class="absolute inset-0 bg-blue-500/80 hidden group-hover:flex items-center justify-center text-[9px] font-bold text-white uppercase backdrop-blur-sm">📷 Add Foto</div>
                         </div>
-                        <p class="text-[10px] text-slate-700 leading-tight font-medium mb-2" contenteditable="true"><strong>Como fazer:</strong> Cruze os braços à frente do peito. Suba e desça da cadeira devagar usando a força das pernas.</p>
+                        <p class="text-[10px] text-slate-700 leading-tight font-medium mb-1.5" contenteditable="true"><strong>Como fazer:</strong> Cruze os braços à frente do peito. Suba e desça da cadeira devagar usando a força das pernas.</p>
                         
-                        <div class="bg-white p-2 rounded-lg shadow-sm border border-slate-200 space-y-1 mb-2">
+                        <div class="bg-white p-2 rounded-lg shadow-sm border border-slate-200 space-y-1 mb-1.5">
                             <div class="flex justify-between text-[9px] border-b border-slate-100 pb-1">
                                 <span class="text-slate-500 font-semibold" contenteditable="true">Séries:</span><span class="font-black text-slate-800" contenteditable="true">3 de 10x</span>
                             </div>
@@ -324,7 +339,7 @@
                     </div>
                 </div>
 
-                <hr class="border-dashed border-slate-200 my-1">
+                <hr class="border-dashed border-slate-200 my-0.5">
 
                 <div class="flex-1 flex flex-col justify-between">
                     <div>
@@ -332,15 +347,15 @@
                             <span class="w-5 h-5 rounded-full theme-bg text-white font-black text-[10px] flex items-center justify-center shrink-0" contenteditable="true">4</span>
                             <h3 class="text-xs font-black text-slate-800 uppercase tracking-tight leading-tight" contenteditable="true">Esticar o Joelho</h3>
                         </div>
-                        <div class="img-upload-area w-full h-[72px] theme-bg-light rounded-xl mb-2 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden" onclick="triggerImageUpload(this, 'rect')">
+                        <div class="img-upload-area w-full h-[100px] theme-bg-light rounded-xl mb-2 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden" onclick="triggerImageUpload(this, 'rect')">
                             <div id="container-img-ex4" class="w-full h-full flex items-center justify-center">
-                                <svg class="w-8 h-8 theme-text-svg text-teal-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                                <svg class="w-10 h-10 theme-text-svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                             </div>
                             <div class="absolute inset-0 bg-blue-500/80 hidden group-hover:flex items-center justify-center text-[9px] font-bold text-white uppercase backdrop-blur-sm">📷 Add Foto</div>
                         </div>
-                        <p class="text-[10px] text-slate-700 leading-tight font-medium mb-2" contenteditable="true"><strong>Como fazer:</strong> Sentado, estique uma perna até o joelho ficar reto. Segure e desça devagar.</p>
+                        <p class="text-[10px] text-slate-700 leading-tight font-medium mb-1.5" contenteditable="true"><strong>Como fazer:</strong> Sentado, estique uma perna até o joelho ficar reto. Segure e desça devagar.</p>
                         
-                        <div class="bg-white p-2 rounded-lg shadow-sm border border-slate-200 space-y-1 mb-2">
+                        <div class="bg-white p-2 rounded-lg shadow-sm border border-slate-200 space-y-1 mb-1.5">
                             <div class="flex justify-between text-[9px] border-b border-slate-100 pb-1">
                                 <span class="text-slate-500 font-semibold" contenteditable="true">Séries:</span><span class="font-black text-slate-800" contenteditable="true">3 de 10x</span>
                             </div>
@@ -363,15 +378,15 @@
                             <span class="w-5 h-5 rounded-full theme-bg text-white font-black text-[10px] flex items-center justify-center shrink-0" contenteditable="true">5</span>
                             <h3 class="text-xs font-black text-slate-800 uppercase tracking-tight leading-tight" contenteditable="true">Panturrilha</h3>
                         </div>
-                        <div class="img-upload-area w-full h-[72px] theme-bg-light rounded-xl mb-2 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden" onclick="triggerImageUpload(this, 'rect')">
+                        <div class="img-upload-area w-full h-[100px] theme-bg-light rounded-xl mb-2 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden" onclick="triggerImageUpload(this, 'rect')">
                             <div id="container-img-ex5" class="w-full h-full flex items-center justify-center">
-                                <svg class="w-8 h-8 theme-text-svg text-teal-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 11c0 3.517-1.009 6.799-2.753 9.571" /></svg>
+                                <svg class="w-10 h-10 theme-text-svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 11c0 3.517-1.009 6.799-2.753 9.571" /></svg>
                             </div>
                             <div class="absolute inset-0 bg-blue-500/80 hidden group-hover:flex items-center justify-center text-[9px] font-bold text-white uppercase backdrop-blur-sm">📷 Add Foto</div>
                         </div>
-                        <p class="text-[10px] text-slate-700 leading-tight font-medium mb-2" contenteditable="true"><strong>Como fazer:</strong> Perto da parede para apoio, fique na ponta dos pés o máximo que conseguir e desça o calcanhar.</p>
+                        <p class="text-[10px] text-slate-700 leading-tight font-medium mb-1.5" contenteditable="true"><strong>Como fazer:</strong> Perto da parede para apoio, fique na ponta dos pés o máximo que conseguir e desça o calcanhar.</p>
                         
-                        <div class="bg-white p-2 rounded-lg shadow-sm border border-slate-200 space-y-1 mb-2">
+                        <div class="bg-white p-2 rounded-lg shadow-sm border border-slate-200 space-y-1 mb-1.5">
                             <div class="flex justify-between text-[9px] border-b border-slate-100 pb-1">
                                 <span class="text-slate-500 font-semibold" contenteditable="true">Séries:</span><span class="font-black text-slate-800" contenteditable="true">3 de 10x</span>
                             </div>
@@ -385,7 +400,7 @@
                     </div>
                 </div>
 
-                <hr class="border-dashed border-slate-200 my-1">
+                <hr class="border-dashed border-slate-200 my-0.5">
 
                 <div class="flex-1 flex flex-col justify-between">
                     <div>
@@ -393,15 +408,15 @@
                             <span class="w-5 h-5 rounded-full theme-bg text-white font-black text-[10px] flex items-center justify-center shrink-0" contenteditable="true">6</span>
                             <h3 class="text-xs font-black text-slate-800 uppercase tracking-tight leading-tight" contenteditable="true">Caminhada Lateral</h3>
                         </div>
-                        <div class="img-upload-area w-full h-[72px] theme-bg-light rounded-xl mb-2 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden" onclick="triggerImageUpload(this, 'rect')">
+                        <div class="img-upload-area w-full h-[100px] theme-bg-light rounded-xl mb-2 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden" onclick="triggerImageUpload(this, 'rect')">
                             <div id="container-img-ex6" class="w-full h-full flex items-center justify-center">
-                                <svg class="w-8 h-8 theme-text-svg text-teal-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 8h16M4 16h16" /></svg>
+                                <svg class="w-10 h-10 theme-text-svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 8h16M4 16h16" /></svg>
                             </div>
                             <div class="absolute inset-0 bg-blue-500/80 hidden group-hover:flex items-center justify-center text-[9px] font-bold text-white uppercase backdrop-blur-sm">📷 Add Foto</div>
                         </div>
-                        <p class="text-[10px] text-slate-700 leading-tight font-medium mb-2" contenteditable="true"><strong>Como fazer:</strong> Apoiando as mãos na beirada de uma mesa ou balcão, dê passos para a lateral.</p>
+                        <p class="text-[10px] text-slate-700 leading-tight font-medium mb-1.5" contenteditable="true"><strong>Como fazer:</strong> Apoiando as mãos na beirada de uma mesa ou balcão, dê passos para a lateral.</p>
                         
-                        <div class="bg-white p-2 rounded-lg shadow-sm border border-slate-200 space-y-1 mb-2">
+                        <div class="bg-white p-2 rounded-lg shadow-sm border border-slate-200 space-y-1 mb-1.5">
                             <div class="flex justify-between text-[9px] border-b border-slate-100 pb-1">
                                 <span class="text-slate-500 font-semibold" contenteditable="true">Séries:</span><span class="font-black text-slate-800" contenteditable="true">3 de 10x</span>
                             </div>
@@ -447,11 +462,7 @@
             toolbar.classList.remove('hidden');
             toolbar.style.top = `${Math.max(10, rect.top - 45)}px`; 
             toolbar.style.left = `${rect.left + (rect.width/2) - (toolbar.offsetWidth/2)}px`;
-            
-            setTimeout(() => {
-                toolbar.classList.remove('opacity-0', '-translate-y-2');
-                toolbar.classList.add('opacity-100', 'translate-y-0');
-            }, 10);
+            setTimeout(() => { toolbar.classList.remove('opacity-0', '-translate-y-2'); toolbar.classList.add('opacity-100', 'translate-y-0'); }, 10);
         }
 
         function hideToolbar() {
@@ -460,10 +471,7 @@
             setTimeout(() => toolbar.classList.add('hidden'), 200);
         }
 
-        function formatText(command) {
-            document.execCommand(command, false, null);
-            if (activeEditable) activeEditable.focus();
-        }
+        function formatText(command) { document.execCommand(command, false, null); if (activeEditable) activeEditable.focus(); }
 
         function changeFontSize(step) {
             if (!activeEditable) return;
@@ -493,8 +501,7 @@
                     imgObj.onload = function() {
                         const canvas = document.createElement('canvas');
                         const MAX_WIDTH = 800; 
-                        let width = imgObj.width;
-                        let height = imgObj.height;
+                        let width = imgObj.width, height = imgObj.height;
                         if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
                         canvas.width = width; canvas.height = height;
                         const ctx = canvas.getContext('2d');
@@ -544,16 +551,44 @@
         };
 
         window.temaAtual = 'sus-green'; 
+        window.customColorHex = null;
 
-        function mudarTema(nomeTema) {
+        // Lógica do Color Picker Nativo
+        document.getElementById('customColorPicker').addEventListener('input', (e) => {
+            mudarTema('custom', e.target.value);
+        });
+
+        function mudarTema(nomeTema, customHex = null) {
             window.temaAtual = nomeTema;
-            const configs = configuracoesTemas[nomeTema];
             
-            document.querySelectorAll('.theme-bg').forEach(el => { el.classList.remove('bg-cyan-600', 'bg-emerald-600', 'bg-pink-500', 'bg-blue-600'); el.classList.add(configs.bg); });
-            document.querySelectorAll('.theme-text').forEach(el => { el.classList.remove('text-cyan-600', 'text-emerald-600', 'text-pink-500', 'text-blue-600', 'text-teal-700'); el.classList.add(configs.text); });
-            document.querySelectorAll('.theme-text-svg').forEach(el => { el.classList.remove('text-cyan-600', 'text-emerald-600', 'text-pink-500', 'text-blue-600'); el.classList.add(configs.text); });
-            document.querySelectorAll('.theme-badge').forEach(el => { el.className = `theme-badge inline-block text-[10px] font-black px-2.5 py-1 rounded uppercase tracking-widest mb-4 ${configs.badgeBg} ${configs.badgeText}`; });
-            document.querySelectorAll('.theme-bg-light').forEach(el => { el.classList.remove('bg-cyan-50', 'bg-emerald-50/40', 'bg-pink-50/40', 'bg-blue-50/40'); el.classList.add(configs.lightBg); });
+            // 1. Limpa os estilos inlines caso o usuário saia do modo "Custom"
+            document.querySelectorAll('.theme-bg, .theme-text, .theme-text-svg, .theme-badge, .theme-bg-light').forEach(el => {
+                el.style.backgroundColor = '';
+                el.style.color = '';
+            });
+
+            if (nomeTema === 'custom') {
+                window.customColorHex = customHex;
+                // Aplica a cor escolhida via Inline Styles para sobrescrever o Tailwind
+                document.querySelectorAll('.theme-bg').forEach(el => { el.style.backgroundColor = customHex; });
+                document.querySelectorAll('.theme-text').forEach(el => { el.style.color = customHex; });
+                document.querySelectorAll('.theme-text-svg').forEach(el => { el.style.color = customHex; });
+                document.querySelectorAll('.theme-badge').forEach(el => { 
+                    el.style.backgroundColor = customHex + '20'; // cor + 20 de opacidade
+                    el.style.color = customHex; 
+                });
+                document.querySelectorAll('.theme-bg-light').forEach(el => { 
+                    el.style.backgroundColor = customHex + '15'; // cor + 15 de opacidade
+                });
+            } else {
+                window.customColorHex = null;
+                const configs = configuracoesTemas[nomeTema];
+                document.querySelectorAll('.theme-bg').forEach(el => { el.classList.remove('bg-cyan-600', 'bg-emerald-600', 'bg-pink-500', 'bg-blue-600'); el.classList.add(configs.bg); });
+                document.querySelectorAll('.theme-text').forEach(el => { el.classList.remove('text-cyan-600', 'text-emerald-600', 'text-pink-500', 'text-blue-600', 'text-teal-700'); el.classList.add(configs.text); });
+                document.querySelectorAll('.theme-text-svg').forEach(el => { el.classList.remove('text-cyan-600', 'text-emerald-600', 'text-pink-500', 'text-blue-600'); el.classList.add(configs.text); });
+                document.querySelectorAll('.theme-badge').forEach(el => { el.className = `theme-badge inline-block text-[10px] font-black px-2.5 py-1 rounded uppercase tracking-widest mb-4 ${configs.badgeBg} ${configs.badgeText}`; });
+                document.querySelectorAll('.theme-bg-light').forEach(el => { el.classList.remove('bg-cyan-50', 'bg-emerald-50/40', 'bg-pink-50/40', 'bg-blue-50/40'); el.classList.add(configs.lightBg); });
+            }
         }
 
         function renovarIdsDinamicos() {
@@ -583,7 +618,6 @@
 
         const DADOS_DOC_ID = "folder_padrao";
 
-        // AUTENTICAÇÃO COM E-MAIL E SENHA
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 document.getElementById('login-modal').classList.add('hidden');
@@ -614,7 +648,6 @@
 
         document.getElementById('btn-logout').addEventListener('click', () => signOut(auth));
 
-        // RESETAR PADRÃO
         document.getElementById('btn-reset').addEventListener('click', () => {
             if(confirm("ATENÇÃO: Deseja apagar todas as edições e fotos e carregar o modelo de fábrica?")) {
                 document.getElementById('main-content-container').innerHTML = document.getElementById('default-template').innerHTML;
@@ -625,7 +658,6 @@
             }
         });
 
-        // SALVAMENTO NA NUVEM
         window.salvarProgresso = async function() {
             if (!auth.currentUser || !db) return;
             const btn = document.getElementById('btn-salvar');
@@ -647,6 +679,7 @@
 
             const dataToSave = {
                 tema: window.temaAtual || 'sus-green',
+                customColor: window.customColorHex || null,
                 textos: textos,
                 imagens: imagens,
                 atualizadoEm: new Date().toISOString()
@@ -663,21 +696,25 @@
             }
         };
 
-        // CARREGAMENTO DA NUVEM
         async function carregarProgresso() {
             try {
-                // 1º PASSO CORRIGIDO: Sempre desenha o molde vazio na tela primeiro!
                 document.getElementById('main-content-container').innerHTML = document.getElementById('default-template').innerHTML;
                 renovarIdsDinamicos();
 
-                // 2º PASSO: Vai no banco checar se tem dados
                 const docSnap = await getDoc(doc(db, "folders", DADOS_DOC_ID));
                 
                 if (docSnap.exists()) {
                     const data = docSnap.data();
                     
-                    if (data.tema) mudarTema(data.tema);
-                    else mudarTema('sus-green');
+                    if (data.tema) {
+                        if (data.tema === 'custom' && data.customColor) {
+                            mudarTema('custom', data.customColor);
+                        } else {
+                            mudarTema(data.tema);
+                        }
+                    } else {
+                        mudarTema('sus-green');
+                    }
                     
                     if (data.textos) {
                         for (const [id, config] of Object.entries(data.textos)) {
