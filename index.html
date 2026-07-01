@@ -4,17 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Modelo de Folder - Exercícios Domiciliares (Atenção Básica)</title>
-    <!-- Tailwind CSS para visual moderno -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
         
-        body {
-            font-family: 'Inter', sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
+        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
 
-        /* Simulação das dobras do folder na tela (Apenas para telas grandes) */
         @media (min-width: 768px) {
             .fold-guide { position: relative; }
             .fold-guide::after { content: ''; position: absolute; top: 0; bottom: 0; width: 1px; border-left: 1px dashed rgba(156, 163, 175, 0.4); pointer-events: none; }
@@ -23,14 +18,12 @@
             .print-page { width: 100%; aspect-ratio: 297/210; display: grid !important; grid-template-columns: repeat(3, 1fr) !important; gap: 1.5rem !important; }
         }
 
-        /* No celular: visualização em formato de lista confortável para edição */
         @media (max-width: 767px) {
             .print-page:not(.hidden) { display: flex !important; flex-direction: column !important; gap: 2rem !important; height: auto !important; aspect-ratio: auto !important; padding: 1.5rem !important; }
             .print-page.hidden { display: none !important; }
             .fold-guide::after { display: none !important; }
         }
 
-        /* Estilos de Impressão Otimizados */
         @media print {
             @page { size: A4 landscape; margin: 0; }
             body { background: white !important; color: black !important; padding: 0 !important; margin: 0 !important; }
@@ -40,26 +33,22 @@
             [contenteditable="true"] { outline: none !important; border: none !important; background-color: transparent !important; }
         }
 
-        /* Estilo para elementos clicáveis e editáveis */
         [contenteditable="true"] { transition: all 0.2s; cursor: text; border-radius: 6px; padding: 2px 4px; }
         [contenteditable="true"]:hover { background-color: rgba(239, 246, 255, 0.9); outline: 1.5px dashed #3b82f6; }
         [contenteditable="true"]:focus { background-color: #ffffff; outline: 2px solid #2563eb; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3); }
 
-        /* Estilos e animações do Toolbar de Texto */
         #text-toolbar { transition: opacity 0.2s, transform 0.2s; }
         #text-toolbar::after {
             content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
             border-width: 5px; border-style: solid; border-color: #0f172a transparent transparent transparent;
         }
 
-        /* Área de Upload */
         .img-upload-area { position: relative; cursor: pointer; transition: all 0.2s; }
         .img-upload-area:hover { outline: 2px dashed #3b82f6; }
     </style>
 </head>
 <body class="bg-slate-100 min-h-screen flex flex-col relative">
 
-    <!-- TOOLBAR FLUTUANTE DE FORMATAÇÃO DE TEXTO -->
     <div id="text-toolbar" class="no-print fixed z-[200] hidden bg-slate-900 text-white rounded-lg shadow-xl p-1.5 flex items-center gap-1 opacity-0 transform -translate-y-2 pointer-events-auto">
         <button onclick="formatText('bold')" class="w-8 h-8 flex items-center justify-center rounded hover:bg-slate-700 font-serif font-bold text-base transition-colors" title="Negrito">B</button>
         <div class="w-px h-5 bg-slate-700 mx-1"></div>
@@ -67,7 +56,6 @@
         <button onclick="changeFontSize(1)" class="w-8 h-8 flex items-center justify-center rounded hover:bg-slate-700 font-bold text-lg transition-colors" title="Aumentar Fonte">A+</button>
     </div>
 
-    <!-- TELA DE LOGIN (MODAL) -->
     <div id="login-modal" class="fixed inset-0 z-[100] bg-slate-900 flex items-center justify-center p-4 transition-opacity duration-300">
         <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 text-center">
             <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -95,11 +83,9 @@
         </div>
     </div>
 
-    <!-- CABEÇALHO DA FERRAMENTA -->
     <header id="main-header" class="no-print bg-slate-900 text-white shadow-md p-4 sticky top-0 z-50 hidden">
         <div class="max-w-7xl mx-auto flex flex-col lg:flex-row justify-between items-center gap-4">
             
-            <!-- Logo e Usuário -->
             <div class="flex items-center gap-3 w-full lg:w-auto">
                 <div class="p-2.5 bg-emerald-500 rounded-xl text-slate-900 shrink-0">
                     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
@@ -113,10 +99,7 @@
                 </div>
             </div>
 
-            <!-- Controles -->
             <div class="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto flex-wrap justify-center">
-                
-                <!-- Temas de Cores -->
                 <div class="flex items-center gap-3 bg-slate-800 px-4 py-2 rounded-xl">
                     <button onclick="mudarTema('sus-blue')" class="w-6 h-6 rounded-full bg-cyan-600 border-2 border-slate-700 hover:scale-110 transition-transform" title="Azul SUS"></button>
                     <button onclick="mudarTema('sus-green')" class="w-6 h-6 rounded-full bg-emerald-600 border-2 border-slate-700 hover:scale-110 transition-transform" title="Verde Saúde"></button>
@@ -124,18 +107,16 @@
                     <button onclick="mudarTema('novembro-azul')" class="w-6 h-6 rounded-full bg-blue-600 border-2 border-slate-700 hover:scale-110 transition-transform" title="Novembro Azul"></button>
                 </div>
 
-                <!-- Abas da Tela -->
                 <div class="inline-flex rounded-xl border border-slate-700 bg-slate-950 p-1 w-full sm:w-auto">
                     <button onclick="mostrarPagina('externa')" id="btn-ext" class="flex-1 px-4 py-2 rounded-lg text-xs font-bold uppercase bg-emerald-500 text-slate-950 transition-all">Capa/Aba</button>
                     <button onclick="mostrarPagina('interna')" id="btn-int" class="flex-1 px-4 py-2 rounded-lg text-xs font-bold uppercase text-slate-400 transition-all">6 Exercícios</button>
                 </div>
 
-                <!-- Botões de Ação -->
                 <div class="flex gap-2 w-full sm:w-auto">
                     <button id="btn-reset" class="flex-1 sm:flex-none bg-slate-700 hover:bg-slate-600 text-white font-bold px-3 py-2 rounded-xl text-xs uppercase tracking-wider transition-all" title="Restaurar Padrão">
                         🔄 Resetar
                     </button>
-                    <button id="btn-salvar" onclick="salvarProgresso()" class="flex-1 sm:flex-none bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold px-4 py-2 rounded-xl text-xs md:text-sm uppercase tracking-wider flex items-center justify-center gap-1 shadow-lg transition-all">
+                    <button id="btn-salvar" onclick="window.salvarProgresso()" class="flex-1 sm:flex-none bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold px-4 py-2 rounded-xl text-xs md:text-sm uppercase tracking-wider flex items-center justify-center gap-1 shadow-lg transition-all">
                         💾 Salvar
                     </button>
                     <button onclick="abrirImpressao()" class="flex-1 sm:flex-none bg-blue-600 hover:bg-blue-500 text-white font-bold px-4 py-2 rounded-xl text-xs md:text-sm uppercase tracking-wider shadow-lg transition-all">
@@ -146,25 +127,13 @@
         </div>
     </header>
 
-    <!-- ÁREA DE RECOMENDAÇÃO MOBILE -->
-    <section class="no-print bg-amber-50 border-b border-amber-200 text-amber-800 p-4 text-center text-xs md:text-sm font-semibold shadow-inner">
-        <span class="inline-block mr-1">📱</span> 
-        No celular, os textos ficam um embaixo do outro. <strong>Toque em qualquer texto para editá-lo ou alterar o tamanho!</strong>
-    </section>
-
-    <!-- ÁREA PRINCIPAL DO FOLDER -->
     <main id="main-content" class="flex-1 max-w-7xl mx-auto w-full p-4 md:p-8 flex flex-col justify-center items-center gap-6 hidden">
         <div class="w-full max-w-5xl" id="main-content-container">
-            <!-- O conteúdo será injetado aqui via JS -->
-        </div>
+            </div>
     </main>
 
-    <!-- TEMPLATE PADRÃO DO FOLDER -->
     <template id="default-template">
-        <!-- ====== PÁGINA 1: FACE EXTERNA ====== -->
         <div id="pagina-externa" class="print-page bg-white shadow-xl rounded-3xl mx-auto border border-slate-200 p-6 md:p-8 relative transition-all duration-300">
-            
-            <!-- Coluna 1: Aba -->
             <div class="fold-guide fold-left p-4 flex flex-col justify-between h-full bg-slate-50/50 rounded-2xl border border-slate-100">
                 <div>
                     <div class="theme-badge inline-block text-[10px] font-black px-2.5 py-1 rounded bg-teal-100 text-teal-900 uppercase tracking-widest mb-4" contenteditable="true">Dicas Importantes</div>
@@ -173,15 +142,15 @@
                     
                     <div class="space-y-3">
                         <div class="flex gap-2.5 items-start">
-                            <span class="text-emerald-500 font-black text-sm">✓</span>
+                            <span class="text-emerald-500 font-black text-sm" contenteditable="true">✓</span>
                             <p class="text-xs text-slate-600 leading-tight" contenteditable="true"><strong>Roupas Leves:</strong> Use tecidos confortáveis e faça os exercícios de tênis ou descalço em local seguro.</p>
                         </div>
                         <div class="flex gap-2.5 items-start">
-                            <span class="text-emerald-500 font-black text-sm">✓</span>
+                            <span class="text-emerald-500 font-black text-sm" contenteditable="true">✓</span>
                             <p class="text-xs text-slate-600 leading-tight" contenteditable="true"><strong>Hidratação:</strong> Beba pequenos goles de água antes e durante a rotina.</p>
                         </div>
                         <div class="flex gap-2.5 items-start">
-                            <span class="text-emerald-500 font-black text-sm">✓</span>
+                            <span class="text-emerald-500 font-black text-sm" contenteditable="true">✓</span>
                             <p class="text-xs text-slate-600 leading-tight" contenteditable="true"><strong>Sinais de Alerta:</strong> Pare se sentir tontura, falta de ar ou dores articulares agudas.</p>
                         </div>
                     </div>
@@ -191,12 +160,10 @@
                 </div>
             </div>
 
-            <!-- Coluna 2: Contra-Capa -->
             <div class="fold-guide fold-right p-4 flex flex-col justify-between h-full bg-white">
                 <div class="text-center">
                     <div class="theme-bg-light p-4 rounded-2xl mb-4 flex justify-center border border-slate-50">
                         <div class="flex items-center gap-2 font-black text-sm tracking-widest text-slate-800">
-                            <!-- Ícone SUS Simples -->
                             <svg class="w-6 h-6 text-emerald-600 theme-text-svg" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M19 10.5h-5.5V5c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v5.5H5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5h5.5V19c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-5.5H19c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5z"/>
                             </svg>
@@ -226,7 +193,6 @@
                 </div>
             </div>
 
-            <!-- Coluna 3: Capa -->
             <div class="p-4 flex flex-col justify-between h-full rounded-2xl relative overflow-hidden bg-gradient-to-br from-emerald-50/40 to-white text-center">
                 <div class="text-right flex justify-end gap-1 mb-2">
                     <span class="w-2.5 h-2.5 rounded-full theme-bg"></span>
@@ -236,7 +202,7 @@
 
                 <div class="my-auto py-4">
                     <div class="flex justify-center mb-6">
-                        <div class="img-upload-area w-24 h-24 md:w-28 md:h-28 rounded-full theme-bg flex items-center justify-center text-white shadow-lg overflow-hidden group" onclick="triggerImageUpload(this, 'circle')" title="Clique para alterar a imagem">
+                        <div class="img-upload-area w-24 h-24 md:w-28 md:h-28 rounded-full theme-bg flex items-center justify-center text-white shadow-lg overflow-hidden group" onclick="triggerImageUpload(this, 'circle')">
                             <div id="container-img-capa" class="w-full h-full flex items-center justify-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-14 h-14 md:w-16 md:h-16">
                                     <path d="M12 18.5l-1.45-1.32C5.4 12.36 2 9.28 2 5.5 2 2.42 4.42 0 7.5 0c1.74 0 3.41.81 4.5 2.09C13.09 0.81 14.76 0 16.5 0 19.58 0 22 2.42 22 5.5c0 3.78-3.4 6.86-8.55 11.54L12 18.5z" />
@@ -260,12 +226,8 @@
             </div>
         </div>
 
-        <!-- ====== PÁGINA 2: FACE INTERNA (6 Exercícios) ====== -->
         <div id="pagina-interna" class="print-page bg-white shadow-xl rounded-3xl mx-auto border border-slate-200 p-4 md:p-6 relative transition-all duration-300 hidden">
-            
-            <!-- ====== COLUNA 1 (Exercícios 1 e 2) ====== -->
             <div class="fold-guide fold-left p-3 flex flex-col gap-3 h-full bg-slate-50/50 rounded-2xl border border-slate-100">
-                <!-- EXERCÍCIO 1 -->
                 <div class="flex-1 flex flex-col justify-between">
                     <div>
                         <div class="flex items-center gap-2 mb-2">
@@ -280,7 +242,6 @@
                         </div>
                         <p class="text-[10px] text-slate-700 leading-tight font-medium mb-2" contenteditable="true"><strong>Como fazer:</strong> Incline a cabeça lentamente em direção ao ombro. Mantenha os ombros relaxados.</p>
                         
-                        <!-- Box Props Enxuto -->
                         <div class="bg-white p-2 rounded-lg shadow-sm border border-slate-200 space-y-1 mb-2">
                             <div class="flex justify-between text-[9px] border-b border-slate-100 pb-1">
                                 <span class="text-slate-500 font-semibold" contenteditable="true">Séries:</span><span class="font-black text-slate-800" contenteditable="true">3 de 10x</span>
@@ -297,7 +258,6 @@
 
                 <hr class="border-dashed border-slate-200 my-1">
 
-                <!-- EXERCÍCIO 2 -->
                 <div class="flex-1 flex flex-col justify-between">
                     <div>
                         <div class="flex items-center gap-2 mb-2">
@@ -327,9 +287,7 @@
                 </div>
             </div>
 
-            <!-- ====== COLUNA 2 (Exercícios 3 e 4) ====== -->
             <div class="fold-guide fold-right p-3 flex flex-col gap-3 h-full bg-white rounded-2xl">
-                <!-- EXERCÍCIO 3 -->
                 <div class="flex-1 flex flex-col justify-between">
                     <div>
                         <div class="flex items-center gap-2 mb-2">
@@ -360,7 +318,6 @@
 
                 <hr class="border-dashed border-slate-200 my-1">
 
-                <!-- EXERCÍCIO 4 -->
                 <div class="flex-1 flex flex-col justify-between">
                     <div>
                         <div class="flex items-center gap-2 mb-2">
@@ -390,9 +347,7 @@
                 </div>
             </div>
 
-            <!-- ====== COLUNA 3 (Exercícios 5 e 6) ====== -->
             <div class="p-3 flex flex-col gap-3 h-full bg-slate-50/50 rounded-2xl border border-slate-100">
-                <!-- EXERCÍCIO 5 -->
                 <div class="flex-1 flex flex-col justify-between">
                     <div>
                         <div class="flex items-center gap-2 mb-2">
@@ -423,7 +378,6 @@
 
                 <hr class="border-dashed border-slate-200 my-1">
 
-                <!-- EXERCÍCIO 6 -->
                 <div class="flex-1 flex flex-col justify-between">
                     <div>
                         <div class="flex items-center gap-2 mb-2">
@@ -456,44 +410,14 @@
         </div>
     </template>
 
-    <!-- Modal de Impressão e Alertas Genéricos -->
-    <div id="print-modal" class="no-print fixed inset-0 bg-slate-900/80 z-[100] hidden flex-col items-center justify-center p-4 opacity-0 transition-opacity duration-300">
-        <div class="bg-white rounded-3xl max-w-sm w-full p-6 md:p-8 shadow-2xl transform scale-95 transition-transform duration-300" id="print-modal-content">
-            <h3 class="text-xl font-black text-slate-800 text-center mb-3">Salvar seu Folder</h3>
-            <p class="text-sm text-slate-600 text-center mb-6 leading-relaxed">
-                <span class="block bg-slate-50 p-3 rounded-xl border border-slate-100 text-left mt-2">
-                    <strong>1.</strong> Toque nos <strong>3 pontinhos</strong> do navegador.<br>
-                    <strong>2.</strong> Vá em <strong>Compartilhar</strong> ➔ <strong>Imprimir</strong>.<br>
-                    <strong>3.</strong> Escolha <strong>Salvar como PDF</strong> no formato <strong>Paisagem</strong>.
-                </span>
-            </p>
-            <button onclick="fecharModalPrint()" class="w-full bg-blue-600 text-white font-bold py-3.5 rounded-xl hover:bg-blue-500 transition-colors shadow-md">
-                Entendi!
-            </button>
-        </div>
-    </div>
-
-    <div id="alert-modal" class="no-print fixed inset-0 bg-slate-900/80 z-[110] hidden flex-col items-center justify-center p-4 opacity-0 transition-opacity duration-300">
-        <div class="bg-white rounded-3xl max-w-sm w-full p-6 md:p-8 shadow-2xl transform scale-95 transition-transform duration-300" id="alert-modal-content">
-            <h3 id="alert-modal-title" class="text-xl font-black text-amber-600 text-center mb-3">Aviso</h3>
-            <p id="alert-modal-text" class="text-sm text-slate-600 text-center mb-6 leading-relaxed">...</p>
-            <button onclick="fecharAlerta()" class="w-full bg-slate-800 text-white font-bold py-3.5 rounded-xl hover:bg-slate-700 transition-colors shadow-md">Entendi</button>
-        </div>
-    </div>
-
-    <!-- Input Oculto para Upload de Imagens -->
     <input type="file" id="imageUploader" accept="image/png, image/jpeg, image/webp" class="hidden">
 
-    <!-- SCRIPT DE LÓGICA E INTERFACE (INCLUINDO TOOLBAR) -->
     <script>
-        // === LÓGICA DO TOOLBAR DE TEXTO ===
         const toolbar = document.getElementById('text-toolbar');
         let activeEditable = null;
 
-        // Mostra o toolbar quando clicar/focar em algo editável
         document.addEventListener('mouseup', (e) => {
             let target = e.target;
-            // Busca o pai contenteditable mais próximo (caso clique num <strong> dentro)
             while (target && target !== document && !target.isContentEditable) {
                 target = target.parentNode;
             }
@@ -507,19 +431,14 @@
             }
         });
 
-        // Previne que clicar nos botões do toolbar tire o foco do texto
-        toolbar.addEventListener('mousedown', (e) => {
-            e.preventDefault(); 
-        });
+        toolbar.addEventListener('mousedown', (e) => { e.preventDefault(); });
 
         function showToolbar(el) {
             const rect = el.getBoundingClientRect();
             toolbar.classList.remove('hidden');
-            // Calcula posição acima do texto
             toolbar.style.top = `${Math.max(10, rect.top - 45)}px`; 
             toolbar.style.left = `${rect.left + (rect.width/2) - (toolbar.offsetWidth/2)}px`;
             
-            // Ativa transição
             setTimeout(() => {
                 toolbar.classList.remove('opacity-0', '-translate-y-2');
                 toolbar.classList.add('opacity-100', 'translate-y-0');
@@ -532,7 +451,6 @@
             setTimeout(() => toolbar.classList.add('hidden'), 200);
         }
 
-        // Funções de formatação executadas pelos botões
         function formatText(command) {
             document.execCommand(command, false, null);
             if (activeEditable) activeEditable.focus();
@@ -540,20 +458,14 @@
 
         function changeFontSize(step) {
             if (!activeEditable) return;
-            // Pega o tamanho da fonte atual calculada
             const style = window.getComputedStyle(activeEditable);
             let currentSize = parseFloat(style.fontSize);
-            
-            // Aumenta ou diminui 2px baseado no step (+1 ou -1)
             let newSize = currentSize + (step * 2);
             activeEditable.style.fontSize = `${newSize}px`;
-            activeEditable.style.lineHeight = '1.3'; // Mantém as linhas proporcionais
-            
-            showToolbar(activeEditable); // reposiciona a barra caso o elemento cresça
+            activeEditable.style.lineHeight = '1.3'; 
+            showToolbar(activeEditable);
         }
 
-
-        // === LÓGICA DE IMAGENS E INTERFACE GERAL ===
         let alvoImagemAtual = null;
         let formatoImagemAtual = 'rect';
 
@@ -596,40 +508,7 @@
             event.target.value = '';
         });
 
-        function abrirImpressao() {
-            try { window.print(); setTimeout(() => { if(window.innerWidth < 1024) mostrarModalPrint(); }, 800); } 
-            catch(e) { mostrarModalPrint(); }
-        }
-        
-        function mostrarModalPrint() {
-            const modal = document.getElementById('print-modal');
-            const content = document.getElementById('print-modal-content');
-            modal.classList.remove('hidden'); modal.classList.add('flex');
-            setTimeout(() => { modal.classList.remove('opacity-0'); content.classList.remove('scale-95'); }, 10);
-        }
-
-        function fecharModalPrint() {
-            const modal = document.getElementById('print-modal');
-            const content = document.getElementById('print-modal-content');
-            modal.classList.add('opacity-0'); content.classList.add('scale-95');
-            setTimeout(() => { modal.classList.add('hidden'); modal.classList.remove('flex'); }, 300);
-        }
-
-        function mostrarAlerta(titulo, mensagem) {
-            document.getElementById('alert-modal-title').innerText = titulo;
-            document.getElementById('alert-modal-text').innerText = mensagem;
-            const modal = document.getElementById('alert-modal');
-            const content = document.getElementById('alert-modal-content');
-            modal.classList.remove('hidden'); modal.classList.add('flex');
-            setTimeout(() => { modal.classList.remove('opacity-0'); content.classList.remove('scale-95'); }, 10);
-        }
-
-        function fecharAlerta() {
-            const modal = document.getElementById('alert-modal');
-            const content = document.getElementById('alert-modal-content');
-            modal.classList.add('opacity-0'); content.classList.add('scale-95');
-            setTimeout(() => { modal.classList.add('hidden'); modal.classList.remove('flex'); }, 300);
-        }
+        function abrirImpressao() { window.print(); }
 
         function mostrarPagina(pagina) {
             const pagExt = document.getElementById('pagina-externa');
@@ -668,7 +547,6 @@
             document.querySelectorAll('.theme-bg-light').forEach(el => { el.classList.remove('bg-cyan-50', 'bg-emerald-50/40', 'bg-pink-50/40', 'bg-blue-50/40'); el.classList.add(configs.lightBg); });
         }
 
-        // Atribui IDs dinâmicos para viabilizar o salvamento na nuvem
         function renovarIdsDinamicos() {
             document.querySelectorAll('#main-content-container [contenteditable="true"]').forEach((el, index) => { el.id = 'editable-' + index; });
             document.querySelectorAll('#main-content-container [onclick^="triggerImageUpload"]').forEach((el, index) => { el.id = 'img-target-' + index; });
@@ -679,16 +557,12 @@
         }
     </script>
 
-    <!-- FIREBASE (BANCO DE DADOS EM NUVEM) -->
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-        // =======================================================================
-        // SUAS CONFIGURAÇÕES DO FIREBASE (INTACTAS)
-        // =======================================================================
-        let firebaseConfig = {
+        const firebaseConfig = {
           apiKey: "AIzaSyD0l49VdT8hB8dxyS1LxU5lDAY_Bcs08tc",
           authDomain: "foldermaker-55c5e.firebaseapp.com",
           projectId: "foldermaker-55c5e",
@@ -696,40 +570,52 @@
           messagingSenderId: "831477487081",
           appId: "1:831477487081:web:5e8ca0f38be76d2d832778"
         };
-        
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'meu-folder-sus';
-        let db, auth;
-        let currentUser = null;
 
-        if (Object.keys(firebaseConfig).length > 0) {
-            const app = initializeApp(firebaseConfig);
-            db = getFirestore(app);
-            auth = getAuth(app);
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
 
-            async function initAuth() {
-                try {
-                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                        await signInWithCustomToken(auth, __initial_auth_token);
-                    } else {
-                        await signInAnonymously(auth);
-                    }
-                    currentUser = auth.currentUser;
-                    carregarProgresso();
-                } catch (e) {
-                    console.error("Erro na autenticação:", e);
-                }
+        const DADOS_DOC_ID = "folder_padrao";
+
+        // AUTENTICAÇÃO COM E-MAIL E SENHA RESTAURADA
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                document.getElementById('login-modal').classList.add('hidden');
+                document.getElementById('main-header').classList.remove('hidden');
+                document.getElementById('main-content').classList.remove('hidden');
+                document.getElementById('user-email-display').textContent = user.email;
+                carregarProgresso();
+            } else {
+                document.getElementById('login-modal').classList.remove('hidden');
+                document.getElementById('main-header').classList.add('hidden');
+                document.getElementById('main-content').classList.add('hidden');
             }
-            initAuth();
-        }
+        });
 
+        document.getElementById('login-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email-input').value;
+            const pass = document.getElementById('password-input').value;
+            const btn = document.getElementById('btn-entrar');
+            btn.textContent = "Verificando...";
+            document.getElementById('login-error').classList.add('hidden');
+
+            signInWithEmailAndPassword(auth, email, pass).catch((error) => {
+                btn.textContent = "Entrar no Sistema";
+                document.getElementById('login-error').classList.remove('hidden');
+            });
+        });
+
+        document.getElementById('btn-logout').addEventListener('click', () => signOut(auth));
+
+        // SALVAMENTO NA NUVEM
         window.salvarProgresso = async function() {
-            if (!currentUser || !db) return;
-
+            if (!auth.currentUser || !db) return;
             const btn = document.getElementById('btn-salvar');
             const textoOriginal = btn.innerHTML;
             btn.innerHTML = '⏳ Salvando...';
 
-            renovarIdsDinamicos(); // Garante IDs em tudo antes de salvar
+            renovarIdsDinamicos(); 
 
             const textos = {};
             document.querySelectorAll('#main-content-container [contenteditable="true"]').forEach(el => {
@@ -746,40 +632,35 @@
                 tema: window.temaAtual || 'sus-green',
                 textos: textos,
                 imagens: imagens,
-                updatedAt: new Date().toISOString()
+                atualizadoEm: new Date().toISOString()
             };
 
             try {
-                const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'folders', 'folder_padrao');
-                await setDoc(docRef, dataToSave);
-                btn.innerHTML = '✅ Salvo na Nuvem!';
+                await setDoc(doc(db, "folders", DADOS_DOC_ID), dataToSave);
+                btn.innerHTML = '✅ Salvo!';
                 setTimeout(() => btn.innerHTML = textoOriginal, 3000);
             } catch (e) {
                 console.error("Erro ao salvar:", e);
-                btn.innerHTML = '❌ Erro ao salvar';
+                btn.innerHTML = '❌ Erro';
                 setTimeout(() => btn.innerHTML = textoOriginal, 3000);
             }
         };
 
+        // CARREGAMENTO DA NUVEM
         async function carregarProgresso() {
-            if (!currentUser || !db) return;
-
             try {
-                const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'folders', 'folder_padrao');
-                const docSnap = await getDoc(docRef);
-                
+                const docSnap = await getDoc(doc(db, "folders", DADOS_DOC_ID));
                 if (docSnap.exists()) {
                     const data = docSnap.data();
                     
                     if (data.tema) mudarTema(data.tema);
                     
-                    // Se existirem textos salvos, injeta (mantendo os tamanhos costumizados da fonte)
                     if (data.textos) {
                         renovarIdsDinamicos();
                         for (const [id, config] of Object.entries(data.textos)) {
                             const el = document.getElementById(id);
                             if (el) {
-                                el.innerHTML = config.html || config; // fallback pra old versions
+                                el.innerHTML = config.html || config; 
                                 if (config.size) el.style.fontSize = config.size;
                             }
                         }
@@ -793,23 +674,22 @@
                                 container.innerHTML = '';
                                 container.classList.remove('border-2', 'border-dashed', 'border-slate-300');
                                 container.style.padding = '0';
-                                
                                 const img = document.createElement('img');
                                 img.src = src;
-                                img.className = container.getAttribute('onclick').includes('circle') ? 
-                                    'w-full h-full object-cover rounded-full' : 
-                                    'w-full h-full object-cover rounded-xl';
+                                img.className = container.getAttribute('onclick').includes('circle') ? 'w-full h-full object-cover rounded-full' : 'w-full h-full object-cover rounded-xl';
                                 container.appendChild(img);
                             }
                         }
                     }
+                    mostrarPagina('externa');
                 } else {
-                    // Carrega template padrão se nada salvo
                     document.getElementById('main-content-container').innerHTML = document.getElementById('default-template').innerHTML;
                     renovarIdsDinamicos();
+                    mudarTema('sus-green');
+                    mostrarPagina('externa');
                 }
             } catch (e) {
-                console.error("Erro ao carregar dados da nuvem:", e);
+                console.error("Erro ao carregar:", e);
             }
         }
     </script>
