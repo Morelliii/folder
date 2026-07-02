@@ -97,7 +97,7 @@
 </head>
 <body class="bg-slate-100 min-h-screen flex flex-col relative">
 
-    <!-- TOOLBAR FLUTUANTE ATUALIZADO (A+, A-, B, Sb + Alinhamentos) -->
+    <!-- TOOLBAR FLUTUANTE -->
     <div id="text-toolbar" class="no-print fixed z-[200] hidden bg-slate-900 text-white rounded-lg shadow-xl p-1.5 flex items-center gap-1 opacity-0 transform -translate-y-2 pointer-events-auto">
         <button onclick="changeFontSize(-1)" class="w-8 h-8 flex items-center justify-center rounded hover:bg-slate-700 font-bold text-xs transition-colors" title="Diminuir Fonte">A-</button>
         <button onclick="changeFontSize(1)" class="w-8 h-8 flex items-center justify-center rounded hover:bg-slate-700 font-bold text-lg transition-colors" title="Aumentar Fonte">A+</button>
@@ -337,7 +337,7 @@
             </div>
         </div>
 
-        <!-- PÁGINA 2: INTERNA (180px com Margens Otimizadas e Texto Justificado) -->
+        <!-- PÁGINA 2: INTERNA -->
         <div id="pagina-interna" class="print-page bg-white shadow-xl rounded-3xl mx-auto border border-slate-200 p-4 md:p-6 relative transition-all duration-300 hidden">
             <!-- COLUNA 1 -->
             <div class="fold-guide fold-left p-2 flex flex-col gap-2 h-full bg-slate-50/50 rounded-2xl border border-slate-100">
@@ -527,7 +527,7 @@
 
         document.addEventListener('mouseup', (e) => {
             let target = e.target;
-            // Correção da subida pela árvore DOM para ignorar tags filhas e pegar sempre a caixa inteira
+            // Correção da subida pela árvore DOM
             while (target && target !== document && (!target.hasAttribute || target.getAttribute('contenteditable') !== 'true')) { 
                 target = target.parentNode; 
             }
@@ -663,6 +663,7 @@
             
             const imgNode = document.createElement('img');
             imgNode.src = base64Crop;
+            // Para não cortar na impressão de jeito nenhum: object-contain.
             imgNode.className = formatoImagemAtual === 'circle' ? 'w-full h-full object-cover rounded-full' : 'w-full h-full object-contain rounded-xl';
             alvoImagemAtual.appendChild(imgNode);
             
@@ -861,5 +862,3 @@
     </script>
 </body>
 </html>
-
-
