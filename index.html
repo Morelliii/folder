@@ -97,18 +97,12 @@
 </head>
 <body class="bg-slate-100 min-h-screen flex flex-col relative">
 
-    <!-- TOOLBAR FLUTUANTE ATUALIZADO COM ALINHAMENTOS -->
     <div id="text-toolbar" class="no-print fixed z-[200] hidden bg-slate-900 text-white rounded-lg shadow-xl p-1.5 flex items-center gap-1 opacity-0 transform -translate-y-2 pointer-events-auto">
-        <!-- Tamanho -->
         <button onclick="changeFontSize(-1)" class="w-8 h-8 flex items-center justify-center rounded hover:bg-slate-700 font-bold text-xs transition-colors" title="Diminuir Fonte">A-</button>
         <button onclick="changeFontSize(1)" class="w-8 h-8 flex items-center justify-center rounded hover:bg-slate-700 font-bold text-lg transition-colors" title="Aumentar Fonte">A+</button>
         <div class="w-px h-5 bg-slate-700 mx-1"></div>
-        
-        <!-- Negrito -->
         <button onclick="formatText('bold')" class="w-8 h-8 flex items-center justify-center rounded hover:bg-slate-700 font-serif font-bold text-base transition-colors" title="Negrito">B</button>
         <div class="w-px h-5 bg-slate-700 mx-1"></div>
-        
-        <!-- Alinhamentos (Esquerda, Centro, Direita, Justificado) -->
         <button onclick="formatText('justifyLeft')" class="w-8 h-8 flex items-center justify-center rounded hover:bg-slate-700 transition-colors" title="Alinhar à Esquerda">
             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M3 21h18v-2H3v2zm0-4h12v-2H3v2zm0-4h18v-2H3v2zm0-4h12V7H3v2zm0-6v2h18V3H3z"/></svg>
         </button>
@@ -244,22 +238,23 @@
                 <div class="flex-1 flex flex-col">
                     <div class="theme-badge inline-block text-[11px] font-black px-3 py-1.5 rounded uppercase tracking-widest mb-4 w-max" contenteditable="true">Dicas Importantes</div>
                     <h3 class="text-base font-black theme-text mb-3 uppercase tracking-tight" contenteditable="true">Preparando o Corpo</h3>
-                    <p class="text-sm text-slate-600 mb-5 leading-relaxed font-medium" contenteditable="true">A prática regular de exercícios em casa melhora flexibilidade, equilíbrio e reduz dores crônicas.</p>
+                    <p class="text-sm text-slate-600 mb-5 leading-relaxed font-medium text-justify" contenteditable="true">A prática regular de exercícios em casa melhora flexibilidade, equilíbrio e reduz dores crônicas.</p>
                     
                     <div id="lista-dicas" class="space-y-3 flex-1">
+                        <!-- ADICIONADO text-justify A TODAS AS DICAS -->
                         <div class="flex gap-2.5 items-start group relative">
                             <span class="text-emerald-500 font-black text-sm mt-0.5" contenteditable="true">✓</span>
-                            <p class="text-xs text-slate-600 leading-relaxed w-full pr-4" contenteditable="true"><strong>Roupas Leves:</strong> Use tecidos confortáveis e faça os exercícios em local seguro.</p>
+                            <p class="text-xs text-slate-600 leading-relaxed w-full pr-4 text-justify" contenteditable="true"><strong>Roupas Leves:</strong> Use tecidos confortáveis e faça os exercícios em local seguro.</p>
                             <button onclick="this.parentElement.remove()" class="delete-btn no-print hidden group-hover:flex absolute right-0 top-0 text-red-500 hover:text-red-700 text-xs font-black p-1">✖</button>
                         </div>
                         <div class="flex gap-2.5 items-start group relative">
                             <span class="text-emerald-500 font-black text-sm mt-0.5" contenteditable="true">✓</span>
-                            <p class="text-xs text-slate-600 leading-relaxed w-full pr-4" contenteditable="true"><strong>Hidratação:</strong> Beba pequenos goles de água antes e durante a rotina.</p>
+                            <p class="text-xs text-slate-600 leading-relaxed w-full pr-4 text-justify" contenteditable="true"><strong>Hidratação:</strong> Beba pequenos goles de água antes e durante a rotina.</p>
                             <button onclick="this.parentElement.remove()" class="delete-btn no-print hidden group-hover:flex absolute right-0 top-0 text-red-500 hover:text-red-700 text-xs font-black p-1">✖</button>
                         </div>
                         <div class="flex gap-2.5 items-start group relative">
                             <span class="text-emerald-500 font-black text-sm mt-0.5" contenteditable="true">✓</span>
-                            <p class="text-xs text-slate-600 leading-relaxed w-full pr-4" contenteditable="true"><strong>Sinais de Alerta:</strong> Pare se sentir tontura, falta de ar ou dores articulares agudas.</p>
+                            <p class="text-xs text-slate-600 leading-relaxed w-full pr-4 text-justify" contenteditable="true"><strong>Sinais de Alerta:</strong> Pare se sentir tontura, falta de ar ou dores articulares agudas.</p>
                             <button onclick="this.parentElement.remove()" class="delete-btn no-print hidden group-hover:flex absolute right-0 top-0 text-red-500 hover:text-red-700 text-xs font-black p-1">✖</button>
                         </div>
                     </div>
@@ -322,14 +317,14 @@
                                     <path d="M21.5 16h-3.37c-1.12 0-2.18.53-2.83 1.42L14 19h-4l-1.3-1.58A3.49 3.49 0 005.87 16H2.5C1.12 16 0 17.12 0 18.5V20c0 2.21 1.79 4 4 4h12c2.21 0 4-1.79 4-4v-2c0-1.1-.9-2-2-2z" opacity="0.3"/>
                                 </svg>
                             </div>
-                            <div class="absolute inset-0 bg-black/40 hidden group-hover:flex items-center justify-center text-[10px] font-bold text-white uppercase backdrop-blur-sm transition-all text-center leading-tight">Trocar<br>Foto</div>
+                            <div class="absolute inset-0 bg-black/40 hidden group-hover:flex items-center justify-center text-xs font-bold text-white uppercase backdrop-blur-sm transition-all text-center leading-tight">Trocar<br>Foto</div>
                         </div>
                     </div>
                     
                     <h1 class="text-3xl font-black text-slate-800 leading-tight uppercase tracking-tight" contenteditable="true">Mexa-se<br>Com Saúde!</h1>
                     <div class="w-16 h-2 theme-bg mx-auto my-5 rounded-full"></div>
                     <h2 class="text-sm font-black theme-text uppercase tracking-widest" contenteditable="true">Exercícios Domiciliares</h2>
-                    <p class="text-sm text-slate-500 mt-4 max-w-[240px] mx-auto leading-relaxed" contenteditable="true">Pequenos hábitos, grandes resultados para o seu dia a dia.</p>
+                    <p class="text-sm text-slate-500 mt-4 max-w-[240px] mx-auto leading-relaxed text-justify" contenteditable="true">Pequenos hábitos, grandes resultados para o seu dia a dia.</p>
                 </div>
 
                 <div class="border-t border-slate-200 pt-4 flex items-center justify-between text-left text-[11px] text-slate-500 font-bold uppercase tracking-wider">
@@ -339,7 +334,7 @@
             </div>
         </div>
 
-        <!-- PÁGINA 2: INTERNA (180px com Margens Otimizadas) -->
+        <!-- PÁGINA 2: INTERNA (180px com Margens Otimizadas e Texto Justificado) -->
         <div id="pagina-interna" class="print-page bg-white shadow-xl rounded-3xl mx-auto border border-slate-200 p-4 md:p-6 relative transition-all duration-300 hidden">
             <!-- COLUNA 1 -->
             <div class="fold-guide fold-left p-2 flex flex-col gap-2 h-full bg-slate-50/50 rounded-2xl border border-slate-100">
@@ -355,7 +350,8 @@
                             </div>
                             <div class="absolute inset-0 bg-blue-500/80 hidden group-hover:flex items-center justify-center text-[10px] font-bold text-white uppercase backdrop-blur-sm">📷 Editar Foto</div>
                         </div>
-                        <p class="text-[11px] text-slate-800 leading-snug font-semibold mb-1 flex-1" contenteditable="true"><strong>Como fazer:</strong> Incline a cabeça lentamente em direção ao ombro. Mantenha os ombros relaxados.</p>
+                        <!-- ADICIONADO text-justify -->
+                        <p class="text-[11px] text-slate-800 leading-snug font-semibold mb-1 flex-1 text-justify" contenteditable="true"><strong>Como fazer:</strong> Incline a cabeça lentamente em direção ao ombro. Mantenha os ombros relaxados.</p>
                         
                         <div class="bg-white p-1.5 rounded-lg shadow-sm border border-slate-200 mt-auto">
                             <div class="flex justify-between items-center border-b border-slate-100 pb-1">
@@ -384,7 +380,7 @@
                             </div>
                             <div class="absolute inset-0 bg-blue-500/80 hidden group-hover:flex items-center justify-center text-[10px] font-bold text-white uppercase backdrop-blur-sm">📷 Editar Foto</div>
                         </div>
-                        <p class="text-[11px] text-slate-800 leading-snug font-semibold mb-1 flex-1" contenteditable="true"><strong>Como fazer:</strong> Faça movimentos circulares com os ombros para trás e depois para frente, suavemente.</p>
+                        <p class="text-[11px] text-slate-800 leading-snug font-semibold mb-1 flex-1 text-justify" contenteditable="true"><strong>Como fazer:</strong> Faça movimentos circulares com os ombros para trás e depois para frente, suavemente.</p>
                         
                         <div class="bg-white p-1.5 rounded-lg shadow-sm border border-slate-200 mt-auto">
                             <div class="flex justify-between items-center border-b border-slate-100 pb-1">
@@ -414,7 +410,7 @@
                             </div>
                             <div class="absolute inset-0 bg-blue-500/80 hidden group-hover:flex items-center justify-center text-[10px] font-bold text-white uppercase backdrop-blur-sm">📷 Editar Foto</div>
                         </div>
-                        <p class="text-[11px] text-slate-800 leading-snug font-semibold mb-1 flex-1" contenteditable="true"><strong>Como fazer:</strong> Cruze os braços à frente do peito. Suba e desça da cadeira devagar usando a força das pernas.</p>
+                        <p class="text-[11px] text-slate-800 leading-snug font-semibold mb-1 flex-1 text-justify" contenteditable="true"><strong>Como fazer:</strong> Cruze os braços à frente do peito. Suba e desça da cadeira devagar usando a força das pernas.</p>
                         
                         <div class="bg-white p-1.5 rounded-lg shadow-sm border border-slate-200 mt-auto">
                             <div class="flex justify-between items-center border-b border-slate-100 pb-1">
@@ -443,7 +439,7 @@
                             </div>
                             <div class="absolute inset-0 bg-blue-500/80 hidden group-hover:flex items-center justify-center text-[10px] font-bold text-white uppercase backdrop-blur-sm">📷 Editar Foto</div>
                         </div>
-                        <p class="text-[11px] text-slate-800 leading-snug font-semibold mb-1 flex-1" contenteditable="true"><strong>Como fazer:</strong> Sentado, estique uma perna até o joelho ficar reto. Segure e desça devagar.</p>
+                        <p class="text-[11px] text-slate-800 leading-snug font-semibold mb-1 flex-1 text-justify" contenteditable="true"><strong>Como fazer:</strong> Sentado, estique uma perna até o joelho ficar reto. Segure e desça devagar.</p>
                         
                         <div class="bg-white p-1.5 rounded-lg shadow-sm border border-slate-200 mt-auto">
                             <div class="flex justify-between items-center border-b border-slate-100 pb-1">
@@ -473,7 +469,7 @@
                             </div>
                             <div class="absolute inset-0 bg-blue-500/80 hidden group-hover:flex items-center justify-center text-[10px] font-bold text-white uppercase backdrop-blur-sm">📷 Editar Foto</div>
                         </div>
-                        <p class="text-[11px] text-slate-800 leading-snug font-semibold mb-1 flex-1" contenteditable="true"><strong>Como fazer:</strong> Perto da parede para apoio, fique na ponta dos pés o máximo que conseguir e desça o calcanhar.</p>
+                        <p class="text-[11px] text-slate-800 leading-snug font-semibold mb-1 flex-1 text-justify" contenteditable="true"><strong>Como fazer:</strong> Perto da parede para apoio, fique na ponta dos pés o máximo que conseguir e desça o calcanhar.</p>
                         
                         <div class="bg-white p-1.5 rounded-lg shadow-sm border border-slate-200 mt-auto">
                             <div class="flex justify-between items-center border-b border-slate-100 pb-1">
@@ -502,7 +498,7 @@
                             </div>
                             <div class="absolute inset-0 bg-blue-500/80 hidden group-hover:flex items-center justify-center text-[10px] font-bold text-white uppercase backdrop-blur-sm">📷 Editar Foto</div>
                         </div>
-                        <p class="text-[11px] text-slate-800 leading-snug font-semibold mb-1 flex-1" contenteditable="true"><strong>Como fazer:</strong> Apoiando as mãos na beirada de uma mesa ou balcão, dê passos para a lateral.</p>
+                        <p class="text-[11px] text-slate-800 leading-snug font-semibold mb-1 flex-1 text-justify" contenteditable="true"><strong>Como fazer:</strong> Apoiando as mãos na beirada de uma mesa ou balcão, dê passos para a lateral.</p>
                         
                         <div class="bg-white p-1.5 rounded-lg shadow-sm border border-slate-200 mt-auto">
                             <div class="flex justify-between items-center border-b border-slate-100 pb-1">
@@ -524,13 +520,19 @@
     <input type="file" id="imageUploader" accept="image/png, image/jpeg, image/webp" class="hidden">
 
     <script>
+        // === TOOLBAR DE TEXTO ===
         const toolbar = document.getElementById('text-toolbar');
         let activeEditable = null;
 
         document.addEventListener('mouseup', (e) => {
             let target = e.target;
-            while (target && target !== document && !target.isContentEditable) { target = target.parentNode; }
-            if (target && target.isContentEditable) {
+            // CORREÇÃO DO BUG: O código agora "sobe" até encontrar a caixa original do texto 
+            // ignorando tags filhas como <strong> que bugavam o tamanho da fonte!
+            while (target && target !== document && (!target.hasAttribute || target.getAttribute('contenteditable') !== 'true')) { 
+                target = target.parentNode; 
+            }
+
+            if (target && target.hasAttribute && target.getAttribute('contenteditable') === 'true') {
                 activeEditable = target;
                 showToolbar(target);
             } else if (!toolbar.contains(e.target)) {
@@ -566,6 +568,7 @@
             showToolbar(activeEditable);
         }
 
+        // === CROPPER DE IMAGEM ===
         let alvoImagemAtual = null;
         let formatoImagemAtual = 'rect';
         let cropper = null;
@@ -633,7 +636,6 @@
             
             const imgNode = document.createElement('img');
             imgNode.src = base64Crop;
-            // Para não cortar na impressão de jeito nenhum: object-contain.
             imgNode.className = formatoImagemAtual === 'circle' ? 'w-full h-full object-cover rounded-full' : 'w-full h-full object-contain rounded-xl';
             alvoImagemAtual.appendChild(imgNode);
             
@@ -671,7 +673,7 @@
             novaDica.className = 'flex gap-2.5 items-start group relative';
             novaDica.innerHTML = `
                 <span class="text-emerald-500 font-black text-sm mt-0.5" contenteditable="true">✓</span>
-                <p class="text-xs text-slate-600 leading-relaxed w-full pr-4" contenteditable="true"><strong>Nova Dica:</strong> Edite este texto livremente.</p>
+                <p class="text-xs text-slate-600 leading-relaxed w-full pr-4 text-justify" contenteditable="true"><strong>Nova Dica:</strong> Edite este texto livremente.</p>
                 <button onclick="this.parentElement.remove()" class="delete-btn no-print hidden group-hover:flex absolute right-0 top-0 text-red-500 hover:text-red-700 text-xs font-black p-1" title="Apagar Dica">✖</button>
             `;
             lista.appendChild(novaDica);
