@@ -4,7 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Modelo de Folder - Exercícios Domiciliares (Atenção Básica)</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Cropper.js (Para edição e recorte de imagens) -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
         
@@ -24,19 +30,15 @@
             .fold-guide::after { display: none !important; }
         }
 
-        /* CORREÇÃO DO PDF: Força o navegador a imprimir imagens de fundo, cores e o símbolo da APS */
         @media print {
-            * {
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-                color-adjust: exact !important;
-            }
+            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
             @page { size: A4 landscape; margin: 0; }
             body { background: white !important; color: black !important; padding: 0 !important; margin: 0 !important; }
             .no-print { display: none !important; }
             .print-page { width: 297mm !important; height: 210mm !important; margin: 0 !important; border: none !important; box-shadow: none !important; padding: 10mm 12mm !important; page-break-after: always !important; display: grid !important; grid-template-columns: repeat(3, 1fr) !important; gap: 12mm !important; box-sizing: border-box !important; background-color: white !important; background-image: none !important; }
             .fold-guide::after { display: none !important; }
             [contenteditable="true"] { outline: none !important; border: none !important; background-color: transparent !important; }
+            .delete-btn { display: none !important; }
         }
 
         [contenteditable="true"] { transition: all 0.2s; cursor: text; border-radius: 6px; padding: 2px 4px; }
@@ -44,13 +46,13 @@
         [contenteditable="true"]:focus { background-color: #ffffff; outline: 2px solid #2563eb; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3); }
 
         #text-toolbar { transition: opacity 0.2s, transform 0.2s; }
-        #text-toolbar::after {
-            content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
-            border-width: 5px; border-style: solid; border-color: #0f172a transparent transparent transparent;
-        }
+        #text-toolbar::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border-width: 5px; border-style: solid; border-color: #0f172a transparent transparent transparent; }
 
         .img-upload-area { position: relative; cursor: pointer; transition: all 0.2s; }
         .img-upload-area:hover { outline: 2px dashed #3b82f6; }
+
+        /* Ajuste do modal de corte para mobile */
+        .cropper-container { width: 100% !important; height: 50vh !important; max-height: 400px; }
     </style>
 </head>
 <body class="bg-slate-100 min-h-screen flex flex-col relative">
@@ -69,15 +71,14 @@
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
             </div>
             <h2 class="text-2xl font-black text-slate-800 mb-2">Acesso Restrito</h2>
-            <p class="text-sm text-slate-500 mb-6">Faça login para editar e salvar os folders da unidade.</p>
             <form id="login-form" class="space-y-4 text-left">
                 <div>
                     <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-1">E-mail</label>
-                    <input type="email" id="email-input" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 outline-none transition-all" required>
+                    <input type="email" id="email-input" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 outline-none" required>
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-1">Senha</label>
-                    <input type="password" id="password-input" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 outline-none transition-all" required>
+                    <input type="password" id="password-input" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 outline-none" required>
                 </div>
                 <div id="login-error" class="text-xs text-red-500 font-bold hidden text-center">Credenciais inválidas. Tente novamente.</div>
                 <button type="submit" id="btn-entrar" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl transition-all shadow-md mt-2">
@@ -87,10 +88,32 @@
         </div>
     </div>
 
+    <!-- MODAL DE CORTE DE IMAGEM -->
+    <div id="crop-modal" class="no-print fixed inset-0 z-[150] bg-slate-900/90 hidden flex-col items-center justify-center p-4">
+        <div class="bg-white rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl flex flex-col">
+            <div class="p-4 bg-slate-800 text-white flex justify-between items-center">
+                <h3 class="font-bold">Ajustar Imagem</h3>
+                <button onclick="fecharCrop()" class="text-slate-400 hover:text-white font-bold">✕ Fechar</button>
+            </div>
+            <div class="bg-slate-900 w-full h-[50vh] max-h-[400px] flex items-center justify-center">
+                <img id="crop-image" src="" class="max-w-full max-h-full block">
+            </div>
+            <div class="p-4 bg-white flex flex-wrap gap-2 justify-between items-center">
+                <div class="flex gap-2">
+                    <button onclick="cropper.zoom(0.1)" class="bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold px-3 py-2 rounded-lg" title="Aproximar">🔍+</button>
+                    <button onclick="cropper.zoom(-0.1)" class="bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold px-3 py-2 rounded-lg" title="Afastar">🔍-</button>
+                    <button onclick="cropper.rotate(90)" class="bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold px-3 py-2 rounded-lg" title="Girar">↻</button>
+                </div>
+                <button onclick="aplicarCorte()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-6 py-2 rounded-lg shadow-md">
+                    Cortar e Salvar
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- CABEÇALHO -->
     <header id="main-header" class="no-print bg-slate-900 text-white shadow-md p-4 sticky top-0 z-50 hidden">
         <div class="max-w-7xl mx-auto flex flex-col lg:flex-row justify-between items-center gap-4">
-            
             <div class="flex items-center gap-3 w-full lg:w-auto">
                 <div class="p-2.5 bg-emerald-500 rounded-xl text-slate-900 shrink-0">
                     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
@@ -105,17 +128,12 @@
             </div>
 
             <div class="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto flex-wrap justify-center">
-                
-                <!-- SELETOR DE TEMAS COM OPÇÃO MULTICOLORIDA -->
                 <div class="flex items-center gap-2.5 bg-slate-800 px-3.5 py-2 rounded-xl">
                     <button onclick="mudarTema('sus-blue')" class="w-6 h-6 rounded-full bg-cyan-600 border-2 border-slate-700 hover:scale-110 transition-transform" title="Azul SUS"></button>
                     <button onclick="mudarTema('sus-green')" class="w-6 h-6 rounded-full bg-emerald-600 border-2 border-slate-700 hover:scale-110 transition-transform" title="Verde Saúde"></button>
                     <button onclick="mudarTema('outubro-rosa')" class="w-6 h-6 rounded-full bg-pink-500 border-2 border-slate-700 hover:scale-110 transition-transform" title="Outubro Rosa"></button>
                     <button onclick="mudarTema('novembro-azul')" class="w-6 h-6 rounded-full bg-blue-600 border-2 border-slate-700 hover:scale-110 transition-transform" title="Novembro Azul"></button>
-                    
                     <div class="w-px h-5 bg-slate-600 mx-1"></div>
-                    
-                    <!-- NOVO BOTÃO DE COR PERSONALIZADA -->
                     <label class="relative cursor-pointer hover:scale-110 transition-transform" title="Escolher Cor Personalizada">
                         <div class="w-6 h-6 rounded-full border-2 border-slate-700" style="background: conic-gradient(red, yellow, lime, aqua, blue, magenta, red);"></div>
                         <input type="color" id="customColorPicker" class="opacity-0 absolute inset-0 w-0 h-0 cursor-pointer">
@@ -128,15 +146,9 @@
                 </div>
 
                 <div class="flex gap-2 w-full sm:w-auto">
-                    <button id="btn-reset" class="flex-1 sm:flex-none bg-slate-700 hover:bg-slate-600 text-white font-bold px-3 py-2 rounded-xl text-xs uppercase tracking-wider transition-all" title="Restaurar Padrão">
-                        🔄 Resetar
-                    </button>
-                    <button id="btn-salvar" onclick="window.salvarProgresso()" class="flex-1 sm:flex-none bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold px-4 py-2 rounded-xl text-xs md:text-sm uppercase tracking-wider flex items-center justify-center gap-1 shadow-lg transition-all">
-                        💾 Salvar
-                    </button>
-                    <button onclick="abrirImpressao()" class="flex-1 sm:flex-none bg-blue-600 hover:bg-blue-500 text-white font-bold px-4 py-2 rounded-xl text-xs md:text-sm uppercase tracking-wider shadow-lg transition-all">
-                        🖨️ Imprimir
-                    </button>
+                    <button id="btn-reset" class="flex-1 sm:flex-none bg-slate-700 hover:bg-slate-600 text-white font-bold px-3 py-2 rounded-xl text-xs uppercase tracking-wider transition-all">🔄 Resetar</button>
+                    <button id="btn-salvar" onclick="window.salvarProgresso()" class="flex-1 sm:flex-none bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold px-4 py-2 rounded-xl text-xs md:text-sm uppercase tracking-wider flex items-center justify-center gap-1 shadow-lg transition-all">💾 Salvar</button>
+                    <button onclick="window.print()" class="flex-1 sm:flex-none bg-blue-600 hover:bg-blue-500 text-white font-bold px-4 py-2 rounded-xl text-xs md:text-sm uppercase tracking-wider shadow-lg transition-all">🖨️ Imprimir</button>
                 </div>
             </div>
         </div>
@@ -158,20 +170,29 @@
                     <h3 class="text-base font-black theme-text mb-3 uppercase tracking-tight" contenteditable="true">Preparando o Corpo</h3>
                     <p class="text-xs text-slate-600 mb-4 leading-relaxed font-medium" contenteditable="true">A prática regular de exercícios em casa melhora flexibilidade, equilíbrio e reduz dores crônicas.</p>
                     
-                    <div class="space-y-3">
-                        <div class="flex gap-2.5 items-start">
+                    <!-- CONTAINER DE DICAS DINÂMICAS -->
+                    <div id="lista-dicas" class="space-y-3">
+                        <div class="flex gap-2.5 items-start group relative">
                             <span class="text-emerald-500 font-black text-sm" contenteditable="true">✓</span>
-                            <p class="text-xs text-slate-600 leading-tight" contenteditable="true"><strong>Roupas Leves:</strong> Use tecidos confortáveis e faça os exercícios de tênis ou descalço em local seguro.</p>
+                            <p class="text-xs text-slate-600 leading-tight w-full pr-4" contenteditable="true"><strong>Roupas Leves:</strong> Use tecidos confortáveis e faça os exercícios em local seguro.</p>
+                            <button onclick="this.parentElement.remove()" class="delete-btn no-print hidden group-hover:flex absolute right-0 top-0 text-red-500 hover:text-red-700 text-xs font-black p-1">✖</button>
                         </div>
-                        <div class="flex gap-2.5 items-start">
+                        <div class="flex gap-2.5 items-start group relative">
                             <span class="text-emerald-500 font-black text-sm" contenteditable="true">✓</span>
-                            <p class="text-xs text-slate-600 leading-tight" contenteditable="true"><strong>Hidratação:</strong> Beba pequenos goles de água antes e durante a rotina.</p>
+                            <p class="text-xs text-slate-600 leading-tight w-full pr-4" contenteditable="true"><strong>Hidratação:</strong> Beba pequenos goles de água antes e durante a rotina.</p>
+                            <button onclick="this.parentElement.remove()" class="delete-btn no-print hidden group-hover:flex absolute right-0 top-0 text-red-500 hover:text-red-700 text-xs font-black p-1">✖</button>
                         </div>
-                        <div class="flex gap-2.5 items-start">
+                        <div class="flex gap-2.5 items-start group relative">
                             <span class="text-emerald-500 font-black text-sm" contenteditable="true">✓</span>
-                            <p class="text-xs text-slate-600 leading-tight" contenteditable="true"><strong>Sinais de Alerta:</strong> Pare se sentir tontura, falta de ar ou dores articulares agudas.</p>
+                            <p class="text-xs text-slate-600 leading-tight w-full pr-4" contenteditable="true"><strong>Sinais de Alerta:</strong> Pare se sentir tontura, falta de ar ou dores articulares agudas.</p>
+                            <button onclick="this.parentElement.remove()" class="delete-btn no-print hidden group-hover:flex absolute right-0 top-0 text-red-500 hover:text-red-700 text-xs font-black p-1">✖</button>
                         </div>
                     </div>
+                    
+                    <!-- BOTÃO ADICIONAR DICA -->
+                    <button onclick="adicionarDica()" class="no-print mt-3 text-[10px] text-emerald-600 font-bold hover:text-emerald-800 bg-emerald-50 px-2 py-1 rounded border border-emerald-100 transition-colors">
+                        + Adicionar Nova Dica
+                    </button>
                 </div>
                 <div class="mt-6 pt-4 border-t border-slate-100 text-center">
                     <p class="text-[9px] text-slate-400 font-bold uppercase tracking-wider" contenteditable="true">Atenção Básica: Cuidado Contínuo</p>
@@ -182,7 +203,6 @@
                 <div class="text-center">
                     <div class="theme-bg-light p-4 rounded-2xl mb-4 flex justify-center border border-slate-50">
                         <div class="flex items-center gap-2 font-black text-sm tracking-widest text-slate-800">
-                            <!-- ÍCONE APS COM A CLASSE theme-text-svg PARA COLORIR NO PDF -->
                             <svg class="w-6 h-6 theme-text-svg" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M19 10.5h-5.5V5c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v5.5H5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5h5.5V19c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-5.5H19c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5z"/>
                             </svg>
@@ -193,15 +213,15 @@
                     <p class="text-[11px] text-slate-500 mb-4" contenteditable="true">Anote as informações da sua equipe de saúde de referência:</p>
                     
                     <div class="space-y-3 text-left">
-                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 shadow-sm">
+                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 shadow-sm relative group">
                             <span class="text-[9px] uppercase font-bold text-slate-400 block tracking-wider mb-1" contenteditable="true">Unidade de Saúde (UBS):</span>
                             <span class="text-xs text-slate-700 font-bold block" contenteditable="true">UBS Centro - PSF 01</span>
                         </div>
-                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 shadow-sm">
+                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 shadow-sm relative group">
                             <span class="text-[9px] uppercase font-bold text-slate-400 block tracking-wider mb-1" contenteditable="true">Seu Agente de Saúde (ACS):</span>
                             <span class="text-xs text-slate-700 font-bold block" contenteditable="true">Nome do Agente</span>
                         </div>
-                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 shadow-sm">
+                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 shadow-sm relative group">
                             <span class="text-[9px] uppercase font-bold text-slate-400 block tracking-wider mb-1" contenteditable="true">Dúvidas / Contato:</span>
                             <span class="text-xs text-slate-700 font-bold block" contenteditable="true">(88) 99999-9999</span>
                         </div>
@@ -221,7 +241,7 @@
 
                 <div class="my-auto py-4">
                     <div class="flex justify-center mb-6">
-                        <div class="img-upload-area w-24 h-24 md:w-28 md:h-28 rounded-full theme-bg flex items-center justify-center text-white shadow-lg overflow-hidden group" onclick="triggerImageUpload(this, 'circle')">
+                        <div class="img-upload-area w-24 h-24 md:w-28 md:h-28 rounded-full theme-bg flex items-center justify-center text-white shadow-lg overflow-hidden group" onclick="abrirCropModal(this, 'circle')">
                             <div id="container-img-capa" class="w-full h-full flex items-center justify-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-14 h-14 md:w-16 md:h-16">
                                     <path d="M12 18.5l-1.45-1.32C5.4 12.36 2 9.28 2 5.5 2 2.42 4.42 0 7.5 0c1.74 0 3.41.81 4.5 2.09C13.09 0.81 14.76 0 16.5 0 19.58 0 22 2.42 22 5.5c0 3.78-3.4 6.86-8.55 11.54L12 18.5z" />
@@ -255,12 +275,12 @@
                             <span class="w-5 h-5 rounded-full theme-bg text-white font-black text-[10px] flex items-center justify-center shrink-0" contenteditable="true">1</span>
                             <h3 class="text-xs font-black text-slate-800 uppercase tracking-tight leading-tight" contenteditable="true">Pescoço</h3>
                         </div>
-                        <!-- ALTURA DA IMAGEM AUMENTADA (h-[100px]) -->
-                        <div class="img-upload-area w-full h-[100px] theme-bg-light rounded-xl mb-2 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden" onclick="triggerImageUpload(this, 'rect')">
+                        <!-- ALTURA AUMENTADA PARA 130px (h-[130px]) -->
+                        <div class="img-upload-area w-full h-[130px] theme-bg-light rounded-xl mb-2 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden" onclick="abrirCropModal(this, 'rect')">
                             <div id="container-img-ex1" class="w-full h-full flex items-center justify-center">
                                 <svg class="w-10 h-10 theme-text-svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M10 14h4" /></svg>
                             </div>
-                            <div class="absolute inset-0 bg-blue-500/80 hidden group-hover:flex items-center justify-center text-[9px] font-bold text-white uppercase backdrop-blur-sm">📷 Add Foto</div>
+                            <div class="absolute inset-0 bg-blue-500/80 hidden group-hover:flex items-center justify-center text-[9px] font-bold text-white uppercase backdrop-blur-sm">📷 Editar Foto</div>
                         </div>
                         <p class="text-[10px] text-slate-700 leading-tight font-medium mb-1.5" contenteditable="true"><strong>Como fazer:</strong> Incline a cabeça lentamente em direção ao ombro. Mantenha os ombros relaxados.</p>
                         
@@ -273,9 +293,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="bg-amber-50 text-amber-900 px-2 py-1.5 rounded-lg border border-amber-200 shadow-sm mt-auto">
-                        <p class="text-[9px] leading-tight font-bold" contenteditable="true">⚠️ <strong>Dica:</strong> Não prenda o ar durante o exercício.</p>
-                    </div>
                 </div>
 
                 <hr class="border-dashed border-slate-200 my-0.5">
@@ -286,11 +303,11 @@
                             <span class="w-5 h-5 rounded-full theme-bg text-white font-black text-[10px] flex items-center justify-center shrink-0" contenteditable="true">2</span>
                             <h3 class="text-xs font-black text-slate-800 uppercase tracking-tight leading-tight" contenteditable="true">Girar Ombros</h3>
                         </div>
-                        <div class="img-upload-area w-full h-[100px] theme-bg-light rounded-xl mb-2 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden" onclick="triggerImageUpload(this, 'rect')">
+                        <div class="img-upload-area w-full h-[130px] theme-bg-light rounded-xl mb-2 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden" onclick="abrirCropModal(this, 'rect')">
                             <div id="container-img-ex2" class="w-full h-full flex items-center justify-center">
                                 <svg class="w-10 h-10 theme-text-svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
                             </div>
-                            <div class="absolute inset-0 bg-blue-500/80 hidden group-hover:flex items-center justify-center text-[9px] font-bold text-white uppercase backdrop-blur-sm">📷 Add Foto</div>
+                            <div class="absolute inset-0 bg-blue-500/80 hidden group-hover:flex items-center justify-center text-[9px] font-bold text-white uppercase backdrop-blur-sm">📷 Editar Foto</div>
                         </div>
                         <p class="text-[10px] text-slate-700 leading-tight font-medium mb-1.5" contenteditable="true"><strong>Como fazer:</strong> Faça movimentos circulares com os ombros para trás e depois para frente, suavemente.</p>
                         
@@ -303,9 +320,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="bg-amber-50 text-amber-900 px-2 py-1.5 rounded-lg border border-amber-200 shadow-sm mt-auto">
-                        <p class="text-[9px] leading-tight font-bold" contenteditable="true">⚠️ <strong>Dica:</strong> Mantenha os braços soltos ao lado do corpo.</p>
-                    </div>
                 </div>
             </div>
 
@@ -317,11 +331,11 @@
                             <span class="w-5 h-5 rounded-full theme-bg text-white font-black text-[10px] flex items-center justify-center shrink-0" contenteditable="true">3</span>
                             <h3 class="text-xs font-black text-slate-800 uppercase tracking-tight leading-tight" contenteditable="true">Sentar e Levantar</h3>
                         </div>
-                        <div class="img-upload-area w-full h-[100px] theme-bg-light rounded-xl mb-2 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden" onclick="triggerImageUpload(this, 'rect')">
+                        <div class="img-upload-area w-full h-[130px] theme-bg-light rounded-xl mb-2 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden" onclick="abrirCropModal(this, 'rect')">
                             <div id="container-img-ex3" class="w-full h-full flex items-center justify-center">
                                 <svg class="w-10 h-10 theme-text-svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg>
                             </div>
-                            <div class="absolute inset-0 bg-blue-500/80 hidden group-hover:flex items-center justify-center text-[9px] font-bold text-white uppercase backdrop-blur-sm">📷 Add Foto</div>
+                            <div class="absolute inset-0 bg-blue-500/80 hidden group-hover:flex items-center justify-center text-[9px] font-bold text-white uppercase backdrop-blur-sm">📷 Editar Foto</div>
                         </div>
                         <p class="text-[10px] text-slate-700 leading-tight font-medium mb-1.5" contenteditable="true"><strong>Como fazer:</strong> Cruze os braços à frente do peito. Suba e desça da cadeira devagar usando a força das pernas.</p>
                         
@@ -334,9 +348,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="bg-amber-50 text-amber-900 px-2 py-1.5 rounded-lg border border-amber-200 shadow-sm mt-auto">
-                        <p class="text-[9px] leading-tight font-bold" contenteditable="true">⚠️ <strong>Dica:</strong> Encoste a cadeira na parede por segurança.</p>
-                    </div>
                 </div>
 
                 <hr class="border-dashed border-slate-200 my-0.5">
@@ -347,11 +358,11 @@
                             <span class="w-5 h-5 rounded-full theme-bg text-white font-black text-[10px] flex items-center justify-center shrink-0" contenteditable="true">4</span>
                             <h3 class="text-xs font-black text-slate-800 uppercase tracking-tight leading-tight" contenteditable="true">Esticar o Joelho</h3>
                         </div>
-                        <div class="img-upload-area w-full h-[100px] theme-bg-light rounded-xl mb-2 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden" onclick="triggerImageUpload(this, 'rect')">
+                        <div class="img-upload-area w-full h-[130px] theme-bg-light rounded-xl mb-2 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden" onclick="abrirCropModal(this, 'rect')">
                             <div id="container-img-ex4" class="w-full h-full flex items-center justify-center">
                                 <svg class="w-10 h-10 theme-text-svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                             </div>
-                            <div class="absolute inset-0 bg-blue-500/80 hidden group-hover:flex items-center justify-center text-[9px] font-bold text-white uppercase backdrop-blur-sm">📷 Add Foto</div>
+                            <div class="absolute inset-0 bg-blue-500/80 hidden group-hover:flex items-center justify-center text-[9px] font-bold text-white uppercase backdrop-blur-sm">📷 Editar Foto</div>
                         </div>
                         <p class="text-[10px] text-slate-700 leading-tight font-medium mb-1.5" contenteditable="true"><strong>Como fazer:</strong> Sentado, estique uma perna até o joelho ficar reto. Segure e desça devagar.</p>
                         
@@ -364,9 +375,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="bg-amber-50 text-amber-900 px-2 py-1.5 rounded-lg border border-amber-200 shadow-sm mt-auto">
-                        <p class="text-[9px] leading-tight font-bold" contenteditable="true">⚠️ <strong>Dica:</strong> Mantenha a ponta do pé puxada para você.</p>
-                    </div>
                 </div>
             </div>
 
@@ -378,11 +386,11 @@
                             <span class="w-5 h-5 rounded-full theme-bg text-white font-black text-[10px] flex items-center justify-center shrink-0" contenteditable="true">5</span>
                             <h3 class="text-xs font-black text-slate-800 uppercase tracking-tight leading-tight" contenteditable="true">Panturrilha</h3>
                         </div>
-                        <div class="img-upload-area w-full h-[100px] theme-bg-light rounded-xl mb-2 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden" onclick="triggerImageUpload(this, 'rect')">
+                        <div class="img-upload-area w-full h-[130px] theme-bg-light rounded-xl mb-2 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden" onclick="abrirCropModal(this, 'rect')">
                             <div id="container-img-ex5" class="w-full h-full flex items-center justify-center">
                                 <svg class="w-10 h-10 theme-text-svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 11c0 3.517-1.009 6.799-2.753 9.571" /></svg>
                             </div>
-                            <div class="absolute inset-0 bg-blue-500/80 hidden group-hover:flex items-center justify-center text-[9px] font-bold text-white uppercase backdrop-blur-sm">📷 Add Foto</div>
+                            <div class="absolute inset-0 bg-blue-500/80 hidden group-hover:flex items-center justify-center text-[9px] font-bold text-white uppercase backdrop-blur-sm">📷 Editar Foto</div>
                         </div>
                         <p class="text-[10px] text-slate-700 leading-tight font-medium mb-1.5" contenteditable="true"><strong>Como fazer:</strong> Perto da parede para apoio, fique na ponta dos pés o máximo que conseguir e desça o calcanhar.</p>
                         
@@ -395,9 +403,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="bg-amber-50 text-amber-900 px-2 py-1.5 rounded-lg border border-amber-200 shadow-sm mt-auto">
-                        <p class="text-[9px] leading-tight font-bold" contenteditable="true">⚠️ <strong>Dica:</strong> Faça de maneira controlada, sem pressa.</p>
-                    </div>
                 </div>
 
                 <hr class="border-dashed border-slate-200 my-0.5">
@@ -408,11 +413,11 @@
                             <span class="w-5 h-5 rounded-full theme-bg text-white font-black text-[10px] flex items-center justify-center shrink-0" contenteditable="true">6</span>
                             <h3 class="text-xs font-black text-slate-800 uppercase tracking-tight leading-tight" contenteditable="true">Caminhada Lateral</h3>
                         </div>
-                        <div class="img-upload-area w-full h-[100px] theme-bg-light rounded-xl mb-2 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden" onclick="triggerImageUpload(this, 'rect')">
+                        <div class="img-upload-area w-full h-[130px] theme-bg-light rounded-xl mb-2 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden" onclick="abrirCropModal(this, 'rect')">
                             <div id="container-img-ex6" class="w-full h-full flex items-center justify-center">
                                 <svg class="w-10 h-10 theme-text-svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 8h16M4 16h16" /></svg>
                             </div>
-                            <div class="absolute inset-0 bg-blue-500/80 hidden group-hover:flex items-center justify-center text-[9px] font-bold text-white uppercase backdrop-blur-sm">📷 Add Foto</div>
+                            <div class="absolute inset-0 bg-blue-500/80 hidden group-hover:flex items-center justify-center text-[9px] font-bold text-white uppercase backdrop-blur-sm">📷 Editar Foto</div>
                         </div>
                         <p class="text-[10px] text-slate-700 leading-tight font-medium mb-1.5" contenteditable="true"><strong>Como fazer:</strong> Apoiando as mãos na beirada de uma mesa ou balcão, dê passos para a lateral.</p>
                         
@@ -425,9 +430,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="bg-amber-50 text-amber-900 px-2 py-1.5 rounded-lg border border-amber-200 shadow-sm mt-auto">
-                        <p class="text-[9px] leading-tight font-bold" contenteditable="true">⚠️ <strong>Dica:</strong> Certifique-se de que não há tapetes no caminho.</p>
-                    </div>
                 </div>
             </div>
 
@@ -437,15 +439,13 @@
     <input type="file" id="imageUploader" accept="image/png, image/jpeg, image/webp" class="hidden">
 
     <script>
+        // === TOOLBAR DE TEXTO ===
         const toolbar = document.getElementById('text-toolbar');
         let activeEditable = null;
 
         document.addEventListener('mouseup', (e) => {
             let target = e.target;
-            while (target && target !== document && !target.isContentEditable) {
-                target = target.parentNode;
-            }
-
+            while (target && target !== document && !target.isContentEditable) { target = target.parentNode; }
             if (target && target.isContentEditable) {
                 activeEditable = target;
                 showToolbar(target);
@@ -477,16 +477,17 @@
             if (!activeEditable) return;
             const style = window.getComputedStyle(activeEditable);
             let currentSize = parseFloat(style.fontSize);
-            let newSize = currentSize + (step * 2);
-            activeEditable.style.fontSize = `${newSize}px`;
+            activeEditable.style.fontSize = `${currentSize + (step * 2)}px`;
             activeEditable.style.lineHeight = '1.3'; 
             showToolbar(activeEditable);
         }
 
+        // === CROPPER DE IMAGEM ===
         let alvoImagemAtual = null;
         let formatoImagemAtual = 'rect';
+        let cropper = null;
 
-        function triggerImageUpload(elemento, formato) {
+        function abrirCropModal(elemento, formato) {
             alvoImagemAtual = elemento;
             formatoImagemAtual = formato;
             document.getElementById('imageUploader').click();
@@ -494,38 +495,76 @@
 
         document.getElementById('imageUploader').addEventListener('change', function(event) {
             const arquivo = event.target.files[0];
-            if (arquivo && alvoImagemAtual) {
+            if (arquivo) {
                 const leitor = new FileReader();
                 leitor.onload = function(e) {
-                    const imgObj = new Image();
-                    imgObj.onload = function() {
-                        const canvas = document.createElement('canvas');
-                        const MAX_WIDTH = 800; 
-                        let width = imgObj.width, height = imgObj.height;
-                        if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
-                        canvas.width = width; canvas.height = height;
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(imgObj, 0, 0, width, height);
-                        
-                        const base64Comprimido = canvas.toDataURL('image/jpeg', 0.8);
-                        alvoImagemAtual.innerHTML = '';
-                        alvoImagemAtual.classList.remove('border-2', 'border-dashed', 'border-slate-300');
-                        alvoImagemAtual.style.padding = '0';
-                        
-                        const imgNode = document.createElement('img');
-                        imgNode.src = base64Comprimido;
-                        imgNode.className = formatoImagemAtual === 'circle' ? 'w-full h-full object-cover rounded-full' : 'w-full h-full object-cover rounded-xl';
-                        alvoImagemAtual.appendChild(imgNode);
-                    };
-                    imgObj.src = e.target.result;
+                    const cropImage = document.getElementById('crop-image');
+                    cropImage.src = e.target.result;
+                    document.getElementById('crop-modal').classList.remove('hidden');
+                    document.getElementById('crop-modal').classList.add('flex');
+                    
+                    if (cropper) cropper.destroy();
+                    
+                    cropper = new Cropper(cropImage, {
+                        aspectRatio: formatoImagemAtual === 'circle' ? 1 : 16 / 9,
+                        viewMode: 1,
+                        dragMode: 'move',
+                        autoCropArea: 1,
+                        restore: false,
+                        guides: true,
+                        center: true,
+                        highlight: false,
+                        cropBoxMovable: false,
+                        cropBoxResizable: false,
+                        toggleDragModeOnDblclick: false,
+                    });
                 };
                 leitor.readAsDataURL(arquivo);
             }
-            event.target.value = '';
+            event.target.value = ''; // reseta input
         });
 
-        function abrirImpressao() { window.print(); }
+        function fecharCrop() {
+            document.getElementById('crop-modal').classList.add('hidden');
+            document.getElementById('crop-modal').classList.remove('flex');
+            if (cropper) cropper.destroy();
+        }
 
+        function aplicarCorte() {
+            if (!cropper) return;
+            // Gera um canvas leve com o corte exato feito pelo usuário
+            const canvas = cropper.getCroppedCanvas({
+                width: formatoImagemAtual === 'circle' ? 300 : 400,
+                fillColor: '#fff'
+            });
+            const base64Crop = canvas.toDataURL('image/jpeg', 0.85);
+            
+            alvoImagemAtual.innerHTML = '';
+            alvoImagemAtual.classList.remove('border-2', 'border-dashed', 'border-slate-300');
+            alvoImagemAtual.style.padding = '0';
+            
+            const imgNode = document.createElement('img');
+            imgNode.src = base64Crop;
+            imgNode.className = formatoImagemAtual === 'circle' ? 'w-full h-full object-cover rounded-full' : 'w-full h-full object-cover rounded-xl';
+            alvoImagemAtual.appendChild(imgNode);
+            
+            fecharCrop();
+        }
+
+        // === DICAS DINÂMICAS ===
+        function adicionarDica() {
+            const lista = document.getElementById('lista-dicas');
+            const novaDica = document.createElement('div');
+            novaDica.className = 'flex gap-2.5 items-start group relative';
+            novaDica.innerHTML = `
+                <span class="text-emerald-500 font-black text-sm" contenteditable="true">✓</span>
+                <p class="text-xs text-slate-600 leading-tight w-full pr-4" contenteditable="true"><strong>Nova Dica:</strong> Edite este texto livremente.</p>
+                <button onclick="this.parentElement.remove()" class="delete-btn no-print hidden group-hover:flex absolute right-0 top-0 text-red-500 hover:text-red-700 text-xs font-black p-1" title="Apagar Dica">✖</button>
+            `;
+            lista.appendChild(novaDica);
+        }
+
+        // === INTERFACE GERAL E TEMAS ===
         function mostrarPagina(pagina) {
             const pagExt = document.getElementById('pagina-externa');
             const pagInt = document.getElementById('pagina-interna');
@@ -553,47 +592,27 @@
         window.temaAtual = 'sus-green'; 
         window.customColorHex = null;
 
-        // Lógica do Color Picker Nativo
-        document.getElementById('customColorPicker').addEventListener('input', (e) => {
-            mudarTema('custom', e.target.value);
-        });
+        document.getElementById('customColorPicker').addEventListener('input', (e) => { mudarTema('custom', e.target.value); });
 
         function mudarTema(nomeTema, customHex = null) {
             window.temaAtual = nomeTema;
             
-            // 1. Limpa os estilos inlines caso o usuário saia do modo "Custom"
-            document.querySelectorAll('.theme-bg, .theme-text, .theme-text-svg, .theme-badge, .theme-bg-light').forEach(el => {
-                el.style.backgroundColor = '';
-                el.style.color = '';
-            });
+            document.querySelectorAll('.theme-bg, .theme-text, .theme-text-svg, .theme-badge, .theme-bg-light').forEach(el => { el.style.backgroundColor = ''; el.style.color = ''; });
 
             if (nomeTema === 'custom') {
                 window.customColorHex = customHex;
-                // Aplica a cor escolhida via Inline Styles para sobrescrever o Tailwind
                 document.querySelectorAll('.theme-bg').forEach(el => { el.style.backgroundColor = customHex; });
-                document.querySelectorAll('.theme-text').forEach(el => { el.style.color = customHex; });
-                document.querySelectorAll('.theme-text-svg').forEach(el => { el.style.color = customHex; });
-                document.querySelectorAll('.theme-badge').forEach(el => { 
-                    el.style.backgroundColor = customHex + '20'; // cor + 20 de opacidade
-                    el.style.color = customHex; 
-                });
-                document.querySelectorAll('.theme-bg-light').forEach(el => { 
-                    el.style.backgroundColor = customHex + '15'; // cor + 15 de opacidade
-                });
+                document.querySelectorAll('.theme-text, .theme-text-svg').forEach(el => { el.style.color = customHex; });
+                document.querySelectorAll('.theme-badge').forEach(el => { el.style.backgroundColor = customHex + '20'; el.style.color = customHex; });
+                document.querySelectorAll('.theme-bg-light').forEach(el => { el.style.backgroundColor = customHex + '15'; });
             } else {
                 window.customColorHex = null;
                 const configs = configuracoesTemas[nomeTema];
                 document.querySelectorAll('.theme-bg').forEach(el => { el.classList.remove('bg-cyan-600', 'bg-emerald-600', 'bg-pink-500', 'bg-blue-600'); el.classList.add(configs.bg); });
-                document.querySelectorAll('.theme-text').forEach(el => { el.classList.remove('text-cyan-600', 'text-emerald-600', 'text-pink-500', 'text-blue-600', 'text-teal-700'); el.classList.add(configs.text); });
-                document.querySelectorAll('.theme-text-svg').forEach(el => { el.classList.remove('text-cyan-600', 'text-emerald-600', 'text-pink-500', 'text-blue-600'); el.classList.add(configs.text); });
+                document.querySelectorAll('.theme-text, .theme-text-svg').forEach(el => { el.classList.remove('text-cyan-600', 'text-emerald-600', 'text-pink-500', 'text-blue-600', 'text-teal-700'); el.classList.add(configs.text); });
                 document.querySelectorAll('.theme-badge').forEach(el => { el.className = `theme-badge inline-block text-[10px] font-black px-2.5 py-1 rounded uppercase tracking-widest mb-4 ${configs.badgeBg} ${configs.badgeText}`; });
                 document.querySelectorAll('.theme-bg-light').forEach(el => { el.classList.remove('bg-cyan-50', 'bg-emerald-50/40', 'bg-pink-50/40', 'bg-blue-50/40'); el.classList.add(configs.lightBg); });
             }
-        }
-
-        function renovarIdsDinamicos() {
-            document.querySelectorAll('#main-content-container [contenteditable="true"]').forEach((el, index) => { el.id = 'editable-' + index; });
-            document.querySelectorAll('#main-content-container [onclick^="triggerImageUpload"]').forEach((el, index) => { el.id = 'img-target-' + index; });
         }
     </script>
 
@@ -615,7 +634,6 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-
         const DADOS_DOC_ID = "folder_padrao";
 
         onAuthStateChanged(auth, (user) => {
@@ -634,16 +652,11 @@
 
         document.getElementById('login-form').addEventListener('submit', (e) => {
             e.preventDefault();
-            const email = document.getElementById('email-input').value;
-            const pass = document.getElementById('password-input').value;
             const btn = document.getElementById('btn-entrar');
             btn.textContent = "Verificando...";
             document.getElementById('login-error').classList.add('hidden');
-
-            signInWithEmailAndPassword(auth, email, pass).catch((error) => {
-                btn.textContent = "Entrar no Sistema";
-                document.getElementById('login-error').classList.remove('hidden');
-            });
+            signInWithEmailAndPassword(auth, document.getElementById('email-input').value, document.getElementById('password-input').value)
+                .catch(() => { btn.textContent = "Entrar no Sistema"; document.getElementById('login-error').classList.remove('hidden'); });
         });
 
         document.getElementById('btn-logout').addEventListener('click', () => signOut(auth));
@@ -651,37 +664,23 @@
         document.getElementById('btn-reset').addEventListener('click', () => {
             if(confirm("ATENÇÃO: Deseja apagar todas as edições e fotos e carregar o modelo de fábrica?")) {
                 document.getElementById('main-content-container').innerHTML = document.getElementById('default-template').innerHTML;
-                renovarIdsDinamicos();
                 mudarTema('sus-green');
                 mostrarPagina('externa');
                 window.salvarProgresso();
             }
         });
 
+        // SALVAMENTO: Grava TODO o HTML do container para salvar as dicas novas e botões gerados
         window.salvarProgresso = async function() {
             if (!auth.currentUser || !db) return;
             const btn = document.getElementById('btn-salvar');
             const textoOriginal = btn.innerHTML;
             btn.innerHTML = '⏳ Salvando...';
 
-            renovarIdsDinamicos(); 
-
-            const textos = {};
-            document.querySelectorAll('#main-content-container [contenteditable="true"]').forEach(el => {
-                textos[el.id] = { html: el.innerHTML, size: el.style.fontSize };
-            });
-
-            const imagens = {};
-            document.querySelectorAll('#main-content-container [onclick^="triggerImageUpload"]').forEach(el => {
-                const img = el.querySelector('img');
-                if (img) imagens[el.id] = img.src;
-            });
-
             const dataToSave = {
                 tema: window.temaAtual || 'sus-green',
                 customColor: window.customColorHex || null,
-                textos: textos,
-                imagens: imagens,
+                htmlContent: document.getElementById('main-content-container').innerHTML,
                 atualizadoEm: new Date().toISOString()
             };
 
@@ -696,51 +695,22 @@
             }
         };
 
+        // CARREGAMENTO: Puxa o HTML integral do banco e ejeta na tela
         async function carregarProgresso() {
             try {
-                document.getElementById('main-content-container').innerHTML = document.getElementById('default-template').innerHTML;
-                renovarIdsDinamicos();
-
                 const docSnap = await getDoc(doc(db, "folders", DADOS_DOC_ID));
                 
-                if (docSnap.exists()) {
+                if (docSnap.exists() && docSnap.data().htmlContent) {
                     const data = docSnap.data();
+                    document.getElementById('main-content-container').innerHTML = data.htmlContent;
                     
                     if (data.tema) {
-                        if (data.tema === 'custom' && data.customColor) {
-                            mudarTema('custom', data.customColor);
-                        } else {
-                            mudarTema(data.tema);
-                        }
-                    } else {
-                        mudarTema('sus-green');
-                    }
+                        if (data.tema === 'custom' && data.customColor) mudarTema('custom', data.customColor);
+                        else mudarTema(data.tema);
+                    } else mudarTema('sus-green');
                     
-                    if (data.textos) {
-                        for (const [id, config] of Object.entries(data.textos)) {
-                            const el = document.getElementById(id);
-                            if (el) {
-                                el.innerHTML = config.html || config; 
-                                if (config.size) el.style.fontSize = config.size;
-                            }
-                        }
-                    }
-                    
-                    if (data.imagens) {
-                        for (const [id, src] of Object.entries(data.imagens)) {
-                            const container = document.getElementById(id);
-                            if (container) {
-                                container.innerHTML = '';
-                                container.classList.remove('border-2', 'border-dashed', 'border-slate-300');
-                                container.style.padding = '0';
-                                const img = document.createElement('img');
-                                img.src = src;
-                                img.className = container.getAttribute('onclick').includes('circle') ? 'w-full h-full object-cover rounded-full' : 'w-full h-full object-cover rounded-xl';
-                                container.appendChild(img);
-                            }
-                        }
-                    }
                 } else {
+                    document.getElementById('main-content-container').innerHTML = document.getElementById('default-template').innerHTML;
                     mudarTema('sus-green');
                 }
                 
