@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Modelo de Folder - Exercícios Domiciliares (Atenção Básica)</title>
-    <!-- Tailwind CSS -->
+    
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Cropper.js (Para edição e recorte de imagens) -->
+    <!-- Cropper.js -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
 
@@ -51,8 +51,7 @@
         .img-upload-area { position: relative; cursor: pointer; transition: all 0.2s; }
         .img-upload-area:hover { outline: 2px dashed #3b82f6; }
 
-        /* Ajuste do modal de corte para mobile */
-        .cropper-container { width: 100% !important; height: 50vh !important; max-height: 400px; }
+        .cropper-container { width: 100% !important; height: 50vh !important; max-height: 500px; }
     </style>
 </head>
 <body class="bg-slate-100 min-h-screen flex flex-col relative">
@@ -90,12 +89,12 @@
 
     <!-- MODAL DE CORTE DE IMAGEM -->
     <div id="crop-modal" class="no-print fixed inset-0 z-[150] bg-slate-900/90 hidden flex-col items-center justify-center p-4">
-        <div class="bg-white rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl flex flex-col">
+        <div class="bg-white rounded-2xl w-full max-w-3xl overflow-hidden shadow-2xl flex flex-col">
             <div class="p-4 bg-slate-800 text-white flex justify-between items-center">
                 <h3 class="font-bold">Ajustar Imagem</h3>
                 <button onclick="fecharCrop()" class="text-slate-400 hover:text-white font-bold">✕ Fechar</button>
             </div>
-            <div class="bg-slate-900 w-full h-[50vh] max-h-[400px] flex items-center justify-center">
+            <div class="bg-slate-900 w-full h-[50vh] max-h-[500px] flex items-center justify-center">
                 <img id="crop-image" src="" class="max-w-full max-h-full block">
             </div>
             <div class="p-4 bg-white flex flex-wrap gap-2 justify-between items-center">
@@ -129,12 +128,12 @@
 
             <div class="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto flex-wrap justify-center">
                 <div class="flex items-center gap-2.5 bg-slate-800 px-3.5 py-2 rounded-xl">
-                    <button onclick="mudarTema('sus-blue')" class="w-6 h-6 rounded-full bg-cyan-600 border-2 border-slate-700 hover:scale-110 transition-transform" title="Azul SUS"></button>
-                    <button onclick="mudarTema('sus-green')" class="w-6 h-6 rounded-full bg-emerald-600 border-2 border-slate-700 hover:scale-110 transition-transform" title="Verde Saúde"></button>
-                    <button onclick="mudarTema('outubro-rosa')" class="w-6 h-6 rounded-full bg-pink-500 border-2 border-slate-700 hover:scale-110 transition-transform" title="Outubro Rosa"></button>
-                    <button onclick="mudarTema('novembro-azul')" class="w-6 h-6 rounded-full bg-blue-600 border-2 border-slate-700 hover:scale-110 transition-transform" title="Novembro Azul"></button>
+                    <button onclick="mudarTema('sus-blue')" class="w-6 h-6 rounded-full bg-cyan-600 border-2 border-slate-700 hover:scale-110 transition-transform"></button>
+                    <button onclick="mudarTema('sus-green')" class="w-6 h-6 rounded-full bg-emerald-600 border-2 border-slate-700 hover:scale-110 transition-transform"></button>
+                    <button onclick="mudarTema('outubro-rosa')" class="w-6 h-6 rounded-full bg-pink-500 border-2 border-slate-700 hover:scale-110 transition-transform"></button>
+                    <button onclick="mudarTema('novembro-azul')" class="w-6 h-6 rounded-full bg-blue-600 border-2 border-slate-700 hover:scale-110 transition-transform"></button>
                     <div class="w-px h-5 bg-slate-600 mx-1"></div>
-                    <label class="relative cursor-pointer hover:scale-110 transition-transform" title="Escolher Cor Personalizada">
+                    <label class="relative cursor-pointer hover:scale-110 transition-transform">
                         <div class="w-6 h-6 rounded-full border-2 border-slate-700" style="background: conic-gradient(red, yellow, lime, aqua, blue, magenta, red);"></div>
                         <input type="color" id="customColorPicker" class="opacity-0 absolute inset-0 w-0 h-0 cursor-pointer">
                     </label>
@@ -170,7 +169,6 @@
                     <h3 class="text-base font-black theme-text mb-3 uppercase tracking-tight" contenteditable="true">Preparando o Corpo</h3>
                     <p class="text-xs text-slate-600 mb-4 leading-relaxed font-medium" contenteditable="true">A prática regular de exercícios em casa melhora flexibilidade, equilíbrio e reduz dores crônicas.</p>
                     
-                    <!-- CONTAINER DE DICAS DINÂMICAS -->
                     <div id="lista-dicas" class="space-y-3">
                         <div class="flex gap-2.5 items-start group relative">
                             <span class="text-emerald-500 font-black text-sm" contenteditable="true">✓</span>
@@ -189,7 +187,6 @@
                         </div>
                     </div>
                     
-                    <!-- BOTÃO ADICIONAR DICA -->
                     <button onclick="adicionarDica()" class="no-print mt-3 text-[10px] text-emerald-600 font-bold hover:text-emerald-800 bg-emerald-50 px-2 py-1 rounded border border-emerald-100 transition-colors">
                         + Adicionar Nova Dica
                     </button>
@@ -275,7 +272,6 @@
                             <span class="w-5 h-5 rounded-full theme-bg text-white font-black text-[10px] flex items-center justify-center shrink-0" contenteditable="true">1</span>
                             <h3 class="text-xs font-black text-slate-800 uppercase tracking-tight leading-tight" contenteditable="true">Pescoço</h3>
                         </div>
-                        <!-- ALTURA AUMENTADA PARA 130px (h-[130px]) -->
                         <div class="img-upload-area w-full h-[130px] theme-bg-light rounded-xl mb-2 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden" onclick="abrirCropModal(this, 'rect')">
                             <div id="container-img-ex1" class="w-full h-full flex items-center justify-center">
                                 <svg class="w-10 h-10 theme-text-svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M10 14h4" /></svg>
@@ -504,9 +500,13 @@
                     document.getElementById('crop-modal').classList.add('flex');
                     
                     if (cropper) cropper.destroy();
+
+                    // Calcula a proporção exata da caixa na tela para o corte ser 100% fiel
+                    const rect = alvoImagemAtual.getBoundingClientRect();
+                    const proporcaoExata = (rect.width && rect.height) ? (rect.width / rect.height) : (16/9);
                     
                     cropper = new Cropper(cropImage, {
-                        aspectRatio: formatoImagemAtual === 'circle' ? 1 : 16 / 9,
+                        aspectRatio: formatoImagemAtual === 'circle' ? 1 : proporcaoExata,
                         viewMode: 1,
                         dragMode: 'move',
                         autoCropArea: 1,
@@ -514,8 +514,8 @@
                         guides: true,
                         center: true,
                         highlight: false,
-                        cropBoxMovable: false,
-                        cropBoxResizable: false,
+                        cropBoxMovable: true,
+                        cropBoxResizable: true,
                         toggleDragModeOnDblclick: false,
                     });
                 };
@@ -532,12 +532,15 @@
 
         function aplicarCorte() {
             if (!cropper) return;
-            // Gera um canvas leve com o corte exato feito pelo usuário
+            
+            // Aumentado para 1500px garantindo máxima resolução sem distorções no Firebase
             const canvas = cropper.getCroppedCanvas({
-                width: formatoImagemAtual === 'circle' ? 300 : 400,
+                maxWidth: 1500,
+                maxHeight: 1500,
                 fillColor: '#fff'
             });
-            const base64Crop = canvas.toDataURL('image/jpeg', 0.85);
+            
+            const base64Crop = canvas.toDataURL('image/jpeg', 0.95);
             
             alvoImagemAtual.innerHTML = '';
             alvoImagemAtual.classList.remove('border-2', 'border-dashed', 'border-slate-300');
@@ -670,7 +673,6 @@
             }
         });
 
-        // SALVAMENTO: Grava TODO o HTML do container para salvar as dicas novas e botões gerados
         window.salvarProgresso = async function() {
             if (!auth.currentUser || !db) return;
             const btn = document.getElementById('btn-salvar');
@@ -695,7 +697,6 @@
             }
         };
 
-        // CARREGAMENTO: Puxa o HTML integral do banco e ejeta na tela
         async function carregarProgresso() {
             try {
                 const docSnap = await getDoc(doc(db, "folders", DADOS_DOC_ID));
