@@ -30,12 +30,55 @@
             .fold-guide::after { display: none !important; }
         }
 
+        /* CONFIGURAÇÃO BLINDADA PARA IMPRESSÃO PERFEITA */
+        @page { size: A4 landscape; margin: 0mm; }
         @media print {
-            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
-            @page { size: A4 landscape; margin: 0; }
-            body { background: white !important; color: black !important; padding: 0 !important; margin: 0 !important; }
+            * { 
+                -webkit-print-color-adjust: exact !important; 
+                print-color-adjust: exact !important; 
+                color-adjust: exact !important; 
+                box-sizing: border-box !important;
+            }
+            html, body { 
+                width: 297mm; 
+                height: 210mm; 
+                margin: 0 !important; 
+                padding: 0 !important; 
+                background: white !important; 
+            }
+            /* Zera o preenchimento da tela do site para não empurrar o PDF para baixo/direita */
+            main, #main-content-container, #main-content { 
+                padding: 0 !important; 
+                margin: 0 !important; 
+                gap: 0 !important; 
+                display: block !important; 
+                max-width: 100% !important;
+                width: 100% !important;
+            }
             .no-print { display: none !important; }
-            .print-page { width: 297mm !important; height: 210mm !important; margin: 0 !important; border: none !important; box-shadow: none !important; padding: 10mm 12mm !important; page-break-after: always !important; display: grid !important; grid-template-columns: repeat(3, 1fr) !important; gap: 12mm !important; box-sizing: border-box !important; background-color: white !important; background-image: none !important; }
+            
+            .print-page { 
+                width: 297mm !important; 
+                height: 210mm !important; 
+                max-height: 210mm !important; 
+                margin: 0 !important; 
+                border: none !important; 
+                border-radius: 0 !important;
+                box-shadow: none !important; 
+                padding: 8mm !important; 
+                display: grid !important; 
+                grid-template-columns: repeat(3, 1fr) !important; 
+                gap: 8mm !important; 
+                box-sizing: border-box !important; 
+                background-color: white !important; 
+                background-image: none !important; 
+                overflow: hidden !important; 
+                page-break-inside: avoid !important;
+            }
+            /* Quebra de página apenas na primeira face para não gerar a 3ª página vazia */
+            .print-page:first-of-type { page-break-after: always !important; break-after: page !important; }
+            .print-page:last-of-type { page-break-after: auto !important; break-after: auto !important; }
+
             .fold-guide::after { display: none !important; }
             [contenteditable="true"] { outline: none !important; border: none !important; background-color: transparent !important; }
             .delete-btn { display: none !important; }
@@ -145,7 +188,7 @@
                 </div>
 
                 <div class="flex gap-2 w-full sm:w-auto">
-                    <button id="btn-reset" class="flex-1 sm:flex-none bg-slate-700 hover:bg-slate-600 text-white font-bold px-3 py-2 rounded-xl text-xs uppercase tracking-wider transition-all">🔄 Resetar</button>
+                    <button id="btn-reset" class="flex-1 sm:flex-none bg-slate-700 hover:bg-slate-600 text-white font-bold px-3 py-2 rounded-xl text-xs uppercase tracking-wider transition-all" title="Restaurar Padrão">🔄 Resetar</button>
                     <button id="btn-salvar" onclick="window.salvarProgresso()" class="flex-1 sm:flex-none bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold px-4 py-2 rounded-xl text-xs md:text-sm uppercase tracking-wider flex items-center justify-center gap-1 shadow-lg transition-all">💾 Salvar</button>
                     <button onclick="window.print()" class="flex-1 sm:flex-none bg-blue-600 hover:bg-blue-500 text-white font-bold px-4 py-2 rounded-xl text-xs md:text-sm uppercase tracking-wider shadow-lg transition-all">🖨️ Imprimir</button>
                 </div>
@@ -159,46 +202,46 @@
         </div>
     </main>
 
-    <!-- TEMPLATE PADRÃO DO FOLDER AMPLIADO -->
+    <!-- TEMPLATE PADRÃO DO FOLDER -->
     <template id="default-template">
         <!-- PÁGINA 1: EXTERNA -->
         <div id="pagina-externa" class="print-page bg-white shadow-xl rounded-3xl mx-auto border border-slate-200 p-6 md:p-8 relative transition-all duration-300">
             <div class="fold-guide fold-left p-5 flex flex-col justify-between h-full bg-slate-50/50 rounded-2xl border border-slate-100">
                 <div class="flex-1 flex flex-col">
-                    <div class="theme-badge inline-block text-xs font-black px-3 py-1.5 rounded uppercase tracking-widest mb-6 w-max" contenteditable="true">Dicas Importantes</div>
-                    <h3 class="text-lg font-black theme-text mb-4 uppercase tracking-tight" contenteditable="true">Preparando o Corpo</h3>
-                    <p class="text-sm text-slate-600 mb-6 leading-relaxed font-medium" contenteditable="true">A prática regular de exercícios em casa melhora flexibilidade, equilíbrio e reduz dores crônicas.</p>
+                    <div class="theme-badge inline-block text-[11px] font-black px-3 py-1.5 rounded uppercase tracking-widest mb-4 w-max" contenteditable="true">Dicas Importantes</div>
+                    <h3 class="text-base font-black theme-text mb-3 uppercase tracking-tight" contenteditable="true">Preparando o Corpo</h3>
+                    <p class="text-sm text-slate-600 mb-5 leading-relaxed font-medium" contenteditable="true">A prática regular de exercícios em casa melhora flexibilidade, equilíbrio e reduz dores crônicas.</p>
                     
-                    <div id="lista-dicas" class="space-y-4 flex-1">
-                        <div class="flex gap-3 items-start group relative">
-                            <span class="text-emerald-500 font-black text-base mt-0.5" contenteditable="true">✓</span>
-                            <p class="text-sm text-slate-600 leading-relaxed w-full pr-4" contenteditable="true"><strong>Roupas Leves:</strong> Use tecidos confortáveis e faça os exercícios em local seguro.</p>
-                            <button onclick="this.parentElement.remove()" class="delete-btn no-print hidden group-hover:flex absolute right-0 top-0 text-red-500 hover:text-red-700 text-sm font-black p-1">✖</button>
+                    <div id="lista-dicas" class="space-y-3 flex-1">
+                        <div class="flex gap-2.5 items-start group relative">
+                            <span class="text-emerald-500 font-black text-sm mt-0.5" contenteditable="true">✓</span>
+                            <p class="text-xs text-slate-600 leading-relaxed w-full pr-4" contenteditable="true"><strong>Roupas Leves:</strong> Use tecidos confortáveis e faça os exercícios em local seguro.</p>
+                            <button onclick="this.parentElement.remove()" class="delete-btn no-print hidden group-hover:flex absolute right-0 top-0 text-red-500 hover:text-red-700 text-xs font-black p-1">✖</button>
                         </div>
-                        <div class="flex gap-3 items-start group relative">
-                            <span class="text-emerald-500 font-black text-base mt-0.5" contenteditable="true">✓</span>
-                            <p class="text-sm text-slate-600 leading-relaxed w-full pr-4" contenteditable="true"><strong>Hidratação:</strong> Beba pequenos goles de água antes e durante a rotina.</p>
-                            <button onclick="this.parentElement.remove()" class="delete-btn no-print hidden group-hover:flex absolute right-0 top-0 text-red-500 hover:text-red-700 text-sm font-black p-1">✖</button>
+                        <div class="flex gap-2.5 items-start group relative">
+                            <span class="text-emerald-500 font-black text-sm mt-0.5" contenteditable="true">✓</span>
+                            <p class="text-xs text-slate-600 leading-relaxed w-full pr-4" contenteditable="true"><strong>Hidratação:</strong> Beba pequenos goles de água antes e durante a rotina.</p>
+                            <button onclick="this.parentElement.remove()" class="delete-btn no-print hidden group-hover:flex absolute right-0 top-0 text-red-500 hover:text-red-700 text-xs font-black p-1">✖</button>
                         </div>
-                        <div class="flex gap-3 items-start group relative">
-                            <span class="text-emerald-500 font-black text-base mt-0.5" contenteditable="true">✓</span>
-                            <p class="text-sm text-slate-600 leading-relaxed w-full pr-4" contenteditable="true"><strong>Sinais de Alerta:</strong> Pare se sentir tontura, falta de ar ou dores agudas.</p>
-                            <button onclick="this.parentElement.remove()" class="delete-btn no-print hidden group-hover:flex absolute right-0 top-0 text-red-500 hover:text-red-700 text-sm font-black p-1">✖</button>
+                        <div class="flex gap-2.5 items-start group relative">
+                            <span class="text-emerald-500 font-black text-sm mt-0.5" contenteditable="true">✓</span>
+                            <p class="text-xs text-slate-600 leading-relaxed w-full pr-4" contenteditable="true"><strong>Sinais de Alerta:</strong> Pare se sentir tontura, falta de ar ou dores articulares agudas.</p>
+                            <button onclick="this.parentElement.remove()" class="delete-btn no-print hidden group-hover:flex absolute right-0 top-0 text-red-500 hover:text-red-700 text-xs font-black p-1">✖</button>
                         </div>
                     </div>
                     
-                    <button onclick="adicionarDica()" class="no-print mt-4 text-xs text-emerald-600 font-bold hover:text-emerald-800 bg-emerald-50 px-3 py-2 rounded-lg border border-emerald-100 transition-colors w-full">
+                    <button onclick="adicionarDica()" class="no-print mt-4 text-[11px] text-emerald-600 font-bold hover:text-emerald-800 bg-emerald-50 px-3 py-2 rounded-lg border border-emerald-100 transition-colors w-full">
                         + Adicionar Nova Dica
                     </button>
                 </div>
-                <div class="mt-8 pt-5 border-t border-slate-200 text-center">
-                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider" contenteditable="true">Atenção Básica: Cuidado Contínuo</p>
+                <div class="mt-6 pt-4 border-t border-slate-200 text-center">
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider" contenteditable="true">Atenção Básica: Cuidado Contínuo</p>
                 </div>
             </div>
 
             <div class="fold-guide fold-right p-5 flex flex-col justify-between h-full bg-white">
                 <div class="text-center flex-1 flex flex-col">
-                    <div class="theme-bg-light p-5 rounded-2xl mb-6 flex justify-center border border-slate-50">
+                    <div class="theme-bg-light p-4 rounded-2xl mb-5 flex justify-center border border-slate-50">
                         <div class="flex items-center gap-3 font-black text-base tracking-widest text-slate-800">
                             <svg class="w-8 h-8 theme-text-svg" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M19 10.5h-5.5V5c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v5.5H5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5h5.5V19c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-5.5H19c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5z"/>
@@ -207,7 +250,7 @@
                         </div>
                     </div>
                     <h3 class="text-sm font-black text-slate-800 uppercase tracking-widest mb-3" contenteditable="true">Acompanhamento</h3>
-                    <p class="text-xs text-slate-500 mb-6" contenteditable="true">Anote as informações da sua equipe de saúde de referência:</p>
+                    <p class="text-xs text-slate-500 mb-5" contenteditable="true">Anote as informações da sua equipe de saúde de referência:</p>
                     
                     <div class="space-y-4 text-left flex-1">
                         <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 shadow-sm relative group">
@@ -224,8 +267,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="mt-8 pt-5 border-t border-slate-200 text-center">
-                    <span class="text-xs text-slate-400 font-bold block" contenteditable="true">Leve este folder em suas consultas!</span>
+                <div class="mt-6 pt-4 border-t border-slate-200 text-center">
+                    <span class="text-[11px] text-slate-400 font-bold block" contenteditable="true">Leve este folder em suas consultas!</span>
                 </div>
             </div>
 
@@ -238,7 +281,7 @@
 
                 <div class="my-auto py-6 flex-1 flex flex-col justify-center">
                     <div class="flex justify-center mb-8">
-                        <div class="img-upload-area w-36 h-36 md:w-44 md:h-44 rounded-full theme-bg flex items-center justify-center text-white shadow-xl overflow-hidden group" onclick="abrirCropModal(this, 'circle')">
+                        <div class="img-upload-area w-36 h-36 md:w-40 md:h-40 rounded-full theme-bg flex items-center justify-center text-white shadow-xl overflow-hidden group" onclick="abrirCropModal(this, 'circle')">
                             <div id="container-img-capa" class="w-full h-full flex items-center justify-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-20 h-20 md:w-24 md:h-24">
                                     <path d="M12 18.5l-1.45-1.32C5.4 12.36 2 9.28 2 5.5 2 2.42 4.42 0 7.5 0c1.74 0 3.41.81 4.5 2.09C13.09 0.81 14.76 0 16.5 0 19.58 0 22 2.42 22 5.5c0 3.78-3.4 6.86-8.55 11.54L12 18.5z" />
@@ -250,20 +293,20 @@
                     </div>
                     
                     <h1 class="text-3xl font-black text-slate-800 leading-tight uppercase tracking-tight" contenteditable="true">Mexa-se<br>Com Saúde!</h1>
-                    <div class="w-16 h-2 theme-bg mx-auto my-6 rounded-full"></div>
+                    <div class="w-16 h-2 theme-bg mx-auto my-5 rounded-full"></div>
                     <h2 class="text-sm font-black theme-text uppercase tracking-widest" contenteditable="true">Exercícios Domiciliares</h2>
-                    <p class="text-sm text-slate-500 mt-4 max-w-[260px] mx-auto leading-relaxed" contenteditable="true">Pequenos hábitos, grandes resultados para o seu dia a dia.</p>
+                    <p class="text-sm text-slate-500 mt-4 max-w-[240px] mx-auto leading-relaxed" contenteditable="true">Pequenos hábitos, grandes resultados para o seu dia a dia.</p>
                 </div>
 
-                <div class="border-t border-slate-200 pt-4 flex items-center justify-between text-left text-[10px] text-slate-500 font-bold uppercase tracking-wider">
+                <div class="border-t border-slate-200 pt-4 flex items-center justify-between text-left text-[11px] text-slate-500 font-bold uppercase tracking-wider">
                     <div><p contenteditable="true">Apoio: Min. da Saúde</p></div>
                     <div class="text-right"><p contenteditable="true">Equipe eMulti / NASF</p></div>
                 </div>
             </div>
         </div>
 
-        <!-- PÁGINA 2: INTERNA (6 Exercícios Ampliados) -->
-        <div id="pagina-interna" class="print-page bg-white shadow-xl rounded-3xl mx-auto border border-slate-200 p-4 md:p-6 relative transition-all duration-300 hidden">
+        <!-- PÁGINA 2: INTERNA (6 Exercícios) -->
+        <div id="pagina-interna" class="print-page bg-white shadow-xl rounded-3xl mx-auto border border-slate-200 p-6 md:p-8 relative transition-all duration-300 hidden">
             <!-- COLUNA 1 -->
             <div class="fold-guide fold-left p-4 flex flex-col gap-4 h-full bg-slate-50/50 rounded-2xl border border-slate-100">
                 <div class="flex-1 flex flex-col justify-between">
@@ -272,7 +315,7 @@
                             <span class="w-6 h-6 rounded-full theme-bg text-white font-black text-xs flex items-center justify-center shrink-0" contenteditable="true">1</span>
                             <h3 class="text-sm font-black text-slate-800 uppercase tracking-tight leading-tight" contenteditable="true">Pescoço</h3>
                         </div>
-                        <div class="img-upload-area w-full h-[190px] theme-bg-light rounded-xl mb-3 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden" onclick="abrirCropModal(this, 'rect')">
+                        <div class="img-upload-area w-full h-[150px] theme-bg-light rounded-xl mb-3 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden" onclick="abrirCropModal(this, 'rect')">
                             <div id="container-img-ex1" class="w-full h-full flex items-center justify-center">
                                 <svg class="w-12 h-12 theme-text-svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M10 14h4" /></svg>
                             </div>
@@ -281,16 +324,16 @@
                         <p class="text-xs text-slate-700 leading-relaxed font-medium mb-3 flex-1" contenteditable="true"><strong>Como fazer:</strong> Incline a cabeça lentamente em direção ao ombro. Mantenha os ombros relaxados.</p>
                         
                         <div class="bg-white p-3 rounded-lg shadow-sm border border-slate-200 space-y-1.5 mb-2">
-                            <div class="flex justify-between text-[10px] border-b border-slate-100 pb-1.5">
+                            <div class="flex justify-between text-[11px] border-b border-slate-100 pb-1.5">
                                 <span class="text-slate-500 font-semibold" contenteditable="true">Séries:</span><span class="font-black text-slate-800" contenteditable="true">3 de 10x</span>
                             </div>
-                            <div class="flex justify-between text-[10px]">
+                            <div class="flex justify-between text-[11px]">
                                 <span class="text-slate-500 font-semibold" contenteditable="true">Intervalo:</span><span class="font-black text-slate-800" contenteditable="true">45 segs</span>
                             </div>
                         </div>
                     </div>
                     <div class="bg-amber-50 text-amber-900 px-3 py-2 rounded-lg border border-amber-200 shadow-sm mt-auto">
-                        <p class="text-[10px] leading-tight font-bold" contenteditable="true">⚠️ <strong>Dica:</strong> Não prenda o ar durante o exercício.</p>
+                        <p class="text-[11px] leading-tight font-bold" contenteditable="true">⚠️ <strong>Dica:</strong> Não prenda o ar durante o exercício.</p>
                     </div>
                 </div>
 
@@ -302,7 +345,7 @@
                             <span class="w-6 h-6 rounded-full theme-bg text-white font-black text-xs flex items-center justify-center shrink-0" contenteditable="true">2</span>
                             <h3 class="text-sm font-black text-slate-800 uppercase tracking-tight leading-tight" contenteditable="true">Girar Ombros</h3>
                         </div>
-                        <div class="img-upload-area w-full h-[190px] theme-bg-light rounded-xl mb-3 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden" onclick="abrirCropModal(this, 'rect')">
+                        <div class="img-upload-area w-full h-[150px] theme-bg-light rounded-xl mb-3 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden" onclick="abrirCropModal(this, 'rect')">
                             <div id="container-img-ex2" class="w-full h-full flex items-center justify-center">
                                 <svg class="w-12 h-12 theme-text-svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
                             </div>
@@ -311,16 +354,16 @@
                         <p class="text-xs text-slate-700 leading-relaxed font-medium mb-3 flex-1" contenteditable="true"><strong>Como fazer:</strong> Faça movimentos circulares com os ombros para trás e depois para frente, suavemente.</p>
                         
                         <div class="bg-white p-3 rounded-lg shadow-sm border border-slate-200 space-y-1.5 mb-2">
-                            <div class="flex justify-between text-[10px] border-b border-slate-100 pb-1.5">
+                            <div class="flex justify-between text-[11px] border-b border-slate-100 pb-1.5">
                                 <span class="text-slate-500 font-semibold" contenteditable="true">Séries:</span><span class="font-black text-slate-800" contenteditable="true">3 de 10x</span>
                             </div>
-                            <div class="flex justify-between text-[10px]">
+                            <div class="flex justify-between text-[11px]">
                                 <span class="text-slate-500 font-semibold" contenteditable="true">Intervalo:</span><span class="font-black text-slate-800" contenteditable="true">45 segs</span>
                             </div>
                         </div>
                     </div>
                     <div class="bg-amber-50 text-amber-900 px-3 py-2 rounded-lg border border-amber-200 shadow-sm mt-auto">
-                        <p class="text-[10px] leading-tight font-bold" contenteditable="true">⚠️ <strong>Dica:</strong> Mantenha os braços soltos ao lado do corpo.</p>
+                        <p class="text-[11px] leading-tight font-bold" contenteditable="true">⚠️ <strong>Dica:</strong> Mantenha os braços soltos ao lado do corpo.</p>
                     </div>
                 </div>
             </div>
@@ -333,7 +376,7 @@
                             <span class="w-6 h-6 rounded-full theme-bg text-white font-black text-xs flex items-center justify-center shrink-0" contenteditable="true">3</span>
                             <h3 class="text-sm font-black text-slate-800 uppercase tracking-tight leading-tight" contenteditable="true">Sentar e Levantar</h3>
                         </div>
-                        <div class="img-upload-area w-full h-[190px] theme-bg-light rounded-xl mb-3 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden" onclick="abrirCropModal(this, 'rect')">
+                        <div class="img-upload-area w-full h-[150px] theme-bg-light rounded-xl mb-3 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden" onclick="abrirCropModal(this, 'rect')">
                             <div id="container-img-ex3" class="w-full h-full flex items-center justify-center">
                                 <svg class="w-12 h-12 theme-text-svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg>
                             </div>
@@ -342,16 +385,16 @@
                         <p class="text-xs text-slate-700 leading-relaxed font-medium mb-3 flex-1" contenteditable="true"><strong>Como fazer:</strong> Cruze os braços à frente do peito. Suba e desça da cadeira devagar usando a força das pernas.</p>
                         
                         <div class="bg-white p-3 rounded-lg shadow-sm border border-slate-200 space-y-1.5 mb-2">
-                            <div class="flex justify-between text-[10px] border-b border-slate-100 pb-1.5">
+                            <div class="flex justify-between text-[11px] border-b border-slate-100 pb-1.5">
                                 <span class="text-slate-500 font-semibold" contenteditable="true">Séries:</span><span class="font-black text-slate-800" contenteditable="true">3 de 10x</span>
                             </div>
-                            <div class="flex justify-between text-[10px]">
+                            <div class="flex justify-between text-[11px]">
                                 <span class="text-slate-500 font-semibold" contenteditable="true">Intervalo:</span><span class="font-black text-slate-800" contenteditable="true">45 segs</span>
                             </div>
                         </div>
                     </div>
                     <div class="bg-amber-50 text-amber-900 px-3 py-2 rounded-lg border border-amber-200 shadow-sm mt-auto">
-                        <p class="text-[10px] leading-tight font-bold" contenteditable="true">⚠️ <strong>Dica:</strong> Encoste a cadeira na parede por segurança.</p>
+                        <p class="text-[11px] leading-tight font-bold" contenteditable="true">⚠️ <strong>Dica:</strong> Encoste a cadeira na parede por segurança.</p>
                     </div>
                 </div>
 
@@ -363,7 +406,7 @@
                             <span class="w-6 h-6 rounded-full theme-bg text-white font-black text-xs flex items-center justify-center shrink-0" contenteditable="true">4</span>
                             <h3 class="text-sm font-black text-slate-800 uppercase tracking-tight leading-tight" contenteditable="true">Esticar o Joelho</h3>
                         </div>
-                        <div class="img-upload-area w-full h-[190px] theme-bg-light rounded-xl mb-3 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden" onclick="abrirCropModal(this, 'rect')">
+                        <div class="img-upload-area w-full h-[150px] theme-bg-light rounded-xl mb-3 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden" onclick="abrirCropModal(this, 'rect')">
                             <div id="container-img-ex4" class="w-full h-full flex items-center justify-center">
                                 <svg class="w-12 h-12 theme-text-svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                             </div>
@@ -372,16 +415,16 @@
                         <p class="text-xs text-slate-700 leading-relaxed font-medium mb-3 flex-1" contenteditable="true"><strong>Como fazer:</strong> Sentado, estique uma perna até o joelho ficar reto. Segure e desça devagar.</p>
                         
                         <div class="bg-white p-3 rounded-lg shadow-sm border border-slate-200 space-y-1.5 mb-2">
-                            <div class="flex justify-between text-[10px] border-b border-slate-100 pb-1.5">
+                            <div class="flex justify-between text-[11px] border-b border-slate-100 pb-1.5">
                                 <span class="text-slate-500 font-semibold" contenteditable="true">Séries:</span><span class="font-black text-slate-800" contenteditable="true">3 de 10x</span>
                             </div>
-                            <div class="flex justify-between text-[10px]">
+                            <div class="flex justify-between text-[11px]">
                                 <span class="text-slate-500 font-semibold" contenteditable="true">Intervalo:</span><span class="font-black text-slate-800" contenteditable="true">45 segs</span>
                             </div>
                         </div>
                     </div>
                     <div class="bg-amber-50 text-amber-900 px-3 py-2 rounded-lg border border-amber-200 shadow-sm mt-auto">
-                        <p class="text-[10px] leading-tight font-bold" contenteditable="true">⚠️ <strong>Dica:</strong> Mantenha a ponta do pé puxada para você.</p>
+                        <p class="text-[11px] leading-tight font-bold" contenteditable="true">⚠️ <strong>Dica:</strong> Mantenha a ponta do pé puxada para você.</p>
                     </div>
                 </div>
             </div>
@@ -394,7 +437,7 @@
                             <span class="w-6 h-6 rounded-full theme-bg text-white font-black text-xs flex items-center justify-center shrink-0" contenteditable="true">5</span>
                             <h3 class="text-sm font-black text-slate-800 uppercase tracking-tight leading-tight" contenteditable="true">Panturrilha</h3>
                         </div>
-                        <div class="img-upload-area w-full h-[190px] theme-bg-light rounded-xl mb-3 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden" onclick="abrirCropModal(this, 'rect')">
+                        <div class="img-upload-area w-full h-[150px] theme-bg-light rounded-xl mb-3 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden" onclick="abrirCropModal(this, 'rect')">
                             <div id="container-img-ex5" class="w-full h-full flex items-center justify-center">
                                 <svg class="w-12 h-12 theme-text-svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 11c0 3.517-1.009 6.799-2.753 9.571" /></svg>
                             </div>
@@ -403,16 +446,16 @@
                         <p class="text-xs text-slate-700 leading-relaxed font-medium mb-3 flex-1" contenteditable="true"><strong>Como fazer:</strong> Perto da parede para apoio, fique na ponta dos pés o máximo que conseguir e desça o calcanhar.</p>
                         
                         <div class="bg-white p-3 rounded-lg shadow-sm border border-slate-200 space-y-1.5 mb-2">
-                            <div class="flex justify-between text-[10px] border-b border-slate-100 pb-1.5">
+                            <div class="flex justify-between text-[11px] border-b border-slate-100 pb-1.5">
                                 <span class="text-slate-500 font-semibold" contenteditable="true">Séries:</span><span class="font-black text-slate-800" contenteditable="true">3 de 10x</span>
                             </div>
-                            <div class="flex justify-between text-[10px]">
+                            <div class="flex justify-between text-[11px]">
                                 <span class="text-slate-500 font-semibold" contenteditable="true">Intervalo:</span><span class="font-black text-slate-800" contenteditable="true">45 segs</span>
                             </div>
                         </div>
                     </div>
                     <div class="bg-amber-50 text-amber-900 px-3 py-2 rounded-lg border border-amber-200 shadow-sm mt-auto">
-                        <p class="text-[10px] leading-tight font-bold" contenteditable="true">⚠️ <strong>Dica:</strong> Faça de maneira controlada, sem pressa.</p>
+                        <p class="text-[11px] leading-tight font-bold" contenteditable="true">⚠️ <strong>Dica:</strong> Faça de maneira controlada, sem pressa.</p>
                     </div>
                 </div>
 
@@ -424,7 +467,7 @@
                             <span class="w-6 h-6 rounded-full theme-bg text-white font-black text-xs flex items-center justify-center shrink-0" contenteditable="true">6</span>
                             <h3 class="text-sm font-black text-slate-800 uppercase tracking-tight leading-tight" contenteditable="true">Caminhada Lateral</h3>
                         </div>
-                        <div class="img-upload-area w-full h-[190px] theme-bg-light rounded-xl mb-3 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden" onclick="abrirCropModal(this, 'rect')">
+                        <div class="img-upload-area w-full h-[150px] theme-bg-light rounded-xl mb-3 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden" onclick="abrirCropModal(this, 'rect')">
                             <div id="container-img-ex6" class="w-full h-full flex items-center justify-center">
                                 <svg class="w-12 h-12 theme-text-svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 8h16M4 16h16" /></svg>
                             </div>
@@ -433,16 +476,16 @@
                         <p class="text-xs text-slate-700 leading-relaxed font-medium mb-3 flex-1" contenteditable="true"><strong>Como fazer:</strong> Apoiando as mãos na beirada de uma mesa ou balcão, dê passos para a lateral.</p>
                         
                         <div class="bg-white p-3 rounded-lg shadow-sm border border-slate-200 space-y-1.5 mb-2">
-                            <div class="flex justify-between text-[10px] border-b border-slate-100 pb-1.5">
+                            <div class="flex justify-between text-[11px] border-b border-slate-100 pb-1.5">
                                 <span class="text-slate-500 font-semibold" contenteditable="true">Séries:</span><span class="font-black text-slate-800" contenteditable="true">3 de 10x</span>
                             </div>
-                            <div class="flex justify-between text-[10px]">
+                            <div class="flex justify-between text-[11px]">
                                 <span class="text-slate-500 font-semibold" contenteditable="true">Intervalo:</span><span class="font-black text-slate-800" contenteditable="true">45 segs</span>
                             </div>
                         </div>
                     </div>
                     <div class="bg-amber-50 text-amber-900 px-3 py-2 rounded-lg border border-amber-200 shadow-sm mt-auto">
-                        <p class="text-[10px] leading-tight font-bold" contenteditable="true">⚠️ <strong>Dica:</strong> Certifique-se de que não há tapetes no caminho.</p>
+                        <p class="text-[11px] leading-tight font-bold" contenteditable="true">⚠️ <strong>Dica:</strong> Certifique-se de que não há tapetes no caminho.</p>
                     </div>
                 </div>
             </div>
@@ -629,7 +672,7 @@
                 const configs = configuracoesTemas[nomeTema];
                 document.querySelectorAll('.theme-bg').forEach(el => { el.classList.remove('bg-cyan-600', 'bg-emerald-600', 'bg-pink-500', 'bg-blue-600'); el.classList.add(configs.bg); });
                 document.querySelectorAll('.theme-text, .theme-text-svg').forEach(el => { el.classList.remove('text-cyan-600', 'text-emerald-600', 'text-pink-500', 'text-blue-600', 'text-teal-700'); el.classList.add(configs.text); });
-                document.querySelectorAll('.theme-badge').forEach(el => { el.className = `theme-badge inline-block text-xs font-black px-3 py-1.5 rounded uppercase tracking-widest mb-6 w-max ${configs.badgeBg} ${configs.badgeText}`; });
+                document.querySelectorAll('.theme-badge').forEach(el => { el.className = `theme-badge inline-block text-[11px] font-black px-3 py-1.5 rounded uppercase tracking-widest mb-4 w-max ${configs.badgeBg} ${configs.badgeText}`; });
                 document.querySelectorAll('.theme-bg-light').forEach(el => { el.classList.remove('bg-cyan-50', 'bg-emerald-50/40', 'bg-pink-50/40', 'bg-blue-50/40'); el.classList.add(configs.lightBg); });
             }
         }
