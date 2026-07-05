@@ -30,6 +30,9 @@
             .fold-guide::after { display: none !important; }
         }
 
+        /* O NEGRITO AGORA É EXTRA BOLD PARA DIFERENCIAR DO SEMIBOLD */
+        b, strong { font-weight: 800 !important; }
+
         /* CONFIGURAÇÃO BLINDADA PARA IMPRESSÃO PERFEITA */
         @page { size: A4 landscape; margin: 0mm; }
         @media print {
@@ -86,38 +89,35 @@
         [contenteditable="true"]:hover { background-color: rgba(239, 246, 255, 0.9); outline: 1.5px dashed #3b82f6; }
         [contenteditable="true"]:focus { background-color: #ffffff; outline: 2px solid #2563eb; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3); }
 
-        #text-toolbar { transition: opacity 0.2s, transform 0.2s; }
-        #text-toolbar::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border-width: 5px; border-style: solid; border-color: #0f172a transparent transparent transparent; }
-
         .img-upload-area { position: relative; transition: all 0.2s; }
         .img-upload-area:hover { outline: 2px dashed #3b82f6; }
 
         .cropper-container { width: 100% !important; height: 50vh !important; max-height: 500px; }
     </style>
 </head>
-<body class="bg-slate-100 min-h-screen flex flex-col relative">
+<body class="bg-slate-100 min-h-screen flex flex-col relative pb-20">
 
-    <!-- TOOLBAR FLUTUANTE -->
-    <div id="text-toolbar" class="no-print fixed z-[200] hidden bg-slate-900 text-white rounded-lg shadow-xl p-1.5 flex items-center gap-1 opacity-0 transform -translate-y-2 pointer-events-auto">
-        <button onclick="changeFontSize(-1)" class="w-8 h-8 flex items-center justify-center rounded hover:bg-slate-700 font-bold text-xs transition-colors" title="Diminuir Fonte">A-</button>
-        <button onclick="changeFontSize(1)" class="w-8 h-8 flex items-center justify-center rounded hover:bg-slate-700 font-bold text-lg transition-colors" title="Aumentar Fonte">A+</button>
-        <div class="w-px h-5 bg-slate-700 mx-1"></div>
+    <!-- TOOLBAR FLUTUANTE (FIXA NA BASE DA TELA AGORA) -->
+    <div id="text-toolbar" class="no-print fixed z-[200] hidden bg-slate-900 text-white rounded-2xl shadow-2xl p-2.5 flex items-center gap-1.5 opacity-0 transform translate-y-6 transition-all duration-300 pointer-events-auto left-1/2 -translate-x-1/2 bottom-6">
+        <button onclick="changeFontSize(-1)" class="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-slate-700 font-bold text-sm transition-colors" title="Diminuir Fonte">A-</button>
+        <button onclick="changeFontSize(1)" class="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-slate-700 font-bold text-xl transition-colors" title="Aumentar Fonte">A+</button>
+        <div class="w-px h-6 bg-slate-700 mx-1"></div>
         
-        <button onclick="formatText('bold')" class="w-8 h-8 flex items-center justify-center rounded hover:bg-slate-700 font-serif font-bold text-base transition-colors" title="Negrito">B</button>
-        <button onclick="toggleSemibold()" class="w-8 h-8 flex items-center justify-center rounded hover:bg-slate-700 font-sans font-semibold text-sm transition-colors" title="Semibold">Sb</button>
-        <div class="w-px h-5 bg-slate-700 mx-1"></div>
+        <button onclick="formatText('bold')" class="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-slate-700 font-serif font-black text-lg transition-colors" title="Negrito Extra (B)">B</button>
+        <button onclick="toggleSemibold()" class="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-slate-700 font-sans font-semibold text-sm transition-colors" title="Semibold (Sb)">Sb</button>
+        <div class="w-px h-6 bg-slate-700 mx-1"></div>
         
-        <button onclick="formatText('justifyLeft')" class="w-8 h-8 flex items-center justify-center rounded hover:bg-slate-700 transition-colors" title="Alinhar à Esquerda">
-            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M3 21h18v-2H3v2zm0-4h12v-2H3v2zm0-4h18v-2H3v2zm0-4h12V7H3v2zm0-6v2h18V3H3z"/></svg>
+        <button onclick="formatText('justifyLeft')" class="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-slate-700 transition-colors" title="Alinhar à Esquerda">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M3 21h18v-2H3v2zm0-4h12v-2H3v2zm0-4h18v-2H3v2zm0-4h12V7H3v2zm0-6v2h18V3H3z"/></svg>
         </button>
-        <button onclick="formatText('justifyCenter')" class="w-8 h-8 flex items-center justify-center rounded hover:bg-slate-700 transition-colors" title="Centralizar">
-            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M3 21h18v-2H3v2zm3-4h12v-2H6v2zm-3-4h18v-2H3v2zm3-4h12V7H6v2zm-3-6v2h18V3H3z"/></svg>
+        <button onclick="formatText('justifyCenter')" class="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-slate-700 transition-colors" title="Centralizar">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M3 21h18v-2H3v2zm3-4h12v-2H6v2zm-3-4h18v-2H3v2zm3-4h12V7H6v2zm-3-6v2h18V3H3z"/></svg>
         </button>
-        <button onclick="formatText('justifyRight')" class="w-8 h-8 flex items-center justify-center rounded hover:bg-slate-700 transition-colors" title="Alinhar à Direita">
-            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M3 21h18v-2H3v2zm6-4h12v-2H9v2zm-6-4h18v-2H3v2zm6-4h12V7H9v2zm-6-6v2h18V3H3z"/></svg>
+        <button onclick="formatText('justifyRight')" class="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-slate-700 transition-colors" title="Alinhar à Direita">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M3 21h18v-2H3v2zm6-4h12v-2H9v2zm-6-4h18v-2H3v2zm6-4h12V7H9v2zm-6-6v2h18V3H3z"/></svg>
         </button>
-        <button onclick="formatText('justifyFull')" class="w-8 h-8 flex items-center justify-center rounded hover:bg-slate-700 transition-colors" title="Justificar">
-            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M3 21h18v-2H3v2zm0-4h18v-2H3v2zm0-4h18v-2H3v2zm0-4h18V7H3v2zm0-6v2h18V3H3z"/></svg>
+        <button onclick="formatText('justifyFull')" class="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-slate-700 transition-colors" title="Justificar">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M3 21h18v-2H3v2zm0-4h18v-2H3v2zm0-4h18v-2H3v2zm0-4h18V7H3v2zm0-6v2h18V3H3z"/></svg>
         </button>
     </div>
 
@@ -321,9 +321,7 @@
 
                 <div class="my-auto py-4">
                     <div class="flex justify-center mb-6">
-                        <!-- CAPA: Mantendo o onclick simples na própria DIV porque não tem controle de altura -->
                         <div class="img-upload-area w-36 h-36 md:w-40 md:h-40 rounded-full theme-bg flex items-center justify-center text-white shadow-xl overflow-hidden group cursor-pointer" onclick="abrirCropModal(this, 'circle')">
-                            <!-- Container para a Imagem/Svg (BLINDADO) -->
                             <div id="container-img-capa" class="w-full h-full flex items-center justify-center relative z-0">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-20 h-20 md:w-24 md:h-24">
                                     <path d="M12 18.5l-1.45-1.32C5.4 12.36 2 9.28 2 5.5 2 2.42 4.42 0 7.5 0c1.74 0 3.41.81 4.5 2.09C13.09 0.81 14.76 0 16.5 0 19.58 0 22 2.42 22 5.5c0 3.78-3.4 6.86-8.55 11.54L12 18.5z" />
@@ -358,13 +356,11 @@
                             <h3 class="text-[13px] font-black text-slate-800 uppercase tracking-tight leading-tight" contenteditable="true">Pescoço</h3>
                         </div>
                         
-                        <!-- ÁREA DE IMAGEM BLINDADA CONTRA O BUG DO INNERHTML -->
+                        <!-- ÁREA DE IMAGEM -->
                         <div class="img-upload-area w-full h-[180px] theme-bg-light rounded-xl mb-1.5 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden transition-all duration-300 relative">
-                            <!-- DIV INTERNA: Esta é a única que será apagada e receberá a foto! -->
                             <div class="w-full h-full flex items-center justify-center relative z-0">
                                 <svg class="w-10 h-10 theme-text-svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M10 14h4" /></svg>
                             </div>
-                            <!-- OVERLAY: Fica intacto por cima da foto -->
                             <div class="absolute inset-0 bg-blue-600/80 hidden group-hover:flex flex-col z-10">
                                 <div class="flex-1 flex items-center justify-center cursor-pointer" onclick="abrirCropModal(this.closest('.img-upload-area'), 'rect')">
                                     <span class="text-[11px] font-bold text-white uppercase tracking-wider drop-shadow-md">📷 Editar Foto</span>
@@ -625,7 +621,7 @@
 
             if (target && target.hasAttribute && target.getAttribute('contenteditable') === 'true') {
                 activeEditable = target;
-                showToolbar(target);
+                showToolbar();
             } else if (!toolbar.contains(e.target)) {
                 hideToolbar();
                 activeEditable = null;
@@ -634,18 +630,15 @@
 
         toolbar.addEventListener('mousedown', (e) => { e.preventDefault(); });
 
-        function showToolbar(el) {
-            const rect = el.getBoundingClientRect();
+        function showToolbar() {
             toolbar.classList.remove('hidden');
-            toolbar.style.top = `${Math.max(10, rect.top - 45)}px`; 
-            toolbar.style.left = `${rect.left + (rect.width/2) - (toolbar.offsetWidth/2)}px`;
-            setTimeout(() => { toolbar.classList.remove('opacity-0', '-translate-y-2'); toolbar.classList.add('opacity-100', 'translate-y-0'); }, 10);
+            setTimeout(() => { toolbar.classList.remove('opacity-0', 'translate-y-6'); toolbar.classList.add('opacity-100', 'translate-y-0'); }, 10);
         }
 
         function hideToolbar() {
             toolbar.classList.remove('opacity-100', 'translate-y-0');
-            toolbar.classList.add('opacity-0', '-translate-y-2');
-            setTimeout(() => toolbar.classList.add('hidden'), 200);
+            toolbar.classList.add('opacity-0', 'translate-y-6');
+            setTimeout(() => toolbar.classList.add('hidden'), 300);
         }
 
         function formatText(command) { document.execCommand(command, false, null); if (activeEditable) activeEditable.focus(); }
@@ -661,7 +654,7 @@
                 range.insertNode(span);
             } else {
                 const currentWeight = window.getComputedStyle(activeEditable).fontWeight;
-                if (currentWeight === '600' || currentWeight === 'bold' || currentWeight === '700') {
+                if (currentWeight === '600' || currentWeight === 'bold' || currentWeight === '700' || currentWeight === '800') {
                     activeEditable.style.fontWeight = '400'; 
                 } else {
                     activeEditable.style.fontWeight = '600'; 
@@ -683,7 +676,7 @@
                 child.style.lineHeight = '';
             });
             
-            showToolbar(activeEditable);
+            showToolbar();
         }
 
         // === AJUSTE DE PROPORÇÃO DA IMAGEM MANUAL ===
@@ -695,7 +688,7 @@
             let currentHeight = parseInt(window.getComputedStyle(imgContainer).height);
             let newHeight = currentHeight + delta;
             
-            // Limites rígidos para não quebrar a folha A4! (Limite cravado em 400px a pedido do dev!)
+            // Limites rígidos para não quebrar a folha A4! (Teto de 400px a pedido)
             if (newHeight >= 80 && newHeight <= 400) {
                 imgContainer.style.height = newHeight + 'px';
             }
@@ -804,8 +797,6 @@
             
             const base64Crop = canvas.toDataURL('image/jpeg', 0.80);
             
-            // Em vez de limpar a caixa inteira, limpamos APENAS a div interna 
-            // (a camada "z-0") mantendo o menu azul de cima intacto!
             const containerDaFoto = alvoImagemAtual.firstElementChild;
             containerDaFoto.innerHTML = '';
             
