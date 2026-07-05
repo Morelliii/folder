@@ -30,8 +30,8 @@
             .fold-guide::after { display: none !important; }
         }
 
-        /* O NEGRITO AGORA É EXTRA BOLD PARA DIFERENCIAR DO SEMIBOLD */
-        b, strong { font-weight: 800 !important; }
+        /* FORÇANDO O BOLD PARA SER EXTRA BOLD E DESTACAR DO SEMIBOLD */
+        b, strong, [style*="bold"], [style*="700"] { font-weight: 800 !important; }
 
         /* CONFIGURAÇÃO BLINDADA PARA IMPRESSÃO PERFEITA */
         @page { size: A4 landscape; margin: 0mm; }
@@ -95,15 +95,15 @@
         .cropper-container { width: 100% !important; height: 50vh !important; max-height: 500px; }
     </style>
 </head>
-<body class="bg-slate-100 min-h-screen flex flex-col relative pb-20">
+<body class="bg-slate-100 min-h-screen flex flex-col relative pb-10">
 
-    <!-- TOOLBAR FLUTUANTE (FIXA NA BASE DA TELA AGORA) -->
-    <div id="text-toolbar" class="no-print fixed z-[200] hidden bg-slate-900 text-white rounded-2xl shadow-2xl p-2.5 flex items-center gap-1.5 opacity-0 transform translate-y-6 transition-all duration-300 pointer-events-auto left-1/2 -translate-x-1/2 bottom-6">
+    <!-- TOOLBAR FLUTUANTE (FIXA NO TOPO AGORA: top-[85px] à prova de teclados de celular!) -->
+    <div id="text-toolbar" class="no-print fixed z-[200] hidden bg-slate-900 text-white rounded-2xl shadow-2xl p-2.5 flex items-center gap-1.5 opacity-0 transform -translate-y-4 transition-all duration-300 pointer-events-auto left-1/2 -translate-x-1/2 top-[85px]">
         <button onclick="changeFontSize(-1)" class="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-slate-700 font-bold text-sm transition-colors" title="Diminuir Fonte">A-</button>
         <button onclick="changeFontSize(1)" class="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-slate-700 font-bold text-xl transition-colors" title="Aumentar Fonte">A+</button>
         <div class="w-px h-6 bg-slate-700 mx-1"></div>
         
-        <button onclick="formatText('bold')" class="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-slate-700 font-serif font-black text-lg transition-colors" title="Negrito Extra (B)">B</button>
+        <button onclick="formatText('bold')" class="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-slate-700 font-serif font-black text-lg transition-colors" title="Negrito (B)">B</button>
         <button onclick="toggleSemibold()" class="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-slate-700 font-sans font-semibold text-sm transition-colors" title="Semibold (Sb)">Sb</button>
         <div class="w-px h-6 bg-slate-700 mx-1"></div>
         
@@ -255,17 +255,17 @@
                     <div id="lista-dicas" class="space-y-3 flex-1">
                         <div class="flex gap-2.5 items-start group relative">
                             <span class="text-emerald-500 font-black text-sm mt-0.5" contenteditable="true">✓</span>
-                            <p class="text-xs text-slate-600 leading-relaxed w-full pr-4 text-justify" contenteditable="true"><strong>Roupas Leves:</strong> Use tecidos confortáveis e faça os exercícios em local seguro.</p>
+                            <p class="text-xs text-slate-600 leading-relaxed w-full pr-4 text-justify font-medium" contenteditable="true"><strong>Roupas Leves:</strong> Use tecidos confortáveis e faça os exercícios em local seguro.</p>
                             <button onclick="this.parentElement.remove()" class="delete-btn no-print hidden group-hover:flex absolute right-0 top-0 text-red-500 hover:text-red-700 text-xs font-black p-1">✖</button>
                         </div>
                         <div class="flex gap-2.5 items-start group relative">
                             <span class="text-emerald-500 font-black text-sm mt-0.5" contenteditable="true">✓</span>
-                            <p class="text-xs text-slate-600 leading-relaxed w-full pr-4 text-justify" contenteditable="true"><strong>Hidratação:</strong> Beba pequenos goles de água antes e durante a rotina.</p>
+                            <p class="text-xs text-slate-600 leading-relaxed w-full pr-4 text-justify font-medium" contenteditable="true"><strong>Hidratação:</strong> Beba pequenos goles de água antes e durante a rotina.</p>
                             <button onclick="this.parentElement.remove()" class="delete-btn no-print hidden group-hover:flex absolute right-0 top-0 text-red-500 hover:text-red-700 text-xs font-black p-1">✖</button>
                         </div>
                         <div class="flex gap-2.5 items-start group relative">
                             <span class="text-emerald-500 font-black text-sm mt-0.5" contenteditable="true">✓</span>
-                            <p class="text-xs text-slate-600 leading-relaxed w-full pr-4 text-justify" contenteditable="true"><strong>Sinais de Alerta:</strong> Pare se sentir tontura, falta de ar ou dores articulares agudas.</p>
+                            <p class="text-xs text-slate-600 leading-relaxed w-full pr-4 text-justify font-medium" contenteditable="true"><strong>Sinais de Alerta:</strong> Pare se sentir tontura, falta de ar ou dores articulares agudas.</p>
                             <button onclick="this.parentElement.remove()" class="delete-btn no-print hidden group-hover:flex absolute right-0 top-0 text-red-500 hover:text-red-700 text-xs font-black p-1">✖</button>
                         </div>
                     </div>
@@ -335,7 +335,7 @@
                     <h1 class="text-3xl font-black text-slate-800 leading-tight uppercase tracking-tight" contenteditable="true">Mexa-se<br>Com Saúde!</h1>
                     <div class="w-16 h-2 theme-bg mx-auto my-5 rounded-full"></div>
                     <h2 class="text-sm font-black theme-text uppercase tracking-widest" contenteditable="true">Exercícios Domiciliares</h2>
-                    <p class="text-sm text-slate-500 mt-4 max-w-[240px] mx-auto leading-relaxed text-justify" contenteditable="true">Pequenos hábitos, grandes resultados para o seu dia a dia.</p>
+                    <p class="text-sm text-slate-500 mt-4 max-w-[240px] mx-auto leading-relaxed text-justify font-medium" contenteditable="true">Pequenos hábitos, grandes resultados para o seu dia a dia.</p>
                 </div>
 
                 <div class="border-t border-slate-200 pt-4 flex items-center justify-between text-left text-[11px] text-slate-500 font-bold uppercase tracking-wider">
@@ -375,7 +375,8 @@
                             </div>
                         </div>
 
-                        <p class="text-[11px] text-slate-800 leading-snug font-semibold mb-1 flex-1 text-justify" contenteditable="true"><strong>Como fazer:</strong> Incline a cabeça lentamente em direção ao ombro. Mantenha os ombros relaxados.</p>
+                        <!-- FONTE REBAIXADA PARA MEDIUM(500) EM TODOS OS EXERCÍCIOS -->
+                        <p class="text-[11px] text-slate-800 leading-snug font-medium mb-1 flex-1 text-justify" contenteditable="true"><strong>Como fazer:</strong> Incline a cabeça lentamente em direção ao ombro. Mantenha os ombros relaxados.</p>
                         
                         <div class="bg-white p-1.5 rounded-lg shadow-sm border border-slate-200 mt-auto">
                             <div class="flex justify-between items-center border-b border-slate-100 pb-1">
@@ -417,7 +418,8 @@
                             </div>
                         </div>
 
-                        <p class="text-[11px] text-slate-800 leading-snug font-semibold mb-1 flex-1 text-justify" contenteditable="true"><strong>Como fazer:</strong> Faça movimentos circulares com os ombros para trás e depois para frente, suavemente.</p>
+                        <!-- FONTE REBAIXADA PARA MEDIUM(500) -->
+                        <p class="text-[11px] text-slate-800 leading-snug font-medium mb-1 flex-1 text-justify" contenteditable="true"><strong>Como fazer:</strong> Faça movimentos circulares com os ombros para trás e depois para frente, suavemente.</p>
                         
                         <div class="bg-white p-1.5 rounded-lg shadow-sm border border-slate-200 mt-auto">
                             <div class="flex justify-between items-center border-b border-slate-100 pb-1">
@@ -460,7 +462,8 @@
                             </div>
                         </div>
 
-                        <p class="text-[11px] text-slate-800 leading-snug font-semibold mb-1 flex-1 text-justify" contenteditable="true"><strong>Como fazer:</strong> Cruze os braços à frente do peito. Suba e desça da cadeira devagar usando a força das pernas.</p>
+                        <!-- FONTE REBAIXADA PARA MEDIUM(500) -->
+                        <p class="text-[11px] text-slate-800 leading-snug font-medium mb-1 flex-1 text-justify" contenteditable="true"><strong>Como fazer:</strong> Cruze os braços à frente do peito. Suba e desça da cadeira devagar usando a força das pernas.</p>
                         
                         <div class="bg-white p-1.5 rounded-lg shadow-sm border border-slate-200 mt-auto">
                             <div class="flex justify-between items-center border-b border-slate-100 pb-1">
@@ -502,7 +505,8 @@
                             </div>
                         </div>
 
-                        <p class="text-[11px] text-slate-800 leading-snug font-semibold mb-1 flex-1 text-justify" contenteditable="true"><strong>Como fazer:</strong> Sentado, estique uma perna até o joelho ficar reto. Segure e desça devagar.</p>
+                        <!-- FONTE REBAIXADA PARA MEDIUM(500) -->
+                        <p class="text-[11px] text-slate-800 leading-snug font-medium mb-1 flex-1 text-justify" contenteditable="true"><strong>Como fazer:</strong> Sentado, estique uma perna até o joelho ficar reto. Segure e desça devagar.</p>
                         
                         <div class="bg-white p-1.5 rounded-lg shadow-sm border border-slate-200 mt-auto">
                             <div class="flex justify-between items-center border-b border-slate-100 pb-1">
@@ -523,7 +527,7 @@
                 <div class="flex-1 flex flex-col justify-between transition-all" id="ex-container-5">
                     <div class="flex-1 flex flex-col">
                         <div class="flex items-center gap-1.5 mb-1.5">
-                            <span class="w-5 h-5 rounded-full border-2 theme-border theme-text font-black text-[11px] flex items-center justify-center shrink-0 bg-white" contenteditable="true">5</span>
+                            <span class="w-6 h-6 rounded-full border-2 theme-border theme-text font-black text-[11px] flex items-center justify-center shrink-0 bg-white" contenteditable="true">5</span>
                             <h3 class="text-[13px] font-black text-slate-800 uppercase tracking-tight leading-tight" contenteditable="true">Panturrilha</h3>
                         </div>
 
@@ -545,7 +549,8 @@
                             </div>
                         </div>
 
-                        <p class="text-[11px] text-slate-800 leading-snug font-semibold mb-1 flex-1 text-justify" contenteditable="true"><strong>Como fazer:</strong> Perto da parede para apoio, fique na ponta dos pés o máximo que conseguir e desça o calcanhar.</p>
+                        <!-- FONTE REBAIXADA PARA MEDIUM(500) -->
+                        <p class="text-[11px] text-slate-800 leading-snug font-medium mb-1 flex-1 text-justify" contenteditable="true"><strong>Como fazer:</strong> Perto da parede para apoio, fique na ponta dos pés o máximo que conseguir e desça o calcanhar.</p>
                         
                         <div class="bg-white p-1.5 rounded-lg shadow-sm border border-slate-200 mt-auto">
                             <div class="flex justify-between items-center border-b border-slate-100 pb-1">
@@ -587,7 +592,8 @@
                             </div>
                         </div>
 
-                        <p class="text-[11px] text-slate-800 leading-snug font-semibold mb-1 flex-1 text-justify" contenteditable="true"><strong>Como fazer:</strong> Apoiando as mãos na beirada de uma mesa ou balcão, dê passos para a lateral.</p>
+                        <!-- FONTE REBAIXADA PARA MEDIUM(500) -->
+                        <p class="text-[11px] text-slate-800 leading-snug font-medium mb-1 flex-1 text-justify" contenteditable="true"><strong>Como fazer:</strong> Apoiando as mãos na beirada de uma mesa ou balcão, dê passos para a lateral.</p>
                         
                         <div class="bg-white p-1.5 rounded-lg shadow-sm border border-slate-200 mt-auto">
                             <div class="flex justify-between items-center border-b border-slate-100 pb-1">
@@ -613,31 +619,39 @@
         const toolbar = document.getElementById('text-toolbar');
         let activeEditable = null;
 
-        document.addEventListener('mouseup', (e) => {
-            let target = e.target;
-            while (target && target !== document && (!target.hasAttribute || target.getAttribute('contenteditable') !== 'true')) { 
-                target = target.parentNode; 
-            }
-
-            if (target && target.hasAttribute && target.getAttribute('contenteditable') === 'true') {
-                activeEditable = target;
+        // NOVO MONITOR DE SELEÇÃO: Agora o menu não some se você arrastar o mouse para fora!
+        document.addEventListener('selectionchange', () => {
+            const active = document.activeElement;
+            if (active && active.getAttribute('contenteditable') === 'true') {
+                activeEditable = active;
                 showToolbar();
-            } else if (!toolbar.contains(e.target)) {
+            }
+        });
+
+        // Só esconde o menu se o clique (mousedown) for fora de qualquer área editável e fora da própria toolbar
+        document.addEventListener('mousedown', (e) => {
+            if (toolbar.contains(e.target)) return;
+            const editable = e.target.closest('[contenteditable="true"]');
+            if (!editable) {
                 hideToolbar();
                 activeEditable = null;
             }
         });
 
+        // Previne que clicar nos botões do menu desfoque a caixa de texto
         toolbar.addEventListener('mousedown', (e) => { e.preventDefault(); });
 
         function showToolbar() {
             toolbar.classList.remove('hidden');
-            setTimeout(() => { toolbar.classList.remove('opacity-0', 'translate-y-6'); toolbar.classList.add('opacity-100', 'translate-y-0'); }, 10);
+            setTimeout(() => { 
+                toolbar.classList.remove('opacity-0', '-translate-y-4'); 
+                toolbar.classList.add('opacity-100', 'translate-y-0'); 
+            }, 10);
         }
 
         function hideToolbar() {
             toolbar.classList.remove('opacity-100', 'translate-y-0');
-            toolbar.classList.add('opacity-0', 'translate-y-6');
+            toolbar.classList.add('opacity-0', '-translate-y-4');
             setTimeout(() => toolbar.classList.add('hidden'), 300);
         }
 
@@ -654,8 +668,9 @@
                 range.insertNode(span);
             } else {
                 const currentWeight = window.getComputedStyle(activeEditable).fontWeight;
+                // Se já estiver em algum peso maior, volta pro normal (500)
                 if (currentWeight === '600' || currentWeight === 'bold' || currentWeight === '700' || currentWeight === '800') {
-                    activeEditable.style.fontWeight = '400'; 
+                    activeEditable.style.fontWeight = '500'; 
                 } else {
                     activeEditable.style.fontWeight = '600'; 
                 }
@@ -688,7 +703,7 @@
             let currentHeight = parseInt(window.getComputedStyle(imgContainer).height);
             let newHeight = currentHeight + delta;
             
-            // Limites rígidos para não quebrar a folha A4! (Teto de 400px a pedido)
+            // Limites rígidos para não quebrar a folha A4! (Teto de 400px garantido)
             if (newHeight >= 80 && newHeight <= 400) {
                 imgContainer.style.height = newHeight + 'px';
             }
@@ -841,7 +856,7 @@
             novaDica.className = 'flex gap-2.5 items-start group relative';
             novaDica.innerHTML = `
                 <span class="text-emerald-500 font-black text-sm mt-0.5" contenteditable="true">✓</span>
-                <p class="text-xs text-slate-600 leading-relaxed w-full pr-4 text-justify" contenteditable="true"><strong>Nova Dica:</strong> Edite este texto livremente.</p>
+                <p class="text-xs text-slate-600 leading-relaxed w-full pr-4 text-justify font-medium" contenteditable="true"><strong>Nova Dica:</strong> Edite este texto livremente.</p>
                 <button onclick="this.parentElement.remove()" class="delete-btn no-print hidden group-hover:flex absolute right-0 top-0 text-red-500 hover:text-red-700 text-xs font-black p-1" title="Apagar Dica">✖</button>
             `;
             lista.appendChild(novaDica);
@@ -1015,6 +1030,3 @@
     </script>
 </body>
 </html>
-
-
-
