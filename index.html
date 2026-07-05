@@ -185,6 +185,13 @@
             </div>
 
             <div class="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto flex-wrap justify-center">
+                <!-- Seletor de Layouts -->
+                <select id="layout-select" onchange="mudarLayout(this.value)" class="bg-slate-800 text-white text-xs font-bold px-3 py-2 rounded-xl outline-none border border-slate-700 hover:bg-slate-700 transition-colors cursor-pointer" title="Quantidade de Exercícios">
+                    <option value="6">Layout: 6 Exercícios</option>
+                    <option value="4">Layout: 4 Exercícios</option>
+                    <option value="3">Layout: 3 Exercícios</option>
+                </select>
+
                 <div class="flex items-center gap-2.5 bg-slate-800 px-3.5 py-2 rounded-xl">
                     <button onclick="mudarTema('sus-blue')" class="w-6 h-6 rounded-full bg-cyan-600 border-2 border-slate-700 hover:scale-110 transition-transform" title="Azul SUS"></button>
                     <button onclick="mudarTema('sus-green')" class="w-6 h-6 rounded-full bg-emerald-600 border-2 border-slate-700 hover:scale-110 transition-transform" title="Verde Saúde"></button>
@@ -199,7 +206,7 @@
 
                 <div class="inline-flex rounded-xl border border-slate-700 bg-slate-950 p-1 w-full sm:w-auto">
                     <button onclick="mostrarPagina('externa')" id="btn-ext" class="flex-1 px-4 py-2 rounded-lg text-xs font-bold uppercase bg-emerald-500 text-slate-950 transition-all">Capa/Aba</button>
-                    <button onclick="mostrarPagina('interna')" id="btn-int" class="flex-1 px-4 py-2 rounded-lg text-xs font-bold uppercase text-slate-400 transition-all">6 Exercícios</button>
+                    <button onclick="mostrarPagina('interna')" id="btn-int" class="flex-1 px-4 py-2 rounded-lg text-xs font-bold uppercase text-slate-400 transition-all">Exercícios</button>
                 </div>
 
                 <div class="flex gap-2 w-full sm:w-auto">
@@ -341,14 +348,14 @@
         <div id="pagina-interna" class="print-page bg-white shadow-xl rounded-3xl mx-auto border border-slate-200 p-4 md:p-6 relative transition-all duration-300 hidden">
             <!-- COLUNA 1 -->
             <div class="fold-guide fold-left p-2 flex flex-col gap-2 h-full bg-slate-50/50 rounded-2xl border border-slate-100">
-                <div class="flex-1 flex flex-col justify-between">
+                <div class="flex-1 flex flex-col justify-between transition-all" id="ex-container-1">
                     <div class="flex-1 flex flex-col">
                         <div class="flex items-center gap-1.5 mb-1.5">
-                            <span class="w-5 h-5 rounded-full theme-bg text-white font-black text-[10px] flex items-center justify-center shrink-0" contenteditable="true">1</span>
+                            <span class="w-6 h-6 rounded-full border-2 theme-border theme-text font-black text-[11px] flex items-center justify-center shrink-0 bg-white" contenteditable="true">1</span>
                             <h3 class="text-[13px] font-black text-slate-800 uppercase tracking-tight leading-tight" contenteditable="true">Pescoço</h3>
                         </div>
-                        <div class="img-upload-area w-full h-[180px] theme-bg-light rounded-xl mb-1.5 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden" onclick="abrirCropModal(this, 'rect')">
-                            <div id="container-img-ex1" class="w-full h-full flex items-center justify-center">
+                        <div class="img-upload-area w-full h-[140px] theme-bg-light rounded-xl mb-1.5 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden transition-all duration-500" onclick="abrirCropModal(this, 'rect')">
+                            <div class="w-full h-full flex items-center justify-center">
                                 <svg class="w-10 h-10 theme-text-svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M10 14h4" /></svg>
                             </div>
                             <div class="absolute inset-0 bg-blue-500/80 hidden group-hover:flex items-center justify-center text-[10px] font-bold text-white uppercase backdrop-blur-sm">📷 Editar Foto</div>
@@ -368,16 +375,16 @@
                     </div>
                 </div>
 
-                <hr class="border-dashed border-slate-200 my-0.5">
+                <hr class="border-dashed border-slate-200 my-0.5" id="hr-1">
 
-                <div class="flex-1 flex flex-col justify-between">
+                <div class="flex-1 flex flex-col justify-between transition-all" id="ex-container-2">
                     <div class="flex-1 flex flex-col">
                         <div class="flex items-center gap-1.5 mb-1.5">
-                            <span class="w-5 h-5 rounded-full theme-bg text-white font-black text-[10px] flex items-center justify-center shrink-0" contenteditable="true">2</span>
+                            <span class="w-6 h-6 rounded-full border-2 theme-border theme-text font-black text-[11px] flex items-center justify-center shrink-0 bg-white" contenteditable="true">2</span>
                             <h3 class="text-[13px] font-black text-slate-800 uppercase tracking-tight leading-tight" contenteditable="true">Girar Ombros</h3>
                         </div>
-                        <div class="img-upload-area w-full h-[180px] theme-bg-light rounded-xl mb-1.5 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden" onclick="abrirCropModal(this, 'rect')">
-                            <div id="container-img-ex2" class="w-full h-full flex items-center justify-center">
+                        <div class="img-upload-area w-full h-[140px] theme-bg-light rounded-xl mb-1.5 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden transition-all duration-500" onclick="abrirCropModal(this, 'rect')">
+                            <div class="w-full h-full flex items-center justify-center">
                                 <svg class="w-10 h-10 theme-text-svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
                             </div>
                             <div class="absolute inset-0 bg-blue-500/80 hidden group-hover:flex items-center justify-center text-[10px] font-bold text-white uppercase backdrop-blur-sm">📷 Editar Foto</div>
@@ -400,14 +407,14 @@
 
             <!-- COLUNA 2 -->
             <div class="fold-guide fold-right p-2 flex flex-col gap-2 h-full bg-white rounded-2xl">
-                <div class="flex-1 flex flex-col justify-between">
+                <div class="flex-1 flex flex-col justify-between transition-all" id="ex-container-3">
                     <div class="flex-1 flex flex-col">
                         <div class="flex items-center gap-1.5 mb-1.5">
-                            <span class="w-5 h-5 rounded-full theme-bg text-white font-black text-[10px] flex items-center justify-center shrink-0" contenteditable="true">3</span>
+                            <span class="w-6 h-6 rounded-full border-2 theme-border theme-text font-black text-[11px] flex items-center justify-center shrink-0 bg-white" contenteditable="true">3</span>
                             <h3 class="text-[13px] font-black text-slate-800 uppercase tracking-tight leading-tight" contenteditable="true">Sentar e Levantar</h3>
                         </div>
-                        <div class="img-upload-area w-full h-[180px] theme-bg-light rounded-xl mb-1.5 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden" onclick="abrirCropModal(this, 'rect')">
-                            <div id="container-img-ex3" class="w-full h-full flex items-center justify-center">
+                        <div class="img-upload-area w-full h-[140px] theme-bg-light rounded-xl mb-1.5 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden transition-all duration-500" onclick="abrirCropModal(this, 'rect')">
+                            <div class="w-full h-full flex items-center justify-center">
                                 <svg class="w-10 h-10 theme-text-svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg>
                             </div>
                             <div class="absolute inset-0 bg-blue-500/80 hidden group-hover:flex items-center justify-center text-[10px] font-bold text-white uppercase backdrop-blur-sm">📷 Editar Foto</div>
@@ -427,16 +434,16 @@
                     </div>
                 </div>
 
-                <hr class="border-dashed border-slate-200 my-0.5">
+                <hr class="border-dashed border-slate-200 my-0.5" id="hr-2">
 
-                <div class="flex-1 flex flex-col justify-between">
+                <div class="flex-1 flex flex-col justify-between transition-all" id="ex-container-4">
                     <div class="flex-1 flex flex-col">
                         <div class="flex items-center gap-1.5 mb-1.5">
-                            <span class="w-5 h-5 rounded-full theme-bg text-white font-black text-[10px] flex items-center justify-center shrink-0" contenteditable="true">4</span>
+                            <span class="w-6 h-6 rounded-full border-2 theme-border theme-text font-black text-[11px] flex items-center justify-center shrink-0 bg-white" contenteditable="true">4</span>
                             <h3 class="text-[13px] font-black text-slate-800 uppercase tracking-tight leading-tight" contenteditable="true">Esticar o Joelho</h3>
                         </div>
-                        <div class="img-upload-area w-full h-[180px] theme-bg-light rounded-xl mb-1.5 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden" onclick="abrirCropModal(this, 'rect')">
-                            <div id="container-img-ex4" class="w-full h-full flex items-center justify-center">
+                        <div class="img-upload-area w-full h-[140px] theme-bg-light rounded-xl mb-1.5 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden transition-all duration-500" onclick="abrirCropModal(this, 'rect')">
+                            <div class="w-full h-full flex items-center justify-center">
                                 <svg class="w-10 h-10 theme-text-svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                             </div>
                             <div class="absolute inset-0 bg-blue-500/80 hidden group-hover:flex items-center justify-center text-[10px] font-bold text-white uppercase backdrop-blur-sm">📷 Editar Foto</div>
@@ -459,14 +466,14 @@
 
             <!-- COLUNA 3 -->
             <div class="p-2 flex flex-col gap-2 h-full bg-slate-50/50 rounded-2xl border border-slate-100">
-                <div class="flex-1 flex flex-col justify-between">
+                <div class="flex-1 flex flex-col justify-between transition-all" id="ex-container-5">
                     <div class="flex-1 flex flex-col">
                         <div class="flex items-center gap-1.5 mb-1.5">
-                            <span class="w-5 h-5 rounded-full theme-bg text-white font-black text-[10px] flex items-center justify-center shrink-0" contenteditable="true">5</span>
+                            <span class="w-6 h-6 rounded-full border-2 theme-border theme-text font-black text-[11px] flex items-center justify-center shrink-0 bg-white" contenteditable="true">5</span>
                             <h3 class="text-[13px] font-black text-slate-800 uppercase tracking-tight leading-tight" contenteditable="true">Panturrilha</h3>
                         </div>
-                        <div class="img-upload-area w-full h-[180px] theme-bg-light rounded-xl mb-1.5 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden" onclick="abrirCropModal(this, 'rect')">
-                            <div id="container-img-ex5" class="w-full h-full flex items-center justify-center">
+                        <div class="img-upload-area w-full h-[140px] theme-bg-light rounded-xl mb-1.5 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden transition-all duration-500" onclick="abrirCropModal(this, 'rect')">
+                            <div class="w-full h-full flex items-center justify-center">
                                 <svg class="w-10 h-10 theme-text-svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 11c0 3.517-1.009 6.799-2.753 9.571" /></svg>
                             </div>
                             <div class="absolute inset-0 bg-blue-500/80 hidden group-hover:flex items-center justify-center text-[10px] font-bold text-white uppercase backdrop-blur-sm">📷 Editar Foto</div>
@@ -486,16 +493,16 @@
                     </div>
                 </div>
 
-                <hr class="border-dashed border-slate-200 my-0.5">
+                <hr class="border-dashed border-slate-200 my-0.5" id="hr-3">
 
-                <div class="flex-1 flex flex-col justify-between">
+                <div class="flex-1 flex flex-col justify-between transition-all" id="ex-container-6">
                     <div class="flex-1 flex flex-col">
                         <div class="flex items-center gap-1.5 mb-1.5">
-                            <span class="w-5 h-5 rounded-full theme-bg text-white font-black text-[10px] flex items-center justify-center shrink-0" contenteditable="true">6</span>
+                            <span class="w-6 h-6 rounded-full border-2 theme-border theme-text font-black text-[11px] flex items-center justify-center shrink-0 bg-white" contenteditable="true">6</span>
                             <h3 class="text-[13px] font-black text-slate-800 uppercase tracking-tight leading-tight" contenteditable="true">Caminhada Lateral</h3>
                         </div>
-                        <div class="img-upload-area w-full h-[180px] theme-bg-light rounded-xl mb-1.5 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden" onclick="abrirCropModal(this, 'rect')">
-                            <div id="container-img-ex6" class="w-full h-full flex items-center justify-center">
+                        <div class="img-upload-area w-full h-[140px] theme-bg-light rounded-xl mb-1.5 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden transition-all duration-500" onclick="abrirCropModal(this, 'rect')">
+                            <div class="w-full h-full flex items-center justify-center">
                                 <svg class="w-10 h-10 theme-text-svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 8h16M4 16h16" /></svg>
                             </div>
                             <div class="absolute inset-0 bg-blue-500/80 hidden group-hover:flex items-center justify-center text-[10px] font-bold text-white uppercase backdrop-blur-sm">📷 Editar Foto</div>
@@ -522,12 +529,12 @@
     <input type="file" id="imageUploader" accept="image/png, image/jpeg, image/webp" class="hidden">
 
     <script>
+        // === TOOLBAR DE TEXTO ===
         const toolbar = document.getElementById('text-toolbar');
         let activeEditable = null;
 
         document.addEventListener('mouseup', (e) => {
             let target = e.target;
-            // Correção da subida pela árvore DOM
             while (target && target !== document && (!target.hasAttribute || target.getAttribute('contenteditable') !== 'true')) { 
                 target = target.parentNode; 
             }
@@ -586,7 +593,6 @@
             activeEditable.style.fontSize = `${currentSize + (step * 2)}px`;
             activeEditable.style.lineHeight = '1.3'; 
             
-            // Limpa as formatações sujas que o Chrome embute nas tags filhas (causa do bug)
             const childNodes = activeEditable.querySelectorAll('*');
             childNodes.forEach(child => {
                 child.style.fontSize = '';
@@ -596,6 +602,50 @@
             showToolbar(activeEditable);
         }
 
+        // === LAYOUT ENGINE (6, 4, 3 Exercícios) ===
+        window.layoutAtual = '6';
+
+        function mudarLayout(qtd) {
+            window.layoutAtual = qtd;
+            
+            // Lógica de quais exercícios e linhas divisórias(hr) exibir para cada opção
+            const config = {
+                '6': { show: [1,2,3,4,5,6], hr: [1,2,3], imgH: '140px' },
+                '4': { show: [1,2,3,5], hr: [1], imgH: { 1: '140px', 2: '140px', 3: '260px', 5: '260px'} },
+                '3': { show: [1,3,5], hr: [], imgH: '260px' }
+            };
+            
+            // Ajustar exercícios visíveis e esticar as fotos
+            [1,2,3,4,5,6].forEach(id => {
+                const el = document.getElementById('ex-container-' + id);
+                if(el) {
+                    if (config[qtd].show.includes(id)) {
+                        el.classList.remove('hidden');
+                        el.classList.add('flex');
+                        
+                        const imgBox = el.querySelector('.img-upload-area');
+                        if (imgBox) {
+                            let h = typeof config[qtd].imgH === 'string' ? config[qtd].imgH : config[qtd].imgH[id];
+                            imgBox.style.height = h;
+                        }
+                    } else {
+                        el.classList.add('hidden');
+                        el.classList.remove('flex');
+                    }
+                }
+            });
+
+            // Ajustar divisórias
+            [1,2,3].forEach(id => {
+                const hr = document.getElementById('hr-' + id);
+                if(hr) {
+                    if (config[qtd].hr.includes(id)) hr.classList.remove('hidden');
+                    else hr.classList.add('hidden');
+                }
+            });
+        }
+
+        // === CROPPER DE IMAGEM ===
         let alvoImagemAtual = null;
         let formatoImagemAtual = 'rect';
         let cropper = null;
@@ -663,7 +713,6 @@
             
             const imgNode = document.createElement('img');
             imgNode.src = base64Crop;
-            // Para não cortar na impressão de jeito nenhum: object-contain.
             imgNode.className = formatoImagemAtual === 'circle' ? 'w-full h-full object-cover rounded-full' : 'w-full h-full object-contain rounded-xl';
             alvoImagemAtual.appendChild(imgNode);
             
@@ -725,10 +774,10 @@
         }
 
         const configuracoesTemas = {
-            'sus-blue': { bg: 'bg-cyan-600', text: 'text-cyan-600', badgeBg: 'bg-cyan-100', badgeText: 'text-cyan-900', lightBg: 'bg-cyan-50' },
-            'sus-green': { bg: 'bg-emerald-600', text: 'text-emerald-600', badgeBg: 'bg-emerald-100', badgeText: 'text-emerald-900', lightBg: 'bg-emerald-50/40' },
-            'outubro-rosa': { bg: 'bg-pink-500', text: 'text-pink-500', badgeBg: 'bg-pink-100', badgeText: 'text-pink-900', lightBg: 'bg-pink-50/40' },
-            'novembro-azul': { bg: 'bg-blue-600', text: 'text-blue-600', badgeBg: 'bg-blue-100', badgeText: 'text-blue-900', lightBg: 'bg-blue-50/40' }
+            'sus-blue': { bg: 'bg-cyan-600', text: 'text-cyan-600', border: 'border-cyan-600', badgeBg: 'bg-cyan-100', badgeText: 'text-cyan-900', lightBg: 'bg-cyan-50' },
+            'sus-green': { bg: 'bg-emerald-600', text: 'text-emerald-600', border: 'border-emerald-600', badgeBg: 'bg-emerald-100', badgeText: 'text-emerald-900', lightBg: 'bg-emerald-50/40' },
+            'outubro-rosa': { bg: 'bg-pink-500', text: 'text-pink-500', border: 'border-pink-500', badgeBg: 'bg-pink-100', badgeText: 'text-pink-900', lightBg: 'bg-pink-50/40' },
+            'novembro-azul': { bg: 'bg-blue-600', text: 'text-blue-600', border: 'border-blue-600', badgeBg: 'bg-blue-100', badgeText: 'text-blue-900', lightBg: 'bg-blue-50/40' }
         };
 
         window.temaAtual = 'sus-green'; 
@@ -739,12 +788,13 @@
         function mudarTema(nomeTema, customHex = null) {
             window.temaAtual = nomeTema;
             
-            document.querySelectorAll('.theme-bg, .theme-text, .theme-text-svg, .theme-badge, .theme-bg-light').forEach(el => { el.style.backgroundColor = ''; el.style.color = ''; });
+            document.querySelectorAll('.theme-bg, .theme-text, .theme-text-svg, .theme-badge, .theme-bg-light, .theme-border').forEach(el => { el.style.backgroundColor = ''; el.style.color = ''; el.style.borderColor = ''; });
 
             if (nomeTema === 'custom') {
                 window.customColorHex = customHex;
                 document.querySelectorAll('.theme-bg').forEach(el => { el.style.backgroundColor = customHex; });
                 document.querySelectorAll('.theme-text, .theme-text-svg').forEach(el => { el.style.color = customHex; });
+                document.querySelectorAll('.theme-border').forEach(el => { el.style.borderColor = customHex; });
                 document.querySelectorAll('.theme-badge').forEach(el => { el.style.backgroundColor = customHex + '20'; el.style.color = customHex; });
                 document.querySelectorAll('.theme-bg-light').forEach(el => { el.style.backgroundColor = customHex + '15'; });
             } else {
@@ -752,6 +802,7 @@
                 const configs = configuracoesTemas[nomeTema];
                 document.querySelectorAll('.theme-bg').forEach(el => { el.classList.remove('bg-cyan-600', 'bg-emerald-600', 'bg-pink-500', 'bg-blue-600'); el.classList.add(configs.bg); });
                 document.querySelectorAll('.theme-text, .theme-text-svg').forEach(el => { el.classList.remove('text-cyan-600', 'text-emerald-600', 'text-pink-500', 'text-blue-600', 'text-teal-700'); el.classList.add(configs.text); });
+                document.querySelectorAll('.theme-border').forEach(el => { el.classList.remove('border-cyan-600', 'border-emerald-600', 'border-pink-500', 'border-blue-600'); el.classList.add(configs.border); });
                 document.querySelectorAll('.theme-badge').forEach(el => { el.className = `theme-badge inline-block text-[11px] font-black px-3 py-1.5 rounded uppercase tracking-widest mb-4 w-max ${configs.badgeBg} ${configs.badgeText}`; });
                 document.querySelectorAll('.theme-bg-light').forEach(el => { el.classList.remove('bg-cyan-50', 'bg-emerald-50/40', 'bg-pink-50/40', 'bg-blue-50/40'); el.classList.add(configs.lightBg); });
             }
@@ -807,6 +858,8 @@
             if(confirm("ATENÇÃO: Deseja apagar todas as edições e fotos e carregar o modelo de fábrica?")) {
                 document.getElementById('main-content-container').innerHTML = document.getElementById('default-template').innerHTML;
                 mudarTema('sus-green');
+                mudarLayout('6');
+                document.getElementById('layout-select').value = '6';
                 mostrarPagina('externa');
                 window.salvarProgresso();
             }
@@ -821,6 +874,7 @@
             const dataToSave = {
                 tema: window.temaAtual || 'sus-green',
                 customColor: window.customColorHex || null,
+                layout: window.layoutAtual || '6',
                 htmlContent: document.getElementById('main-content-container').innerHTML,
                 atualizadoEm: new Date().toISOString()
             };
@@ -848,10 +902,18 @@
                         if (data.tema === 'custom' && data.customColor) mudarTema('custom', data.customColor);
                         else mudarTema(data.tema);
                     } else mudarTema('sus-green');
+
+                    if (data.layout) {
+                        mudarLayout(data.layout);
+                        document.getElementById('layout-select').value = data.layout;
+                    } else {
+                        mudarLayout('6');
+                    }
                     
                 } else {
                     document.getElementById('main-content-container').innerHTML = document.getElementById('default-template').innerHTML;
                     mudarTema('sus-green');
+                    mudarLayout('6');
                 }
                 
                 mostrarPagina('externa');
