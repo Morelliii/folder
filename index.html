@@ -321,14 +321,16 @@
 
                 <div class="my-auto py-4">
                     <div class="flex justify-center mb-6">
+                        <!-- CAPA: Mantendo o onclick simples na própria DIV porque não tem controle de altura -->
                         <div class="img-upload-area w-36 h-36 md:w-40 md:h-40 rounded-full theme-bg flex items-center justify-center text-white shadow-xl overflow-hidden group cursor-pointer" onclick="abrirCropModal(this, 'circle')">
-                            <div id="container-img-capa" class="w-full h-full flex items-center justify-center">
+                            <!-- Container para a Imagem/Svg (BLINDADO) -->
+                            <div id="container-img-capa" class="w-full h-full flex items-center justify-center relative z-0">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-20 h-20 md:w-24 md:h-24">
                                     <path d="M12 18.5l-1.45-1.32C5.4 12.36 2 9.28 2 5.5 2 2.42 4.42 0 7.5 0c1.74 0 3.41.81 4.5 2.09C13.09 0.81 14.76 0 16.5 0 19.58 0 22 2.42 22 5.5c0 3.78-3.4 6.86-8.55 11.54L12 18.5z" />
                                     <path d="M21.5 16h-3.37c-1.12 0-2.18.53-2.83 1.42L14 19h-4l-1.3-1.58A3.49 3.49 0 005.87 16H2.5C1.12 16 0 17.12 0 18.5V20c0 2.21 1.79 4 4 4h12c2.21 0 4-1.79 4-4v-2c0-1.1-.9-2-2-2z" opacity="0.3"/>
                                 </svg>
                             </div>
-                            <div class="absolute inset-0 bg-black/40 hidden group-hover:flex items-center justify-center text-xs font-bold text-white uppercase backdrop-blur-sm transition-all text-center leading-tight">Trocar<br>Foto</div>
+                            <div class="absolute inset-0 bg-black/40 hidden group-hover:flex items-center justify-center text-xs font-bold text-white uppercase backdrop-blur-sm transition-all text-center leading-tight z-10">Trocar<br>Foto</div>
                         </div>
                     </div>
                     
@@ -356,11 +358,13 @@
                             <h3 class="text-[13px] font-black text-slate-800 uppercase tracking-tight leading-tight" contenteditable="true">Pescoço</h3>
                         </div>
                         
-                        <!-- ÁREA DE IMAGEM -->
+                        <!-- ÁREA DE IMAGEM BLINDADA CONTRA O BUG DO INNERHTML -->
                         <div class="img-upload-area w-full h-[180px] theme-bg-light rounded-xl mb-1.5 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden transition-all duration-300 relative">
-                            <div class="w-full h-full flex items-center justify-center">
+                            <!-- DIV INTERNA: Esta é a única que será apagada e receberá a foto! -->
+                            <div class="w-full h-full flex items-center justify-center relative z-0">
                                 <svg class="w-10 h-10 theme-text-svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M10 14h4" /></svg>
                             </div>
+                            <!-- OVERLAY: Fica intacto por cima da foto -->
                             <div class="absolute inset-0 bg-blue-600/80 hidden group-hover:flex flex-col z-10">
                                 <div class="flex-1 flex items-center justify-center cursor-pointer" onclick="abrirCropModal(this.closest('.img-upload-area'), 'rect')">
                                     <span class="text-[11px] font-bold text-white uppercase tracking-wider drop-shadow-md">📷 Editar Foto</span>
@@ -399,9 +403,8 @@
                             <h3 class="text-[13px] font-black text-slate-800 uppercase tracking-tight leading-tight" contenteditable="true">Girar Ombros</h3>
                         </div>
 
-                        <!-- ÁREA DE IMAGEM -->
                         <div class="img-upload-area w-full h-[180px] theme-bg-light rounded-xl mb-1.5 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden transition-all duration-300 relative">
-                            <div class="w-full h-full flex items-center justify-center">
+                            <div class="w-full h-full flex items-center justify-center relative z-0">
                                 <svg class="w-10 h-10 theme-text-svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
                             </div>
                             <div class="absolute inset-0 bg-blue-600/80 hidden group-hover:flex flex-col z-10">
@@ -443,9 +446,8 @@
                             <h3 class="text-[13px] font-black text-slate-800 uppercase tracking-tight leading-tight" contenteditable="true">Sentar e Levantar</h3>
                         </div>
 
-                        <!-- ÁREA DE IMAGEM -->
                         <div class="img-upload-area w-full h-[180px] theme-bg-light rounded-xl mb-1.5 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden transition-all duration-300 relative">
-                            <div class="w-full h-full flex items-center justify-center">
+                            <div class="w-full h-full flex items-center justify-center relative z-0">
                                 <svg class="w-10 h-10 theme-text-svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg>
                             </div>
                             <div class="absolute inset-0 bg-blue-600/80 hidden group-hover:flex flex-col z-10">
@@ -486,9 +488,8 @@
                             <h3 class="text-[13px] font-black text-slate-800 uppercase tracking-tight leading-tight" contenteditable="true">Esticar o Joelho</h3>
                         </div>
 
-                        <!-- ÁREA DE IMAGEM -->
                         <div class="img-upload-area w-full h-[180px] theme-bg-light rounded-xl mb-1.5 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden transition-all duration-300 relative">
-                            <div class="w-full h-full flex items-center justify-center">
+                            <div class="w-full h-full flex items-center justify-center relative z-0">
                                 <svg class="w-10 h-10 theme-text-svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                             </div>
                             <div class="absolute inset-0 bg-blue-600/80 hidden group-hover:flex flex-col z-10">
@@ -526,13 +527,12 @@
                 <div class="flex-1 flex flex-col justify-between transition-all" id="ex-container-5">
                     <div class="flex-1 flex flex-col">
                         <div class="flex items-center gap-1.5 mb-1.5">
-                            <span class="w-6 h-6 rounded-full border-2 theme-border theme-text font-black text-[11px] flex items-center justify-center shrink-0 bg-white" contenteditable="true">5</span>
+                            <span class="w-5 h-5 rounded-full border-2 theme-border theme-text font-black text-[11px] flex items-center justify-center shrink-0 bg-white" contenteditable="true">5</span>
                             <h3 class="text-[13px] font-black text-slate-800 uppercase tracking-tight leading-tight" contenteditable="true">Panturrilha</h3>
                         </div>
 
-                        <!-- ÁREA DE IMAGEM -->
                         <div class="img-upload-area w-full h-[180px] theme-bg-light rounded-xl mb-1.5 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden transition-all duration-300 relative">
-                            <div class="w-full h-full flex items-center justify-center">
+                            <div class="w-full h-full flex items-center justify-center relative z-0">
                                 <svg class="w-10 h-10 theme-text-svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 11c0 3.517-1.009 6.799-2.753 9.571" /></svg>
                             </div>
                             <div class="absolute inset-0 bg-blue-600/80 hidden group-hover:flex flex-col z-10">
@@ -573,9 +573,8 @@
                             <h3 class="text-[13px] font-black text-slate-800 uppercase tracking-tight leading-tight" contenteditable="true">Caminhada Lateral</h3>
                         </div>
 
-                        <!-- ÁREA DE IMAGEM -->
                         <div class="img-upload-area w-full h-[180px] theme-bg-light rounded-xl mb-1.5 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden transition-all duration-300 relative">
-                            <div class="w-full h-full flex items-center justify-center">
+                            <div class="w-full h-full flex items-center justify-center relative z-0">
                                 <svg class="w-10 h-10 theme-text-svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 8h16M4 16h16" /></svg>
                             </div>
                             <div class="absolute inset-0 bg-blue-600/80 hidden group-hover:flex flex-col z-10">
@@ -696,8 +695,8 @@
             let currentHeight = parseInt(window.getComputedStyle(imgContainer).height);
             let newHeight = currentHeight + delta;
             
-            // Limites rígidos para não quebrar a folha A4! (+30% aplicado: teto de 470px)
-            if (newHeight >= 80 && newHeight <= 470) {
+            // Limites rígidos para não quebrar a folha A4! (Limite cravado em 400px a pedido do dev!)
+            if (newHeight >= 80 && newHeight <= 400) {
                 imgContainer.style.height = newHeight + 'px';
             }
         };
@@ -805,14 +804,17 @@
             
             const base64Crop = canvas.toDataURL('image/jpeg', 0.80);
             
-            alvoImagemAtual.innerHTML = '';
+            // Em vez de limpar a caixa inteira, limpamos APENAS a div interna 
+            // (a camada "z-0") mantendo o menu azul de cima intacto!
+            const containerDaFoto = alvoImagemAtual.firstElementChild;
+            containerDaFoto.innerHTML = '';
+            
             alvoImagemAtual.classList.remove('border-2', 'border-dashed', 'border-slate-300');
-            alvoImagemAtual.style.padding = '0';
             
             const imgNode = document.createElement('img');
             imgNode.src = base64Crop;
             imgNode.className = formatoImagemAtual === 'circle' ? 'w-full h-full object-cover rounded-full' : 'w-full h-full object-contain rounded-xl';
-            alvoImagemAtual.appendChild(imgNode);
+            containerDaFoto.appendChild(imgNode);
             
             fecharCrop();
         }
@@ -1022,5 +1024,3 @@
     </script>
 </body>
 </html>
-
-
