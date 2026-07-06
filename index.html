@@ -7,6 +7,7 @@
     
     <script src="https://cdn.tailwindcss.com"></script>
     
+    <!-- Cropper.js -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
 
@@ -32,7 +33,7 @@
         /* FORÇANDO O BOLD PARA SER EXTRA BOLD E DESTACAR DO SEMIBOLD */
         b, strong, [style*="bold"], [style*="700"] { font-weight: 800 !important; }
 
-        /* CONFIGURAÇÃO BLINDADA PARA IMPRESSÃO PERFEITA (OTIMIZADA PARA MAIS ESPAÇO) */
+        /* CONFIGURAÇÃO BLINDADA PARA IMPRESSÃO PERFEITA */
         @page { size: A4 landscape; margin: 0mm; }
         @media print {
             * { 
@@ -66,10 +67,10 @@
                 border: none !important; 
                 border-radius: 0 !important;
                 box-shadow: none !important; 
-                padding: 5mm !important; /* Reduzido de 8mm para dar mais margem vertical livre */
+                padding: 5mm !important; 
                 display: grid !important; 
                 grid-template-columns: repeat(3, 1fr) !important; 
-                gap: 5mm !important; /* Reduzido de 8mm para compactar os blocos invisíveis */
+                gap: 5mm !important; 
                 box-sizing: border-box !important; 
                 background-color: white !important; 
                 background-image: none !important; 
@@ -96,7 +97,8 @@
 </head>
 <body class="bg-slate-100 min-h-screen flex flex-col relative pb-10">
 
-    <div id="text-toolbar" class="no-print fixed z-[200] hidden bg-slate-900 text-white rounded-2xl shadow-2xl p-2.5 flex items-center gap-1.5 opacity-0 transform -translate-y-4 transition-all duration-300 pointer-events-auto left-1/2 -translate-x-1/2 top-[85px]">
+    <!-- TOOLBAR FLUTUANTE COM INDICADOR DIGITAL DE TAMANHO DA FONTE -->
+    <div id="text-toolbar" class="no-print fixed z-[200] hidden bg-slate-900 text-white rounded-2xl shadow-2xl p-2.5 flex items-center gap-1.5 opacity-0 transform -translate-y-4 transition-all duration-300 pointer-events-auto left-1/2 -translate-x-1/2 top-[120px] md:top-[85px]">
         <button onclick="changeFontSize(-1)" class="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-slate-700 font-bold text-sm transition-colors" title="Diminuir Fonte">A-</button>
         <span id="font-size-display" class="text-xs font-mono font-bold bg-slate-800 px-2 py-1 rounded-lg text-slate-300 min-w-[38px] text-center">11px</span>
         <button onclick="changeFontSize(1)" class="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-slate-700 font-bold text-xl transition-colors" title="Aumentar Fonte">A+</button>
@@ -120,6 +122,7 @@
         </button>
     </div>
 
+    <!-- TELA DE LOGIN -->
     <div id="login-modal" class="fixed inset-0 z-[100] bg-slate-900 flex items-center justify-center p-4 transition-opacity duration-300">
         <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 text-center">
             <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -143,6 +146,7 @@
         </div>
     </div>
 
+    <!-- MODAL DE CORTE DE IMAGEM -->
     <div id="crop-modal" class="no-print fixed inset-0 z-[150] bg-slate-900/90 hidden flex-col items-center justify-center p-4">
         <div class="bg-white rounded-2xl w-full max-w-3xl overflow-hidden shadow-2xl flex flex-col">
             <div class="p-4 bg-slate-800 text-white flex justify-between items-center">
@@ -165,6 +169,7 @@
         </div>
     </div>
 
+    <!-- CABEÇALHO -->
     <header id="main-header" class="no-print bg-slate-900 text-white shadow-md p-4 sticky top-0 z-50 hidden">
         <div class="max-w-7xl mx-auto flex flex-col lg:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-3 w-full lg:w-auto">
@@ -181,11 +186,25 @@
             </div>
 
             <div class="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto flex-wrap justify-center">
+                
+                <!-- NOVO GERENCIADOR DE ARQUIVOS -->
+                <div class="flex items-center gap-1.5 bg-slate-800 px-3 py-2 rounded-xl w-full sm:w-auto justify-center shadow-inner border border-slate-700">
+                    <input type="text" id="folder-name-input" placeholder="Nome do Paciente..." class="bg-slate-900 text-white text-[13px] font-bold px-3 py-1.5 rounded-lg outline-none border border-slate-600 focus:border-amber-500 flex-1 sm:w-36 transition-colors" title="Nome para salvar a prescrição">
+                    <div class="w-px h-6 bg-slate-600 mx-1"></div>
+                    <select id="saved-folders-select" onchange="carregarFolder(this.value)" class="bg-slate-900 text-slate-300 text-xs font-bold px-2 py-1.5 rounded-lg outline-none border border-slate-600 hover:border-slate-500 transition-colors cursor-pointer w-28 md:w-32" title="Carregar folder salvo">
+                        <option value="">📂 Carregar...</option>
+                    </select>
+                    <button onclick="deletarFolderAtual()" class="text-slate-500 hover:text-red-400 transition-colors p-1.5 rounded-lg hover:bg-slate-700" title="Excluir este paciente do sistema">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                    </button>
+                </div>
+
+                <!-- Seletor de Layouts -->
                 <select id="layout-select" onchange="mudarLayout(this.value)" class="bg-slate-800 text-white text-xs font-bold px-3 py-2 rounded-xl outline-none border border-slate-700 hover:bg-slate-700 transition-colors cursor-pointer" title="Quantidade de Exercícios">
-                    <option value="6">Layout: 6 Exercícios</option>
-                    <option value="5">Layout: 5 Exercícios</option>
-                    <option value="4">Layout: 4 Exercícios</option>
-                    <option value="3">Layout: 3 Exercícios</option>
+                    <option value="6">Layout: 6 Ex</option>
+                    <option value="5">Layout: 5 Ex</option>
+                    <option value="4">Layout: 4 Ex</option>
+                    <option value="3">Layout: 3 Ex</option>
                 </select>
 
                 <div class="flex items-center gap-2.5 bg-slate-800 px-3.5 py-2 rounded-xl">
@@ -206,7 +225,7 @@
                 </div>
 
                 <div class="flex gap-2 w-full sm:w-auto">
-                    <button id="btn-reset" class="flex-1 sm:flex-none bg-slate-700 hover:bg-slate-600 text-white font-bold px-3 py-2 rounded-xl text-xs uppercase tracking-wider transition-all" title="Restaurar Padrão">🔄 Resetar</button>
+                    <button id="btn-reset" class="flex-1 sm:flex-none bg-slate-700 hover:bg-slate-600 text-white font-bold px-4 py-2 rounded-xl text-xs md:text-sm uppercase tracking-wider transition-all" title="Começar folder do zero">📄 Novo</button>
                     <button id="btn-salvar" onclick="window.salvarProgresso()" class="flex-1 sm:flex-none bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold px-4 py-2 rounded-xl text-xs md:text-sm uppercase tracking-wider flex items-center justify-center gap-1 shadow-lg transition-all">💾 Salvar</button>
                     <button onclick="abrirImpressao()" class="flex-1 sm:flex-none bg-blue-600 hover:bg-blue-500 text-white font-bold px-4 py-2 rounded-xl text-xs md:text-sm uppercase tracking-wider shadow-lg transition-all">🖨️ Imprimir</button>
                 </div>
@@ -216,9 +235,11 @@
 
     <main id="main-content" class="flex-1 max-w-7xl mx-auto w-full p-4 md:p-8 flex flex-col justify-center items-center gap-6 hidden">
         <div class="w-full max-w-5xl" id="main-content-container">
-            </div>
+            <!-- Conteúdo Injetado -->
+        </div>
     </main>
 
+    <!-- Modal de Impressão -->
     <div id="print-modal" class="no-print fixed inset-0 bg-slate-900/80 z-[250] hidden flex-col items-center justify-center p-4 opacity-0 transition-opacity duration-300">
         <div class="bg-white rounded-3xl max-w-sm w-full p-6 md:p-8 shadow-2xl transform scale-95 transition-transform duration-300" id="print-modal-content">
             <h3 class="text-xl font-black text-slate-800 text-center mb-3">Salvar seu Folder</h3>
@@ -235,7 +256,9 @@
         </div>
     </div>
 
+    <!-- TEMPLATE PADRÃO DO FOLDER -->
     <template id="default-template">
+        <!-- PÁGINA 1: EXTERNA -->
         <div id="pagina-externa" class="print-page bg-white shadow-xl rounded-3xl mx-auto border border-slate-200 p-6 md:p-8 relative transition-all duration-300">
             <div class="fold-guide fold-left p-5 flex flex-col justify-between h-full bg-slate-50/50 rounded-2xl border border-slate-100">
                 <div class="flex-1 flex flex-col">
@@ -336,7 +359,9 @@
             </div>
         </div>
 
+        <!-- PÁGINA 2: INTERNA -->
         <div id="pagina-interna" class="print-page bg-white shadow-xl rounded-3xl mx-auto border border-slate-200 p-4 md:p-6 relative transition-all duration-300 hidden">
+            <!-- COLUNA 1 -->
             <div class="fold-guide fold-left p-1.5 flex flex-col gap-1.5 h-full bg-slate-50/50 rounded-2xl border border-slate-100">
                 <div class="flex-1 flex flex-col justify-between transition-all" id="ex-container-1">
                     <div class="flex-1 flex flex-col">
@@ -421,6 +446,7 @@
                 </div>
             </div>
 
+            <!-- COLUNA 2 -->
             <div class="fold-guide fold-right p-1.5 flex flex-col gap-1.5 h-full bg-white rounded-2xl">
                 <div class="flex-1 flex flex-col justify-between transition-all" id="ex-container-3">
                     <div class="flex-1 flex flex-col">
@@ -505,6 +531,7 @@
                 </div>
             </div>
 
+            <!-- COLUNA 3 -->
             <div class="p-1.5 flex flex-col gap-1.5 h-full bg-slate-50/50 rounded-2xl border border-slate-100">
                 <div class="flex-1 flex flex-col justify-between transition-all" id="ex-container-5">
                     <div class="flex-1 flex flex-col">
@@ -601,10 +628,7 @@
         window.marcarAlteracao = function() {
             if (!window.hasUnsavedChanges) {
                 window.hasUnsavedChanges = true;
-                const btn = document.getElementById('btn-salvar');
-                btn.innerHTML = '⚠️ Não Salvo';
-                btn.classList.remove('bg-amber-500', 'hover:bg-amber-400');
-                btn.classList.add('bg-red-500', 'hover:bg-red-400');
+                atualizarBotaoSalvar(false);
             }
         };
 
@@ -612,15 +636,14 @@
             document.getElementById('main-content').addEventListener('input', window.marcarAlteracao);
         });
 
-        // === TOOLBAR DE TEXTO ===
+        // === TOOLBAR DE TEXTO BLINDADA ===
         const toolbar = document.getElementById('text-toolbar');
         const visorFonte = document.getElementById('font-size-display');
         let activeEditable = null;
-        let isChangingFont = false; // A nossa "Trava" contra o bug do navegador
+        let isChangingFont = false;
 
-        // Função que lê o CSS real e atualiza o visor
         function sincronizarVisor() {
-            if (!activeEditable || isChangingFont) return; // Se estiver travado, ignora
+            if (!activeEditable || isChangingFont) return;
             const style = window.getComputedStyle(activeEditable);
             const size = Math.round(parseFloat(style.fontSize));
             if (visorFonte) visorFonte.textContent = size + 'px';
@@ -636,7 +659,6 @@
             }, 10);
         }
 
-        // Gatilho super leve focado só na seleção
         document.addEventListener('selectionchange', () => {
             const selection = window.getSelection();
             if (selection && selection.rangeCount > 0) {
@@ -644,14 +666,11 @@
                 if (node) {
                     if (node.nodeType !== Node.ELEMENT_NODE) node = node.parentNode;
                     const editable = node.closest('[contenteditable="true"]');
-                    if (editable) {
-                        abrirMenu(editable);
-                    }
+                    if (editable) abrirMenu(editable);
                 }
             }
         });
 
-        // Fechar menu se clicar fora
         document.addEventListener('mousedown', (e) => {
             if (toolbar.contains(e.target)) return;
             const editable = e.target.closest('[contenteditable="true"]');
@@ -694,8 +713,7 @@
 
         function changeFontSize(step) {
             if (!activeEditable) return;
-            
-            isChangingFont = true; // Aciona a trava
+            isChangingFont = true; 
             
             const style = window.getComputedStyle(activeEditable);
             let currentSize = parseFloat(style.fontSize) || 11;
@@ -710,11 +728,9 @@
                 child.style.lineHeight = '';
             });
             
-            // Atualiza o visor à força e com perfeição
             if (visorFonte) visorFonte.textContent = novoTamanho + 'px';
             window.marcarAlteracao();
             
-            // Desativa a trava logo após a reestruturação da tela
             setTimeout(() => { isChangingFont = false; }, 50);
         }
 
@@ -939,14 +955,14 @@
                 document.querySelectorAll('.theme-badge').forEach(el => { el.className = `theme-badge inline-block text-[11px] font-black px-3 py-1.5 rounded uppercase tracking-widest mb-4 w-max ${configs.badgeBg} ${configs.badgeText}`; });
                 document.querySelectorAll('.theme-bg-light').forEach(el => { el.classList.remove('bg-cyan-50', 'bg-emerald-50/40', 'bg-pink-50/40', 'bg-blue-50/40'); el.classList.add(configs.lightBg); });
             }
-            window.marcarAlteracao();
         }
     </script>
 
+    <!-- FIREBASE (BANCO DE DADOS EM NUVEM MULTI-PACIENTE) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, getDoc, collection, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         const firebaseConfig = {
           apiKey: "AIzaSyD0l49VdT8hB8dxyS1LxU5lDAY_Bcs08tc",
@@ -960,15 +976,17 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-        const DADOS_DOC_ID = "folder_padrao";
+        
+        let currentFolderId = ""; // Fica vazio para forçar o usuário a dar um nome
 
-        onAuthStateChanged(auth, (user) => {
+        onAuthStateChanged(auth, async (user) => {
             if (user) {
                 document.getElementById('login-modal').classList.add('hidden');
                 document.getElementById('main-header').classList.remove('hidden');
                 document.getElementById('main-content').classList.remove('hidden');
                 document.getElementById('user-email-display').textContent = user.email;
-                carregarProgresso();
+                await atualizarListaFolders();
+                iniciarFolderEmBranco();
             } else {
                 document.getElementById('login-modal').classList.remove('hidden');
                 document.getElementById('main-header').classList.add('hidden');
@@ -987,22 +1005,138 @@
 
         document.getElementById('btn-logout').addEventListener('click', () => signOut(auth));
 
+        // Busca todos os pacientes salvos na nuvem e preenche o Select
+        window.atualizarListaFolders = async function() {
+            const select = document.getElementById('saved-folders-select');
+            select.innerHTML = '<option value="">📂 Carregar...</option>';
+            try {
+                const querySnapshot = await getDocs(collection(db, "folders"));
+                querySnapshot.forEach((doc) => {
+                    // Impede de listar arquivos de sistema antigos se houver
+                    if(doc.id !== "folder_padrao") {
+                        const option = document.createElement('option');
+                        option.value = doc.id;
+                        option.textContent = doc.id;
+                        if(doc.id === currentFolderId) option.selected = true;
+                        select.appendChild(option);
+                    }
+                });
+            } catch (e) {
+                console.error("Erro ao carregar lista de pacientes", e);
+            }
+        };
+
+        // Carrega as informações do paciente selecionado no menu
+        window.carregarFolder = async function(id) {
+            if(!id) return;
+            try {
+                const docSnap = await getDoc(doc(db, "folders", id));
+                if (docSnap.exists()) {
+                    currentFolderId = id;
+                    document.getElementById('folder-name-input').value = id;
+                    
+                    const data = docSnap.data();
+                    document.getElementById('main-content-container').innerHTML = data.htmlContent;
+                    
+                    if (data.tema) {
+                        window.temaAtual = data.tema;
+                        window.customColorHex = data.customColor;
+                        if(data.tema === 'custom') document.getElementById('customColorPicker').value = data.customColor;
+                        mudarTema(data.tema, data.customColor);
+                    }
+
+                    if (data.layout) {
+                        window.layoutAtual = data.layout;
+                        document.getElementById('layout-select').value = data.layout;
+                        mudarLayout(data.layout);
+                    }
+                    
+                    window.hasUnsavedChanges = false;
+                    window.atualizarBotaoSalvar(true);
+                    mostrarPagina('externa');
+                }
+            } catch (e) {
+                console.error("Erro ao carregar paciente:", e);
+                alert("Erro ao carregar o arquivo.");
+            }
+        };
+
+        // Deleta permanentemente o arquivo do paciente atual
+        window.deletarFolderAtual = async function() {
+            if(!currentFolderId) {
+                alert("Você precisa carregar um folder salvo primeiro para poder excluir.");
+                return;
+            }
+            if(confirm(`⚠️ ATENÇÃO: Tem certeza que deseja APAGAR permanentemente a prescrição de "${currentFolderId}"?`)) {
+                try {
+                    await deleteDoc(doc(db, "folders", currentFolderId));
+                    await atualizarListaFolders();
+                    iniciarFolderEmBranco();
+                } catch(e) {
+                    alert("Erro ao excluir arquivo.");
+                }
+            }
+        };
+
+        // Botão Novo: Limpa a tela para começar outro paciente
         document.getElementById('btn-reset').addEventListener('click', () => {
-            if(confirm("ATENÇÃO: Deseja apagar todas as edições e fotos e carregar o modelo de fábrica?")) {
-                document.getElementById('main-content-container').innerHTML = document.getElementById('default-template').innerHTML;
-                mudarTema('sus-green');
-                mudarLayout('6');
-                document.getElementById('layout-select').value = '6';
-                mostrarPagina('externa');
-                window.salvarProgresso();
+            if(confirm("ATENÇÃO: Deseja limpar a tela e começar uma prescrição NOVA do zero?")) {
+                iniciarFolderEmBranco();
             }
         });
 
+        function iniciarFolderEmBranco() {
+            currentFolderId = "";
+            document.getElementById('folder-name-input').value = "";
+            document.getElementById('saved-folders-select').value = "";
+            
+            document.getElementById('main-content-container').innerHTML = document.getElementById('default-template').innerHTML;
+            mudarTema('sus-green');
+            mudarLayout('6');
+            document.getElementById('layout-select').value = '6';
+            mostrarPagina('externa');
+            
+            window.hasUnsavedChanges = false;
+            window.atualizarBotaoSalvar(true);
+        }
+
+        window.atualizarBotaoSalvar = function(salvo) {
+            const btn = document.getElementById('btn-salvar');
+            if(salvo) {
+                btn.innerHTML = '✅ Salvo!';
+                btn.classList.remove('bg-red-500', 'hover:bg-red-400');
+                btn.classList.add('bg-amber-500', 'hover:bg-amber-400');
+                setTimeout(() => {
+                    if(!window.hasUnsavedChanges) btn.innerHTML = '💾 Salvar';
+                }, 3000);
+            } else {
+                btn.innerHTML = '⚠️ Não Salvo';
+                btn.classList.remove('bg-amber-500', 'hover:bg-amber-400');
+                btn.classList.add('bg-red-500', 'hover:bg-red-400');
+            }
+        };
+
+        // Função de Salvamento Inteligente
         window.salvarProgresso = async function() {
             if (!auth.currentUser || !db) return;
+            
+            const inputElement = document.getElementById('folder-name-input');
+            const folderName = inputElement.value.trim();
+
+            // Bloqueia se tentar salvar sem dar um nome para a prescrição
+            if (!folderName) {
+                alert("⚠️ Por favor, digite o NOME DO PACIENTE na barra superior antes de salvar!");
+                inputElement.focus();
+                inputElement.classList.add('ring-2', 'ring-amber-500');
+                setTimeout(() => inputElement.classList.remove('ring-2', 'ring-amber-500'), 2000);
+                return;
+            }
+
             const btn = document.getElementById('btn-salvar');
             const textoOriginal = btn.innerHTML;
             btn.innerHTML = '⏳ Salvando...';
+
+            currentFolderId = folderName;
 
             const dataToSave = {
                 tema: window.temaAtual || 'sus-green',
@@ -1013,16 +1147,11 @@
             };
 
             try {
-                await setDoc(doc(db, "folders", DADOS_DOC_ID), dataToSave);
+                await setDoc(doc(db, "folders", currentFolderId), dataToSave);
                 
                 window.hasUnsavedChanges = false;
-                btn.innerHTML = '✅ Salvo!';
-                btn.classList.remove('bg-red-500', 'hover:bg-red-400');
-                btn.classList.add('bg-amber-500', 'hover:bg-amber-400');
-                
-                setTimeout(() => {
-                    if(!window.hasUnsavedChanges) btn.innerHTML = '💾 Salvar';
-                }, 3000);
+                window.atualizarBotaoSalvar(true);
+                await atualizarListaFolders();
                 
             } catch (e) {
                 console.error("Erro ao salvar:", e);
@@ -1030,43 +1159,6 @@
                 setTimeout(() => btn.innerHTML = textoOriginal, 3000);
             }
         };
-
-        async function carregarProgresso() {
-            try {
-                const docSnap = await getDoc(doc(db, "folders", DADOS_DOC_ID));
-                
-                if (docSnap.exists() && docSnap.data().htmlContent) {
-                    const data = docSnap.data();
-                    document.getElementById('main-content-container').innerHTML = data.htmlContent;
-                    
-                    if (data.tema) {
-                        window.temaAtual = data.tema;
-                        window.customColorHex = data.customColor;
-                        if(data.tema === 'custom') document.getElementById('customColorPicker').value = data.customColor;
-                    }
-
-                    if (data.layout) {
-                        window.layoutAtual = data.layout;
-                        document.getElementById('layout-select').value = data.layout;
-                    }
-                    
-                } else {
-                    document.getElementById('main-content-container').innerHTML = document.getElementById('default-template').innerHTML;
-                    mudarTema('sus-green');
-                    mudarLayout('6');
-                }
-                
-                window.hasUnsavedChanges = false;
-                const btn = document.getElementById('btn-salvar');
-                btn.innerHTML = '💾 Salvar';
-                btn.classList.remove('bg-red-500', 'hover:bg-red-400');
-                btn.classList.add('bg-amber-500', 'hover:bg-amber-400');
-
-                mostrarPagina('externa');
-            } catch (e) {
-                console.error("Erro ao carregar:", e);
-            }
-        }
     </script>
 </body>
 </html>
