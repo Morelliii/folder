@@ -883,7 +883,7 @@
             let currentHeight = parseInt(window.getComputedStyle(imgContainer).height);
             let newHeight = currentHeight + delta;
             
-            if (newHeight >= 80 && newHeight <= 400) {
+            if (newHeight >= 80 && newHeight <= 420) {
                 imgContainer.style.height = newHeight + 'px';
                 window.marcarAlteracao();
             }
@@ -897,9 +897,9 @@
             
             const config = {
                 '6': { show: [1,2,3,4,5,6], hr: [1,2,3], imgH: '180px' },
-                '5': { show: [1,2,3,4,5], hr: [1,2], imgH: { 1: '180px', 2: '180px', 3: '180px', 4: '180px', 5: '400px'} },
-                '4': { show: [1,2,3,5], hr: [1], imgH: { 1: '180px', 2: '180px', 3: '400px', 5: '400px'} },
-                '3': { show: [1,3,5], hr: [], imgH: '400px' }
+                '5': { show: [1,2,3,4,5], hr: [1,2], imgH: { 1: '180px', 2: '180px', 3: '180px', 4: '180px', 5: '420px'} },
+                '4': { show: [1,2,3,5], hr: [1], imgH: { 1: '180px', 2: '180px', 3: '420px', 5: '420px'} },
+                '3': { show: [1,3,5], hr: [], imgH: '420px' }
             };
             
             [1,2,3,4,5,6].forEach(id => {
