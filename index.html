@@ -25,14 +25,13 @@
         /* FORÇANDO O BOLD PARA SER EXTRA BOLD E DESTACAR DO SEMIBOLD */
         b, strong, [style*="bold"], [style*="700"] { font-weight: 800 !important; }
 
-        /* CLASSE PARA A GAVETA RETRÁTIL DA BARRA LATERAL */
         .sidebar-collapsed {
             width: 0px !important;
             border-right-width: 0px !important;
         }
 
-        /* DIMENSÕES EXATAS NA TELA PARA BATER 100% COM A IMPRESSÃO (WYSIWYG) */
-        @media (min-width: 768px) {
+        /* --- BLINDAGEM: REGRAS APENAS PARA A TELA (SCREEN) --- */
+        @media screen and (min-width: 768px) {
             .fold-guide { position: relative; }
             .fold-guide::after { content: ''; position: absolute; top: 0; bottom: 0; width: 1px; border-left: 1px dashed rgba(156, 163, 175, 0.4); pointer-events: none; }
             .fold-left::after { right: 0; }
@@ -50,13 +49,13 @@
             }
         }
 
-        @media (max-width: 767px) {
+        @media screen and (max-width: 767px) {
             .print-page:not(.hidden) { display: flex !important; flex-direction: column !important; gap: 2rem !important; height: auto !important; aspect-ratio: auto !important; padding: 1.5rem !important; }
             .print-page.hidden { display: none !important; }
             .fold-guide::after { display: none !important; }
         }
 
-        /* CONFIGURAÇÃO BLINDADA PARA IMPRESSÃO PERFEITA */
+        /* --- CONFIGURAÇÃO BLINDADA PARA IMPRESSÃO PERFEITA --- */
         @page { size: A4 landscape; margin: 0mm; }
         @media print {
             * { 
@@ -65,16 +64,20 @@
                 color-adjust: exact !important; 
                 box-sizing: border-box !important;
             }
+            
+            /* Remove a trava de altura e overflow para permitir que o navegador calcule 2 páginas */
             html, body { 
-                width: 297mm; 
-                height: 210mm; 
+                width: 297mm !important; 
+                height: auto !important; 
+                min-height: 100% !important;
                 margin: 0 !important; 
                 padding: 0 !important; 
                 background: white !important; 
+                overflow: visible !important;
             }
             
-            /* Esconde a barra lateral e botões na hora de imprimir */
-            #sidebar-menu, #floating-controls { display: none !important; }
+            #sidebar-menu, #floating-controls, #text-toolbar { display: none !important; }
+            .no-print { display: none !important; }
             
             main, #main-content-container, #main-content { 
                 padding: 0 !important; 
@@ -83,37 +86,45 @@
                 display: block !important; 
                 max-width: 100% !important;
                 width: 100% !important;
-                overflow: hidden !important;
+                overflow: visible !important;
+                transform: none !important; /* Desativa escalas na hora de imprimir */
             }
-            .no-print { display: none !important; }
             
-            /* REGRA DE FERRO: IGNORA O "HIDDEN" DO TAILWIND NA HORA DE SALVAR O PDF E FORÇA AS DUAS ABAS A EXISTIREM */
+            /* Força a visualização para o motor de PDF do Android ignorar o Tailwind */
             #pagina-externa, #pagina-interna {
                 display: grid !important;
                 visibility: visible !important;
                 opacity: 1 !important;
             }
-
+            
             .print-page { 
                 width: 297mm !important; 
-                height: 210mm !important; 
+                height: 209mm !important; /* Um milimetro a menos para evitar folha em branco no final */
                 max-height: 210mm !important; 
-                margin: 0 !important; 
+                margin: 0 auto !important; 
                 border: none !important; 
                 border-radius: 0 !important;
                 box-shadow: none !important; 
                 padding: 5mm !important; 
+                
+                /* GARANTIA DE 3 COLUNAS MESMO SE A IMPRESSORA TENTAR MUDAR */
                 display: grid !important; 
                 grid-template-columns: repeat(3, 1fr) !important; 
                 gap: 5mm !important; 
+                
                 box-sizing: border-box !important; 
                 background-color: white !important; 
                 background-image: none !important; 
                 overflow: hidden !important; 
                 page-break-inside: avoid !important;
+                break-inside: avoid !important;
             }
-            .print-page:first-of-type { page-break-after: always !important; break-after: page !important; }
-            .print-page:last-of-type { page-break-after: auto !important; break-after: auto !important; }
+            
+            /* Garante a quebra de página exata após a capa */
+            #pagina-externa { 
+                page-break-after: always !important; 
+                break-after: page !important; 
+            }
 
             .fold-guide::after { display: none !important; }
             [contenteditable="true"] { outline: none !important; border: none !important; background-color: transparent !important; }
@@ -132,13 +143,11 @@
 </head>
 <body class="bg-slate-200 min-h-[100dvh] flex flex-col md:flex-row relative">
 
-    <!-- CONTROLES FLUTUANTES RÁPIDOS (Visíveis apenas quando menu recolhido) -->
+    <!-- CONTROLES FLUTUANTES RÁPIDOS -->
     <div id="floating-controls" class="no-print fixed top-5 left-5 z-[60] hidden flex-col gap-2 transition-all">
-        <!-- Botão Menu -->
         <button id="btn-open-sidebar" onclick="toggleSidebar()" class="bg-slate-900 hover:bg-slate-800 text-white p-2.5 rounded-xl shadow-2xl transition-all flex items-center justify-center border border-slate-700" title="Abrir Menu">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
         </button>
-        <!-- Botão Quick Save (Disquete) -->
         <button id="btn-quick-save" onclick="window.salvarProgresso()" class="bg-amber-500 hover:bg-amber-400 text-slate-900 p-2.5 rounded-xl shadow-2xl transition-all flex items-center justify-center border border-amber-600" title="Salvar Alterações">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
         </button>
@@ -156,7 +165,7 @@
         <div class="w-px h-6 bg-slate-700 mx-1"></div>
         
         <button onclick="formatText('justifyLeft')" class="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-slate-700 transition-colors" title="Alinhar à Esquerda">
-            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M3 21h18v-2H3v2zm0-4h12v-2H3v2zm0-4h18v-2H3v2zm0-4h18V7H3v2zm0-6v2h18V3H3z"/></svg>
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M3 21h18v-2H3v2zm0-4h12v-2H3v2zm0-4h18v-2H3v2zm0-4h12V7H3v2zm0-6v2h18V3H3z"/></svg>
         </button>
         <button onclick="formatText('justifyCenter')" class="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-slate-700 transition-colors" title="Centralizar">
             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M3 21h18v-2H3v2zm3-4h12v-2H6v2zm-3-4h18v-2H3v2zm3-4h12V7H6v2zm-3-6v2h18V3H3z"/></svg>
@@ -229,7 +238,6 @@
     <aside id="sidebar-menu" class="no-print w-full md:w-[280px] bg-slate-900 text-white flex flex-col shrink-0 md:h-[100dvh] md:sticky md:top-0 shadow-2xl z-50 overflow-hidden transition-[width] duration-300 border-r border-slate-800 hidden md:flex">
         
         <div class="w-full md:w-[280px] h-full flex flex-col">
-            
             <!-- HEADER LOGO E SAIR -->
             <div class="p-4 border-b border-slate-800 flex items-start justify-between shrink-0">
                 <div class="flex items-center gap-3">
@@ -242,14 +250,13 @@
                         <button id="btn-logout" class="text-[9px] font-bold text-red-400 hover:text-white bg-slate-800 hover:bg-red-500 px-2 py-0.5 rounded transition-colors">Sair da Conta</button>
                     </div>
                 </div>
-                
                 <button onclick="toggleSidebar()" class="hidden md:flex text-slate-400 hover:text-white hover:bg-slate-700 p-1.5 rounded-lg transition-colors" title="Recolher Barra Lateral">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" /></svg>
                 </button>
             </div>
 
+            <!-- ÁREA ÚNICA COM SCROLL -->
             <div class="p-4 flex flex-col gap-6 flex-1 overflow-y-auto">
-                
                 <!-- MENU DE DESIGN -->
                 <div class="flex flex-col gap-4">
                     <div class="space-y-2">
@@ -345,12 +352,10 @@
 
     <!-- ÁREA PRINCIPAL DA FOLHA A4 -->
     <main id="main-content" class="flex-1 overflow-x-auto p-4 md:p-8 flex flex-col items-center justify-start hidden pb-24 md:pb-8 relative">
-        <!-- Aviso para telas muito pequenas -->
         <div class="no-print w-full max-w-[1050px] mb-4 md:hidden text-center bg-blue-100 text-blue-800 text-xs font-bold py-2 px-4 rounded-xl border border-blue-200 shadow-sm">
             Arraste a folha para os lados para ver tudo ➔
         </div>
         
-        <!-- CONTAINER BLINDADO DO A4 -->
         <div id="main-content-container" class="flex-shrink-0 transition-all duration-300 transform origin-top w-full md:w-[297mm]">
             <!-- Conteúdo Injetado via Javascript -->
         </div>
@@ -373,7 +378,7 @@
         </div>
     </div>
 
-    <!-- TEMPLATE PADRÃO DO FOLDER (100% BLINDADO COM DIVS PARA PREVENIR QUEBRA DE ENTER) -->
+    <!-- TEMPLATE PADRÃO DO FOLDER -->
     <template id="default-template">
         <!-- PÁGINA 1: EXTERNA -->
         <div id="pagina-externa" class="print-page bg-white mx-auto border border-slate-200 relative transition-all duration-300">
@@ -1001,14 +1006,41 @@
             window.marcarAlteracao();
         }
 
+        // LÓGICA DE IMPRESSÃO BLINDADA COM AFTERPRINT PARA ANDROID
         function abrirImpressao() { 
-            try { 
-                window.print(); 
-                if(window.innerWidth < 1024) setTimeout(mostrarModalPrint, 800); 
-            } catch(e) { 
-                console.error("Erro na impressão:", e);
-                mostrarModalPrint(); 
-            } 
+            const pagExt = document.getElementById('pagina-externa');
+            const pagInt = document.getElementById('pagina-interna');
+            
+            const extWasHidden = pagExt.classList.contains('hidden');
+            const intWasHidden = pagInt.classList.contains('hidden');
+            
+            // Força a exibição na tela (importante para que o motor de PDF capture as divs)
+            pagExt.classList.remove('hidden');
+            pagInt.classList.remove('hidden');
+
+            // Gatilho inteligente: só esconde de volta QUANDO A IMPRESSÃO TERMINAR
+            const finalizarImpressao = () => {
+                if(extWasHidden) pagExt.classList.add('hidden');
+                if(intWasHidden) pagInt.classList.add('hidden');
+                window.removeEventListener('afterprint', finalizarImpressao);
+            };
+            window.addEventListener('afterprint', finalizarImpressao);
+
+            // Dá 500ms pro celular organizar as caixas na tela antes de abrir a janela do PDF
+            setTimeout(() => {
+                try { 
+                    window.print(); 
+                } catch(e) { 
+                    console.error("Erro na impressão:", e);
+                }
+                
+                // Fallback de segurança: se o "afterprint" falhar no navegador do celular, esconde após 3 segundos
+                setTimeout(() => {
+                    finalizarImpressao();
+                    if(window.innerWidth < 1024) mostrarModalPrint(); 
+                }, 3000);
+
+            }, 500); 
         }
         
         function mostrarModalPrint() {
