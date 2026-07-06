@@ -137,6 +137,8 @@
 
         .img-upload-area { position: relative; cursor: pointer; transition: all 0.2s; }
         .img-upload-area:hover { outline: 2px dashed #3b82f6; }
+
+        .cropper-container { width: 100% !important; height: 100% !important; }
         
     </style>
 </head>
@@ -956,8 +958,8 @@
                     const proporcaoExata = (rect.width && rect.height) ? (rect.width / rect.height) : (16/9);
                     
                     cropper = new Cropper(cropImage, {
-                        aspectRatio: formatoImagemAtual === 'circle' ? 1 : NaN, // O NaN libera pra você cortar na altura que quiser
-                        viewMode: 1, // O número 1 é o que PROÍBE a caixa azul de sair da imagem
+                        aspectRatio: formatoImagemAtual === 'circle' ? 1 : proporcaoExata,
+                        viewMode: 1,
                         dragMode: 'move',
                         autoCropArea: 1,
                         restore: false,
