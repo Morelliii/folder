@@ -153,8 +153,8 @@
         </button>
     </div>
 
-    <!-- TOOLBAR FLUTUANTE DE TEXTO -->
-    <div id="text-toolbar" class="no-print fixed z-[200] hidden bg-slate-900/95 backdrop-blur-sm text-white rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.3)] p-2 flex items-center gap-1 opacity-0 transform translate-y-4 transition-all duration-300 pointer-events-auto left-1/2 -translate-x-1/2 bottom-6 border border-slate-700">
+    <!-- TOOLBAR FLUTUANTE DE TEXTO NO TOPO -->
+    <div id="text-toolbar" class="no-print fixed z-[200] hidden bg-slate-900/95 backdrop-blur-sm text-white rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.3)] p-2 flex items-center gap-1 opacity-0 transform -translate-y-4 transition-all duration-300 pointer-events-auto left-1/2 -translate-x-1/2 top-[85px] border border-slate-700">
         <button onclick="changeFontSize(-1)" class="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-slate-700 font-bold text-sm transition-colors" title="Diminuir Fonte">A-</button>
         <span id="font-size-display" class="text-xs font-mono font-black bg-slate-950 px-2 py-1 rounded-lg text-amber-400 min-w-[40px] text-center border border-slate-800">11px</span>
         <button onclick="changeFontSize(1)" class="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-slate-700 font-bold text-xl transition-colors" title="Aumentar Fonte">A+</button>
@@ -165,7 +165,7 @@
         <div class="w-px h-6 bg-slate-700 mx-1"></div>
         
         <button onclick="formatText('justifyLeft')" class="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-slate-700 transition-colors" title="Alinhar à Esquerda">
-            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M3 21h18v-2H3v2zm0-4h12v-2H3v2zm0-4h18v-2H3v2zm0-4h12V7H3v2zm0-6v2h18V3H3z"/></svg>
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M3 21h18v-2H3v2zm0-4h12v-2H3v2zm0-4h18v-2H3v2zm0-4h18V7H3v2zm0-6v2h18V3H3z"/></svg>
         </button>
         <button onclick="formatText('justifyCenter')" class="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-slate-700 transition-colors" title="Centralizar">
             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M3 21h18v-2H3v2zm3-4h12v-2H6v2zm-3-4h18v-2H3v2zm3-4h12V7H6v2zm-3-6v2h18V3H3z"/></svg>
@@ -793,7 +793,7 @@
             toolbar.classList.remove('hidden');
             sincronizarVisor();
             setTimeout(() => { 
-                toolbar.classList.remove('opacity-0', 'translate-y-4'); 
+                toolbar.classList.remove('opacity-0', '-translate-y-4'); 
                 toolbar.classList.add('opacity-100', 'translate-y-0'); 
             }, 10);
         }
@@ -815,7 +815,7 @@
             const editable = e.target.closest('[contenteditable="true"]');
             if (!editable) {
                 toolbar.classList.remove('opacity-100', 'translate-y-0');
-                toolbar.classList.add('opacity-0', 'translate-y-4');
+                toolbar.classList.add('opacity-0', '-translate-y-4');
                 setTimeout(() => toolbar.classList.add('hidden'), 300);
                 activeEditable = null;
             }
