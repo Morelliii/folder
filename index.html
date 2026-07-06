@@ -72,8 +72,8 @@
                 padding: 0 !important; 
                 background: white !important; 
             }
-            /* Esconde a barra lateral na hora de imprimir */
-            #sidebar-menu, #btn-open-sidebar { display: none !important; }
+            /* Esconde a barra lateral e os botões flutuantes na hora de imprimir */
+            #sidebar-menu, #floating-controls { display: none !important; }
             
             main, #main-content-container, #main-content { 
                 padding: 0 !important; 
@@ -124,13 +124,19 @@
 </head>
 <body class="bg-slate-200 min-h-screen flex flex-col md:flex-row relative">
 
-    <!-- BOTÃO FLUTUANTE PARA ABRIR O MENU (Visível apenas quando menu recolhido) -->
-    <button id="btn-open-sidebar" onclick="toggleSidebar()" class="no-print fixed top-5 left-5 z-[60] bg-slate-900 hover:bg-slate-800 text-white px-4 py-3 rounded-xl shadow-2xl transition-all hidden items-center gap-2 border border-slate-700">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-        <span class="text-sm font-bold pr-1">Menu</span>
-    </button>
+    <!-- CONTROLES FLUTUANTES RÁPIDOS (Visíveis apenas quando menu recolhido) -->
+    <div id="floating-controls" class="no-print fixed top-5 left-5 z-[60] hidden flex-col gap-2.5 transition-all">
+        <!-- Botão Menu -->
+        <button id="btn-open-sidebar" onclick="toggleSidebar()" class="bg-slate-900 hover:bg-slate-800 text-white p-3 rounded-xl shadow-2xl transition-all flex items-center justify-center border border-slate-700" title="Abrir Menu">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <!-- Botão Quick Save (Disquete) -->
+        <button id="btn-quick-save" onclick="window.salvarProgresso()" class="bg-amber-500 hover:bg-amber-400 text-slate-900 p-3 rounded-xl shadow-2xl transition-all flex items-center justify-center border border-amber-600" title="Salvar Alterações">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
+        </button>
+    </div>
 
-    <!-- TOOLBAR FLUTUANTE DE TEXTO (FIXA NA BASE DA TELA EM CIMA DO A4) -->
+    <!-- TOOLBAR FLUTUANTE DE TEXTO (FIXA NA BASE DA TELA) -->
     <div id="text-toolbar" class="no-print fixed z-[200] hidden bg-slate-900/95 backdrop-blur-sm text-white rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.3)] p-2.5 flex items-center gap-1.5 opacity-0 transform translate-y-4 transition-all duration-300 pointer-events-auto left-1/2 -translate-x-1/2 bottom-8 border border-slate-700">
         <button onclick="changeFontSize(-1)" class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-slate-700 font-bold text-sm transition-colors" title="Diminuir Fonte">A-</button>
         <span id="font-size-display" class="text-sm font-mono font-black bg-slate-950 px-3 py-1.5 rounded-lg text-amber-400 min-w-[44px] text-center border border-slate-800">11px</span>
@@ -142,7 +148,7 @@
         <div class="w-px h-8 bg-slate-700 mx-1.5"></div>
         
         <button onclick="formatText('justifyLeft')" class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-slate-700 transition-colors" title="Alinhar à Esquerda">
-            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M3 21h18v-2H3v2zm0-4h12v-2H3v2zm0-4h18v-2H3v2zm0-4h12V7H3v2zm0-6v2h18V3H3z"/></svg>
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M3 21h18v-2H3v2zm0-4h12v-2H3v2zm0-4h18v-2H3v2zm0-4h18V7H3v2zm0-6v2h18V3H3z"/></svg>
         </button>
         <button onclick="formatText('justifyCenter')" class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-slate-700 transition-colors" title="Centralizar">
             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M3 21h18v-2H3v2zm3-4h12v-2H6v2zm-3-4h18v-2H3v2zm3-4h12V7H6v2zm-3-6v2h18V3H3z"/></svg>
@@ -212,64 +218,34 @@
     </div>
 
     <!-- DASHBOARD LATERAL (ASIDE) -->
-    <!-- Ajustado para w-[280px] com transição suave de largura (Gaveta) -->
     <aside id="sidebar-menu" class="no-print w-full md:w-[280px] bg-slate-900 text-white flex flex-col shrink-0 md:h-screen md:sticky md:top-0 shadow-2xl z-50 overflow-hidden transition-[width] duration-300 border-r border-slate-800 hidden md:flex">
         
-        <!-- O conteúdo interno fica com largura fixa para não esmagar durante a animação de fechar -->
+        <!-- Conteúdo Fixo do Menu Lateral -->
         <div class="w-full md:w-[280px] h-full flex flex-col">
             
-            <!-- HEADER LOGO -->
-            <div class="p-5 border-b border-slate-800 flex items-center justify-between">
+            <!-- HEADER LOGO E SAIR (Correção de Misclick) -->
+            <div class="p-5 border-b border-slate-800 flex items-start justify-between">
                 <div class="flex items-center gap-3">
                     <div class="p-2 bg-emerald-500 rounded-xl text-slate-900 shrink-0 shadow-inner">
                         <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
                     </div>
-                    <div>
+                    <div class="flex flex-col items-start">
                         <h1 class="text-lg font-black leading-tight tracking-tight">Editor SUS</h1>
-                        <p class="text-[10px] text-slate-400 font-medium" id="user-email-display">carregando...</p>
+                        <p class="text-[10px] text-slate-400 font-medium mb-1" id="user-email-display">carregando...</p>
+                        <!-- Botão Sair Isolado e Seguro -->
+                        <button id="btn-logout" class="text-[9px] font-bold text-red-400 hover:text-white bg-slate-800 hover:bg-red-500 px-2 py-0.5 rounded transition-colors">Sair da Conta</button>
                     </div>
                 </div>
                 
-                <div class="flex gap-1">
-                    <!-- Botão Minimizar Lateral -->
-                    <button onclick="toggleSidebar()" class="hidden md:flex text-slate-400 hover:text-white hover:bg-slate-700 p-1.5 rounded-lg transition-colors" title="Minimizar Menu Lateral">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" /></svg>
-                    </button>
-                    <!-- Botão Sair -->
-                    <button id="btn-logout" class="text-slate-500 hover:text-red-400 hover:bg-slate-800 p-1.5 rounded-lg transition-colors" title="Sair do Sistema">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
-                    </button>
-                </div>
+                <!-- Botão Minimizar Lateral Isolado no Canto Superior Direito -->
+                <button onclick="toggleSidebar()" class="hidden md:flex text-slate-400 hover:text-white hover:bg-slate-700 p-1.5 rounded-lg transition-colors" title="Recolher Barra Lateral">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" /></svg>
+                </button>
             </div>
 
-            <!-- MENU DE CONTROLES -->
+            <!-- MENU DE DESIGN (Meio) -->
             <div class="p-5 flex flex-col gap-5 flex-1 overflow-y-auto">
                 
-                <!-- Controle de Pacientes (Empilhado verticalmente para caber bem) -->
-                <div class="bg-slate-800/50 p-4 rounded-2xl border border-slate-700/50 flex flex-col gap-3">
-                    <label class="text-[11px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                        <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-                        Ficha do Paciente
-                    </label>
-                    <input type="text" id="folder-name-input" placeholder="Nome para salvar..." class="w-full bg-slate-950 text-white text-[13px] font-bold px-3 py-3 rounded-xl outline-none border border-slate-700 focus:border-amber-500 transition-colors shadow-inner" title="Ex: Dona Maria - Ombro">
-                    
-                    <div class="flex gap-2">
-                        <div class="relative flex-1">
-                            <select id="saved-folders-select" onchange="carregarFolder(this.value)" class="w-full appearance-none bg-slate-700 text-white text-xs font-bold px-3 py-3 rounded-xl outline-none border border-slate-600 hover:border-slate-400 transition-colors cursor-pointer shadow-sm pr-8 truncate">
-                                <option value="">📂 Carregar...</option>
-                            </select>
-                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-400">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                            </div>
-                        </div>
-                        <button onclick="deletarFolderAtual()" class="bg-slate-800 text-slate-400 hover:text-red-400 hover:bg-slate-700 transition-colors w-11 h-11 rounded-xl border border-slate-700 flex items-center justify-center shrink-0" title="Excluir este paciente">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                        </button>
-                    </div>
-                </div>
-
-                <hr class="border-slate-800">
-
                 <!-- Estrutura de Exercícios -->
                 <div class="space-y-2.5">
                     <label class="text-[11px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
@@ -315,20 +291,50 @@
                 </div>
             </div>
 
-            <!-- AÇÕES PRINCIPAIS (Fixas no final da barra lateral) -->
-            <div class="p-5 border-t border-slate-800 bg-slate-900 flex flex-col gap-3 mt-auto">
-                <button id="btn-reset" class="w-full flex items-center justify-center gap-2 bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 rounded-xl transition-all border border-slate-600 shadow-sm text-sm">
-                    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                    Nova Ficha
-                </button>
-                <button id="btn-salvar" onclick="window.salvarProgresso()" class="w-full flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-black py-3 rounded-xl transition-all shadow-[0_0_15px_rgba(245,158,11,0.2)] hover:-translate-y-0.5 text-sm">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
-                    Salvar Paciente
-                </button>
-                <button onclick="abrirImpressao()" class="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl transition-all shadow-[0_0_15px_rgba(37,99,235,0.3)] hover:-translate-y-0.5 text-sm">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
-                    Gerar PDF
-                </button>
+            <!-- MENU DE PACIENTES E SALVAMENTO (Agrupados no Final) -->
+            <div class="p-5 border-t border-slate-800 bg-slate-900 flex flex-col gap-4 mt-auto">
+                
+                <!-- Ficha do Paciente -->
+                <div class="flex flex-col gap-2.5">
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                        Ficha do Paciente
+                    </label>
+                    <input type="text" id="folder-name-input" placeholder="Nome para salvar..." class="w-full bg-slate-950 text-white text-[13px] font-bold px-3 py-2.5 rounded-xl outline-none border border-slate-700 focus:border-amber-500 transition-colors shadow-inner" title="Ex: Dona Maria - Ombro">
+                    
+                    <div class="flex gap-2">
+                        <div class="relative flex-1">
+                            <select id="saved-folders-select" onchange="carregarFolder(this.value)" class="w-full appearance-none bg-slate-800 text-white text-xs font-bold px-3 py-2.5 rounded-xl outline-none border border-slate-700 hover:border-slate-500 transition-colors cursor-pointer shadow-sm pr-8 truncate">
+                                <option value="">📂 Carregar...</option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-400">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </div>
+                        </div>
+                        <button onclick="deletarFolderAtual()" class="bg-slate-800 text-slate-400 hover:text-red-400 hover:bg-slate-700 transition-colors w-10 h-10 rounded-xl border border-slate-700 flex items-center justify-center shrink-0" title="Excluir este paciente">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Botões de Ação Final -->
+                <div class="flex flex-col gap-2.5">
+                    <div class="flex gap-2.5">
+                        <button id="btn-reset" class="flex-1 flex items-center justify-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-white font-bold py-2.5 rounded-xl transition-all border border-slate-600 shadow-sm text-xs" title="Limpar tudo e criar nova prescrição">
+                            <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                            Novo
+                        </button>
+                        <button onclick="abrirImpressao()" class="flex-1 flex items-center justify-center gap-1.5 bg-blue-600 hover:bg-blue-500 text-white font-bold py-2.5 rounded-xl transition-all shadow-[0_0_15px_rgba(37,99,235,0.3)] hover:-translate-y-0.5 text-xs" title="Gerar PDF Final">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                            PDF
+                        </button>
+                    </div>
+                    
+                    <button id="btn-salvar" onclick="window.salvarProgresso()" class="w-full flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-black py-3 rounded-xl transition-all shadow-[0_0_15px_rgba(245,158,11,0.2)] hover:-translate-y-0.5 text-sm" title="Salvar Ficha na Nuvem">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
+                        Salvar Paciente
+                    </button>
+                </div>
             </div>
         </div>
     </aside>
@@ -340,7 +346,8 @@
             Arraste a folha para os lados para ver tudo ➔
         </div>
         
-        <div id="main-content-container" class="flex-shrink-0 transition-all duration-300">
+        <!-- CONTAINER BLINDADO DO A4 (Tamanho Imutável de 297x210mm) -->
+        <div id="main-content-container" class="flex-shrink-0 transition-all duration-300 transform origin-top w-full md:w-[297mm]">
             <!-- Conteúdo Injetado via Javascript -->
         </div>
     </main>
@@ -729,19 +736,19 @@
     <input type="file" id="imageUploader" accept="image/png, image/jpeg, image/webp" class="hidden">
 
     <script>
-        // === CONTROLE DO MENU LATERAL (GAVETA) ===
+        // === CONTROLE DO MENU LATERAL (GAVETA) E BOTÕES FLUTUANTES ===
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar-menu');
-            const btnOpen = document.getElementById('btn-open-sidebar');
+            const floatingControls = document.getElementById('floating-controls');
             
             sidebar.classList.toggle('sidebar-collapsed');
             
             if (sidebar.classList.contains('sidebar-collapsed')) {
-                btnOpen.classList.remove('hidden');
-                btnOpen.classList.add('flex');
+                floatingControls.classList.remove('hidden');
+                floatingControls.classList.add('flex');
             } else {
-                btnOpen.classList.add('hidden');
-                btnOpen.classList.remove('flex');
+                floatingControls.classList.add('hidden');
+                floatingControls.classList.remove('flex');
             }
         }
 
@@ -1220,17 +1227,32 @@
 
         window.atualizarBotaoSalvar = function(salvo) {
             const btn = document.getElementById('btn-salvar');
+            const quickBtn = document.getElementById('btn-quick-save');
+            
             if(salvo) {
-                btn.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg> Paciente Salvo`;
+                btn.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg> Paciente Salvo`;
                 btn.classList.remove('bg-red-500', 'hover:bg-red-400', 'text-white');
                 btn.classList.add('bg-amber-500', 'hover:bg-amber-400', 'text-slate-900');
+                
+                if(quickBtn) {
+                    quickBtn.classList.remove('bg-red-500', 'hover:bg-red-400', 'text-white', 'border-red-600');
+                    quickBtn.classList.add('bg-amber-500', 'hover:bg-amber-400', 'text-slate-900', 'border-amber-600');
+                }
+
                 setTimeout(() => {
-                    if(!window.hasUnsavedChanges) btn.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg> Salvar Paciente`;
+                    if(!window.hasUnsavedChanges) {
+                        btn.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg> Salvar Paciente`;
+                    }
                 }, 3000);
             } else {
                 btn.innerHTML = `⚠️ Não Salvo`;
                 btn.classList.remove('bg-amber-500', 'hover:bg-amber-400', 'text-slate-900');
                 btn.classList.add('bg-red-500', 'hover:bg-red-400', 'text-white');
+                
+                if(quickBtn) {
+                    quickBtn.classList.remove('bg-amber-500', 'hover:bg-amber-400', 'text-slate-900', 'border-amber-600');
+                    quickBtn.classList.add('bg-red-500', 'hover:bg-red-400', 'text-white', 'border-red-600');
+                }
             }
         };
 
@@ -1242,6 +1264,13 @@
 
             if (!folderName) {
                 alert("⚠️ Por favor, digite o NOME DO PACIENTE no menu antes de salvar!");
+                
+                // Se o menu estiver fechado, ele abre sozinho para mostrar o input de nome
+                const sidebar = document.getElementById('sidebar-menu');
+                if (sidebar.classList.contains('sidebar-collapsed')) {
+                    toggleSidebar();
+                }
+                
                 inputElement.focus();
                 inputElement.classList.add('ring-2', 'ring-amber-500');
                 setTimeout(() => inputElement.classList.remove('ring-2', 'ring-amber-500'), 2000);
