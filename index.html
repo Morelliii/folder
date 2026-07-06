@@ -7,7 +7,6 @@
     
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Cropper.js -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
 
@@ -33,7 +32,7 @@
         /* FORÇANDO O BOLD PARA SER EXTRA BOLD E DESTACAR DO SEMIBOLD */
         b, strong, [style*="bold"], [style*="700"] { font-weight: 800 !important; }
 
-        /* CONFIGURAÇÃO BLINDADA PARA IMPRESSÃO PERFEITA */
+        /* CONFIGURAÇÃO BLINDADA PARA IMPRESSÃO PERFEITA (OTIMIZADA PARA MAIS ESPAÇO) */
         @page { size: A4 landscape; margin: 0mm; }
         @media print {
             * { 
@@ -67,10 +66,10 @@
                 border: none !important; 
                 border-radius: 0 !important;
                 box-shadow: none !important; 
-                padding: 8mm !important; 
+                padding: 5mm !important; /* Reduzido de 8mm para dar mais margem vertical livre */
                 display: grid !important; 
                 grid-template-columns: repeat(3, 1fr) !important; 
-                gap: 8mm !important; 
+                gap: 5mm !important; /* Reduzido de 8mm para compactar os blocos invisíveis */
                 box-sizing: border-box !important; 
                 background-color: white !important; 
                 background-image: none !important; 
@@ -89,7 +88,7 @@
         [contenteditable="true"]:hover { background-color: rgba(239, 246, 255, 0.9); outline: 1.5px dashed #3b82f6; }
         [contenteditable="true"]:focus { background-color: #ffffff; outline: 2px solid #2563eb; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3); }
 
-        .img-upload-area { position: relative; transition: all 0.2s; }
+        .img-upload-area { position: relative; cursor: pointer; transition: all 0.2s; }
         .img-upload-area:hover { outline: 2px dashed #3b82f6; }
 
         .cropper-container { width: 100% !important; height: 50vh !important; max-height: 500px; }
@@ -97,9 +96,9 @@
 </head>
 <body class="bg-slate-100 min-h-screen flex flex-col relative pb-10">
 
-    <!-- TOOLBAR FLUTUANTE NO TOPO -->
     <div id="text-toolbar" class="no-print fixed z-[200] hidden bg-slate-900 text-white rounded-2xl shadow-2xl p-2.5 flex items-center gap-1.5 opacity-0 transform -translate-y-4 transition-all duration-300 pointer-events-auto left-1/2 -translate-x-1/2 top-[85px]">
         <button onclick="changeFontSize(-1)" class="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-slate-700 font-bold text-sm transition-colors" title="Diminuir Fonte">A-</button>
+        <span id="font-size-display" class="text-xs font-mono font-bold bg-slate-800 px-2 py-1 rounded-lg text-slate-300 min-w-[38px] text-center">11px</span>
         <button onclick="changeFontSize(1)" class="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-slate-700 font-bold text-xl transition-colors" title="Aumentar Fonte">A+</button>
         <div class="w-px h-6 bg-slate-700 mx-1"></div>
         
@@ -108,7 +107,7 @@
         <div class="w-px h-6 bg-slate-700 mx-1"></div>
         
         <button onclick="formatText('justifyLeft')" class="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-slate-700 transition-colors" title="Alinhar à Esquerda">
-            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M3 21h18v-2H3v2zm0-4h12v-2H3v2zm0-4h18v-2H3v2zm0-4h18V7H3v2zm0-6v2h18V3H3z"/></svg>
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M3 21h18v-2H3v2zm0-4h12v-2H3v2zm0-4h18v-2H3v2zm0-4h12V7H3v2zm0-6v2h18V3H3z"/></svg>
         </button>
         <button onclick="formatText('justifyCenter')" class="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-slate-700 transition-colors" title="Centralizar">
             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M3 21h18v-2H3v2zm3-4h12v-2H6v2zm-3-4h18v-2H3v2zm3-4h12V7H6v2zm-3-6v2h18V3H3z"/></svg>
@@ -121,7 +120,6 @@
         </button>
     </div>
 
-    <!-- TELA DE LOGIN -->
     <div id="login-modal" class="fixed inset-0 z-[100] bg-slate-900 flex items-center justify-center p-4 transition-opacity duration-300">
         <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 text-center">
             <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -145,7 +143,6 @@
         </div>
     </div>
 
-    <!-- MODAL DE CORTE DE IMAGEM -->
     <div id="crop-modal" class="no-print fixed inset-0 z-[150] bg-slate-900/90 hidden flex-col items-center justify-center p-4">
         <div class="bg-white rounded-2xl w-full max-w-3xl overflow-hidden shadow-2xl flex flex-col">
             <div class="p-4 bg-slate-800 text-white flex justify-between items-center">
@@ -168,7 +165,6 @@
         </div>
     </div>
 
-    <!-- CABEÇALHO -->
     <header id="main-header" class="no-print bg-slate-900 text-white shadow-md p-4 sticky top-0 z-50 hidden">
         <div class="max-w-7xl mx-auto flex flex-col lg:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-3 w-full lg:w-auto">
@@ -185,7 +181,6 @@
             </div>
 
             <div class="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto flex-wrap justify-center">
-                <!-- Seletor de Layouts -->
                 <select id="layout-select" onchange="mudarLayout(this.value)" class="bg-slate-800 text-white text-xs font-bold px-3 py-2 rounded-xl outline-none border border-slate-700 hover:bg-slate-700 transition-colors cursor-pointer" title="Quantidade de Exercícios">
                     <option value="6">Layout: 6 Exercícios</option>
                     <option value="5">Layout: 5 Exercícios</option>
@@ -221,11 +216,9 @@
 
     <main id="main-content" class="flex-1 max-w-7xl mx-auto w-full p-4 md:p-8 flex flex-col justify-center items-center gap-6 hidden">
         <div class="w-full max-w-5xl" id="main-content-container">
-            <!-- Conteúdo Injetado -->
-        </div>
+            </div>
     </main>
 
-    <!-- Modal de Impressão (Mobile Fallback) -->
     <div id="print-modal" class="no-print fixed inset-0 bg-slate-900/80 z-[250] hidden flex-col items-center justify-center p-4 opacity-0 transition-opacity duration-300">
         <div class="bg-white rounded-3xl max-w-sm w-full p-6 md:p-8 shadow-2xl transform scale-95 transition-transform duration-300" id="print-modal-content">
             <h3 class="text-xl font-black text-slate-800 text-center mb-3">Salvar seu Folder</h3>
@@ -242,9 +235,7 @@
         </div>
     </div>
 
-    <!-- TEMPLATE PADRÃO DO FOLDER -->
     <template id="default-template">
-        <!-- PÁGINA 1: EXTERNA -->
         <div id="pagina-externa" class="print-page bg-white shadow-xl rounded-3xl mx-auto border border-slate-200 p-6 md:p-8 relative transition-all duration-300">
             <div class="fold-guide fold-left p-5 flex flex-col justify-between h-full bg-slate-50/50 rounded-2xl border border-slate-100">
                 <div class="flex-1 flex flex-col">
@@ -345,10 +336,8 @@
             </div>
         </div>
 
-        <!-- PÁGINA 2: INTERNA -->
         <div id="pagina-interna" class="print-page bg-white shadow-xl rounded-3xl mx-auto border border-slate-200 p-4 md:p-6 relative transition-all duration-300 hidden">
-            <!-- COLUNA 1 -->
-            <div class="fold-guide fold-left p-2 flex flex-col gap-2 h-full bg-slate-50/50 rounded-2xl border border-slate-100">
+            <div class="fold-guide fold-left p-1.5 flex flex-col gap-1.5 h-full bg-slate-50/50 rounded-2xl border border-slate-100">
                 <div class="flex-1 flex flex-col justify-between transition-all" id="ex-container-1">
                     <div class="flex-1 flex flex-col">
                         <div class="flex items-center gap-1.5 mb-1.5">
@@ -374,7 +363,6 @@
                             </div>
                         </div>
 
-                        <!-- OBJECT COVER RETORNADO E FONTE MEDIUM (500) -->
                         <p class="text-[11px] text-slate-800 leading-snug font-medium mb-1 flex-1 text-justify" contenteditable="true"><strong>Como fazer:</strong> Incline a cabeça lentamente em direção ao ombro. Mantenha os ombros relaxados.</p>
                         
                         <div class="bg-white p-1.5 rounded-lg shadow-sm border border-slate-200 mt-auto">
@@ -433,8 +421,7 @@
                 </div>
             </div>
 
-            <!-- COLUNA 2 -->
-            <div class="fold-guide fold-right p-2 flex flex-col gap-2 h-full bg-white rounded-2xl">
+            <div class="fold-guide fold-right p-1.5 flex flex-col gap-1.5 h-full bg-white rounded-2xl">
                 <div class="flex-1 flex flex-col justify-between transition-all" id="ex-container-3">
                     <div class="flex-1 flex flex-col">
                         <div class="flex items-center gap-1.5 mb-1.5">
@@ -518,12 +505,11 @@
                 </div>
             </div>
 
-            <!-- COLUNA 3 -->
-            <div class="p-2 flex flex-col gap-2 h-full bg-slate-50/50 rounded-2xl border border-slate-100">
+            <div class="p-1.5 flex flex-col gap-1.5 h-full bg-slate-50/50 rounded-2xl border border-slate-100">
                 <div class="flex-1 flex flex-col justify-between transition-all" id="ex-container-5">
                     <div class="flex-1 flex flex-col">
                         <div class="flex items-center gap-1.5 mb-1.5">
-                            <span class="w-5 h-5 rounded-full border-2 theme-border theme-text font-black text-[11px] flex items-center justify-center shrink-0 bg-white" contenteditable="true">5</span>
+                            <span class="w-6 h-6 rounded-full border-2 theme-border theme-text font-black text-[11px] flex items-center justify-center shrink-0 bg-white" contenteditable="true">5</span>
                             <h3 class="text-[13px] font-black text-slate-800 uppercase tracking-tight leading-tight" contenteditable="true">Panturrilha</h3>
                         </div>
 
@@ -622,7 +608,6 @@
             }
         };
 
-        // Escuta qualquer digitação no folder
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('main-content').addEventListener('input', window.marcarAlteracao);
         });
@@ -652,6 +637,7 @@
 
         function showToolbar() {
             toolbar.classList.remove('hidden');
+            updateFontSizeDisplay(); // Atualiza o indicador digital de tamanho ao abrir
             setTimeout(() => { 
                 toolbar.classList.remove('opacity-0', '-translate-y-4'); 
                 toolbar.classList.add('opacity-100', 'translate-y-0'); 
@@ -691,6 +677,7 @@
             window.marcarAlteracao();
         }
 
+        // FUNÇÃO DE TAMANHO DA FONTE CORRIGIDA COM LEITURA DIGITAL ATUALIZADA
         function changeFontSize(step) {
             if (!activeEditable) return;
             const style = window.getComputedStyle(activeEditable);
@@ -704,8 +691,18 @@
                 child.style.lineHeight = '';
             });
             
+            updateFontSizeDisplay(); // Altera o número do visor em tempo real
             showToolbar();
             window.marcarAlteracao();
+        }
+
+        // LÓGICA DO INDICADOR DIGITAL DA FONTE
+        function updateFontSizeDisplay() {
+            if (!activeEditable) return;
+            const style = window.getComputedStyle(activeEditable);
+            const size = Math.round(parseFloat(style.fontSize));
+            const display = document.getElementById('font-size-display');
+            if (display) display.textContent = `${size}px`;
         }
 
         // === AJUSTE DE PROPORÇÃO DA IMAGEM MANUAL ===
@@ -825,7 +822,6 @@
                 fillColor: '#fff'
             });
             
-            // Alterado para WEBP com 88% de qualidade!
             const base64Crop = canvas.toDataURL('image/webp', 0.88);
             
             const containerDaFoto = alvoImagemAtual.firstElementChild;
@@ -835,7 +831,6 @@
             
             const imgNode = document.createElement('img');
             imgNode.src = base64Crop;
-            // Voltamos ao object-cover para erradicar as bordas brancas laterais
             imgNode.className = formatoImagemAtual === 'circle' ? 'w-full h-full object-cover rounded-full' : 'w-full h-full object-cover rounded-xl';
             containerDaFoto.appendChild(imgNode);
             
@@ -935,7 +930,6 @@
         }
     </script>
 
-    <!-- FIREBASE (BANCO DE DADOS EM NUVEM) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
@@ -1008,7 +1002,6 @@
             try {
                 await setDoc(doc(db, "folders", DADOS_DOC_ID), dataToSave);
                 
-                // Reseta o vigia de alterações!
                 window.hasUnsavedChanges = false;
                 btn.innerHTML = '✅ Salvo!';
                 btn.classList.remove('bg-red-500', 'hover:bg-red-400');
@@ -1031,7 +1024,6 @@
                 
                 if (docSnap.exists() && docSnap.data().htmlContent) {
                     const data = docSnap.data();
-                    // O HTML injetado já tem todas as classes e tamanhos corretos que você arrumou manualmente!
                     document.getElementById('main-content-container').innerHTML = data.htmlContent;
                     
                     if (data.tema) {
@@ -1040,7 +1032,6 @@
                         if(data.tema === 'custom') document.getElementById('customColorPicker').value = data.customColor;
                     }
 
-                    // Apenas atualizamos o visual do menu dropdown, sem forçar um redimensionamento destrutivo!
                     if (data.layout) {
                         window.layoutAtual = data.layout;
                         document.getElementById('layout-select').value = data.layout;
@@ -1052,7 +1043,6 @@
                     mudarLayout('6');
                 }
                 
-                // Botão de salvar nasce verde e limpo
                 window.hasUnsavedChanges = false;
                 const btn = document.getElementById('btn-salvar');
                 btn.innerHTML = '💾 Salvar';
