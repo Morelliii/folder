@@ -612,81 +612,62 @@
             document.getElementById('main-content').addEventListener('input', window.marcarAlteracao);
         });
 
-        // === TOOLBAR DE TEXTO (VISOR E FOCO CORRIGIDOS) ===
+        // === TOOLBAR DE TEXTO ===
         const toolbar = document.getElementById('text-toolbar');
+        const visorFonte = document.getElementById('font-size-display');
         let activeEditable = null;
+        let isChangingFont = false; // A nossa "Trava" contra o bug do navegador
 
-        // Função central para atualizar o foco e sincronizar o visor instantaneamente
-        function sincronizarEditor(elemento) {
-            const editable = elemento.closest('[contenteditable="true"]');
-            if (editable) {
-                activeEditable = editable;
-                toolbar.classList.remove('hidden');
-                updateFontSizeDisplay(); // Atualiza o visor de pixels na hora
-                setTimeout(() => { 
-                    toolbar.classList.remove('opacity-0', '-translate-y-4'); 
-                    toolbar.classList.add('opacity-100', 'translate-y-0'); 
-                }, 10);
-            }
+        // Função que lê o CSS real e atualiza o visor
+        function sincronizarVisor() {
+            if (!activeEditable || isChangingFont) return; // Se estiver travado, ignora
+            const style = window.getComputedStyle(activeEditable);
+            const size = Math.round(parseFloat(style.fontSize));
+            if (visorFonte) visorFonte.textContent = size + 'px';
         }
 
-        // Força a atualização do visor no momento exato do clique
-        document.addEventListener('click', (e) => {
-            sincronizarEditor(e.target);
-        });
-
-        // Força a atualização do visor quando o foco entra via teclado/toque
-        document.addEventListener('focusin', (e) => {
-            sincronizarEditor(e.target);
-        });
-
-        // Monitora mudanças de seleção e cursor para manter o visor sempre atualizado
-        document.addEventListener('selectionchange', () => {
-            const selection = window.getSelection();
-            if (selection && selection.rangeCount > 0 && selection.focusNode) {
-                const nóPai = selection.focusNode.nodeType === Node.ELEMENT_NODE 
-                    ? selection.focusNode 
-                    : selection.focusNode.parentNode;
-                
-                const editable = nóPai ? nóPai.closest('[contenteditable="true"]') : null;
-                if (editable) {
-                    activeEditable = editable;
-                    updateFontSizeDisplay();
-                }
-            }
-        });
-
-        // Esconde o menu se o usuário clicar completamente fora de um bloco editável
-        document.addEventListener('mousedown', (e) => {
-            if (toolbar.contains(e.target)) return;
-            const editable = e.target.closest('[contenteditable="true"]');
-            if (!editable) {
-                hideToolbar();
-                activeEditable = null;
-            }
-        });
-
-        toolbar.addEventListener('mousedown', (e) => { e.preventDefault(); });
-
-        function showToolbar() {
+        function abrirMenu(elemento) {
+            activeEditable = elemento;
             toolbar.classList.remove('hidden');
-            updateFontSizeDisplay();
+            sincronizarVisor();
             setTimeout(() => { 
                 toolbar.classList.remove('opacity-0', '-translate-y-4'); 
                 toolbar.classList.add('opacity-100', 'translate-y-0'); 
             }, 10);
         }
 
-        function hideToolbar() {
-            toolbar.classList.remove('opacity-100', 'translate-y-0');
-            toolbar.classList.add('opacity-0', '-translate-y-4');
-            setTimeout(() => toolbar.classList.add('hidden'), 300);
-        }
+        // Gatilho super leve focado só na seleção
+        document.addEventListener('selectionchange', () => {
+            const selection = window.getSelection();
+            if (selection && selection.rangeCount > 0) {
+                let node = selection.focusNode;
+                if (node) {
+                    if (node.nodeType !== Node.ELEMENT_NODE) node = node.parentNode;
+                    const editable = node.closest('[contenteditable="true"]');
+                    if (editable) {
+                        abrirMenu(editable);
+                    }
+                }
+            }
+        });
+
+        // Fechar menu se clicar fora
+        document.addEventListener('mousedown', (e) => {
+            if (toolbar.contains(e.target)) return;
+            const editable = e.target.closest('[contenteditable="true"]');
+            if (!editable) {
+                toolbar.classList.remove('opacity-100', 'translate-y-0');
+                toolbar.classList.add('opacity-0', '-translate-y-4');
+                setTimeout(() => toolbar.classList.add('hidden'), 300);
+                activeEditable = null;
+            }
+        });
+
+        toolbar.addEventListener('mousedown', (e) => { e.preventDefault(); });
 
         function formatText(command) { 
             document.execCommand(command, false, null); 
             if (activeEditable) activeEditable.focus(); 
-            updateFontSizeDisplay(); // Garante o update após comandos de alinhamento
             window.marcarAlteracao();
         }
 
@@ -702,26 +683,25 @@
             } else {
                 const currentWeight = window.getComputedStyle(activeEditable).fontWeight;
                 if (currentWeight === '600' || currentWeight === 'bold' || currentWeight === '700' || currentWeight === '800') {
-                    activeEditable.style.fontWeight = '400'; 
+                    activeEditable.style.fontWeight = '500'; 
                 } else {
                     activeEditable.style.fontWeight = '600'; 
                 }
             }
             activeEditable.focus();
-            updateFontSizeDisplay();
             window.marcarAlteracao();
         }
 
         function changeFontSize(step) {
             if (!activeEditable) return;
             
-            // Pega o tamanho atual e já calcula a matemática exata
-            const style = window.getComputedStyle(activeEditable);
-            let currentSize = parseFloat(style.fontSize);
-            let novoTamanho = currentSize + (step * 2);
+            isChangingFont = true; // Aciona a trava
             
-            // Aplica no texto
-            activeEditable.style.fontSize = `${novoTamanho}px`;
+            const style = window.getComputedStyle(activeEditable);
+            let currentSize = parseFloat(style.fontSize) || 11;
+            let novoTamanho = Math.round(currentSize + (step * 2));
+            
+            activeEditable.style.fontSize = novoTamanho + 'px';
             activeEditable.style.lineHeight = '1.3'; 
             
             const childNodes = activeEditable.querySelectorAll('*');
@@ -730,24 +710,12 @@
                 child.style.lineHeight = '';
             });
             
-            // INJEÇÃO DIRETA: Muda o visor instantaneamente com o valor calculado
-            const display = document.getElementById('font-size-display');
-            if (display) display.textContent = `${Math.round(novoTamanho)}px`;
-            
-            showToolbar();
+            // Atualiza o visor à força e com perfeição
+            if (visorFonte) visorFonte.textContent = novoTamanho + 'px';
             window.marcarAlteracao();
-        }
-
-        function updateFontSizeDisplay() {
-            if (!activeEditable) return;
-            // Dá 10 milissegundos de "respiro" pro navegador calcular o CSS real
-            setTimeout(() => {
-                if (!activeEditable) return;
-                const style = window.getComputedStyle(activeEditable);
-                const size = Math.round(parseFloat(style.fontSize));
-                const display = document.getElementById('font-size-display');
-                if (display) display.textContent = `${size}px`;
-            }, 10);
+            
+            // Desativa a trava logo após a reestruturação da tela
+            setTimeout(() => { isChangingFont = false; }, 50);
         }
 
         // === AJUSTE DE PROPORÇÃO DA IMAGEM MANUAL ===
