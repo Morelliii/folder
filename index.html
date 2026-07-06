@@ -218,7 +218,6 @@
     </div>
 
     <!-- DASHBOARD LATERAL (ASIDE) -->
-    <!-- h-[100dvh] resolve o problema do "buraco" em tablets -->
     <aside id="sidebar-menu" class="no-print w-full md:w-[280px] bg-slate-900 text-white flex flex-col shrink-0 md:h-[100dvh] md:sticky md:top-0 shadow-2xl z-50 overflow-hidden transition-[width] duration-300 border-r border-slate-800 hidden md:flex">
         
         <!-- O conteúdo interno mantém a largura fixa para a animação de minimizar -->
@@ -242,7 +241,7 @@
                 </button>
             </div>
 
-            <!-- ÁREA ÚNICA COM SCROLL (Removemos os buracos) -->
+            <!-- ÁREA ÚNICA COM SCROLL -->
             <div class="p-4 flex flex-col gap-6 flex-1 overflow-y-auto">
                 
                 <!-- MENU DE DESIGN -->
@@ -294,7 +293,7 @@
 
                 <hr class="border-slate-800">
 
-                <!-- MENU DE PACIENTES E SALVAMENTO (Tudo Empilhadinho) -->
+                <!-- MENU DE PACIENTES E SALVAMENTO -->
                 <div class="flex flex-col gap-4">
                     
                     <div class="flex flex-col gap-2">
@@ -350,7 +349,7 @@
             Arraste a folha para os lados para ver tudo ➔
         </div>
         
-        <!-- CONTAINER BLINDADO DO A4 (Tamanho Imutável de 297x210mm) -->
+        <!-- CONTAINER BLINDADO DO A4 -->
         <div id="main-content-container" class="flex-shrink-0 transition-all duration-300 transform origin-top w-full md:w-[297mm]">
             <!-- Conteúdo Injetado via Javascript -->
         </div>
@@ -373,30 +372,30 @@
         </div>
     </div>
 
-    <!-- TEMPLATE PADRÃO DO FOLDER -->
+    <!-- TEMPLATE PADRÃO DO FOLDER (100% BLINDADO COM DIVS) -->
     <template id="default-template">
         <!-- PÁGINA 1: EXTERNA -->
         <div id="pagina-externa" class="print-page bg-white mx-auto border border-slate-200 relative transition-all duration-300">
             <div class="fold-guide fold-left p-5 flex flex-col justify-between h-full bg-slate-50/50 rounded-2xl border border-slate-100">
                 <div class="flex-1 flex flex-col">
                     <div class="theme-badge inline-block text-[11px] font-black px-3 py-1.5 rounded uppercase tracking-widest mb-4 w-max shadow-sm" contenteditable="true">Dicas Importantes</div>
-                    <h3 class="text-base font-black theme-text mb-3 uppercase tracking-tight" contenteditable="true">Preparando o Corpo</h3>
-                    <p class="text-sm text-slate-600 mb-5 leading-relaxed font-medium text-justify" contenteditable="true">A prática regular de exercícios em casa melhora flexibilidade, equilíbrio e reduz dores crônicas.</p>
+                    <div class="text-base font-black theme-text mb-3 uppercase tracking-tight" contenteditable="true">Preparando o Corpo</div>
+                    <div class="text-sm text-slate-600 mb-5 leading-relaxed font-medium text-justify" contenteditable="true">A prática regular de exercícios em casa melhora flexibilidade, equilíbrio e reduz dores crônicas.</div>
                     
                     <div id="lista-dicas" class="space-y-3 flex-1">
                         <div class="flex gap-2.5 items-start group relative">
-                            <span class="text-emerald-500 font-black text-sm mt-0.5" contenteditable="true">✓</span>
-                            <p class="text-xs text-slate-600 leading-relaxed w-full pr-4 text-justify font-medium" contenteditable="true"><strong>Roupas Leves:</strong> Use tecidos confortáveis e faça os exercícios em local seguro.</p>
+                            <div class="text-emerald-500 font-black text-sm mt-0.5" contenteditable="true">✓</div>
+                            <div class="text-xs text-slate-600 leading-relaxed w-full pr-4 text-justify font-medium" contenteditable="true"><strong>Roupas Leves:</strong> Use tecidos confortáveis e faça os exercícios em local seguro.</div>
                             <button onclick="this.parentElement.remove(); window.marcarAlteracao && window.marcarAlteracao();" class="delete-btn no-print hidden group-hover:flex absolute right-0 top-0 text-red-500 hover:text-red-700 text-xs font-black p-1">✖</button>
                         </div>
                         <div class="flex gap-2.5 items-start group relative">
-                            <span class="text-emerald-500 font-black text-sm mt-0.5" contenteditable="true">✓</span>
-                            <p class="text-xs text-slate-600 leading-relaxed w-full pr-4 text-justify font-medium" contenteditable="true"><strong>Hidratação:</strong> Beba pequenos goles de água antes e durante a rotina.</p>
+                            <div class="text-emerald-500 font-black text-sm mt-0.5" contenteditable="true">✓</div>
+                            <div class="text-xs text-slate-600 leading-relaxed w-full pr-4 text-justify font-medium" contenteditable="true"><strong>Hidratação:</strong> Beba pequenos goles de água antes e durante a rotina.</div>
                             <button onclick="this.parentElement.remove(); window.marcarAlteracao && window.marcarAlteracao();" class="delete-btn no-print hidden group-hover:flex absolute right-0 top-0 text-red-500 hover:text-red-700 text-xs font-black p-1">✖</button>
                         </div>
                         <div class="flex gap-2.5 items-start group relative">
-                            <span class="text-emerald-500 font-black text-sm mt-0.5" contenteditable="true">✓</span>
-                            <p class="text-xs text-slate-600 leading-relaxed w-full pr-4 text-justify font-medium" contenteditable="true"><strong>Sinais de Alerta:</strong> Pare se sentir tontura, falta de ar ou dores articulares agudas.</p>
+                            <div class="text-emerald-500 font-black text-sm mt-0.5" contenteditable="true">✓</div>
+                            <div class="text-xs text-slate-600 leading-relaxed w-full pr-4 text-justify font-medium" contenteditable="true"><strong>Sinais de Alerta:</strong> Pare se sentir tontura, falta de ar ou dores articulares agudas.</div>
                             <button onclick="this.parentElement.remove(); window.marcarAlteracao && window.marcarAlteracao();" class="delete-btn no-print hidden group-hover:flex absolute right-0 top-0 text-red-500 hover:text-red-700 text-xs font-black p-1">✖</button>
                         </div>
                     </div>
@@ -407,7 +406,7 @@
                     </button>
                 </div>
                 <div class="mt-6 pt-4 border-t border-slate-200 text-center">
-                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider" contenteditable="true">Atenção Básica: Cuidado Contínuo</p>
+                    <div class="text-[10px] text-slate-400 font-bold uppercase tracking-wider" contenteditable="true">Atenção Básica: Cuidado Contínuo</div>
                 </div>
             </div>
 
@@ -418,29 +417,29 @@
                             <svg class="w-8 h-8 theme-text-svg" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M19 10.5h-5.5V5c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v5.5H5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5h5.5V19c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-5.5H19c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5z"/>
                             </svg>
-                            <span contenteditable="true">SUS / APS</span>
+                            <div contenteditable="true">SUS / APS</div>
                         </div>
                     </div>
-                    <h3 class="text-sm font-black text-slate-800 uppercase tracking-widest mb-3" contenteditable="true">Acompanhamento</h3>
-                    <p class="text-xs text-slate-500 mb-5" contenteditable="true">Anote as informações da sua equipe de saúde de referência:</p>
+                    <div class="text-sm font-black text-slate-800 uppercase tracking-widest mb-3" contenteditable="true">Acompanhamento</div>
+                    <div class="text-xs text-slate-500 mb-5" contenteditable="true">Anote as informações da sua equipe de saúde de referência:</div>
                     
                     <div class="space-y-4 text-left flex-1">
                         <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 shadow-sm relative group">
-                            <span class="text-[10px] uppercase font-bold text-slate-400 block tracking-wider mb-1.5" contenteditable="true">Unidade de Saúde (UBS):</span>
-                            <span class="text-sm text-slate-700 font-bold block" contenteditable="true">UBS Centro - PSF 01</span>
+                            <div class="text-[10px] uppercase font-bold text-slate-400 block tracking-wider mb-1.5" contenteditable="true">Unidade de Saúde (UBS):</div>
+                            <div class="text-sm text-slate-700 font-bold block" contenteditable="true">UBS Centro - PSF 01</div>
                         </div>
                         <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 shadow-sm relative group">
-                            <span class="text-[10px] uppercase font-bold text-slate-400 block tracking-wider mb-1.5" contenteditable="true">Seu Agente de Saúde (ACS):</span>
-                            <span class="text-sm text-slate-700 font-bold block" contenteditable="true">Nome do Agente</span>
+                            <div class="text-[10px] uppercase font-bold text-slate-400 block tracking-wider mb-1.5" contenteditable="true">Seu Agente de Saúde (ACS):</div>
+                            <div class="text-sm text-slate-700 font-bold block" contenteditable="true">Nome do Agente</div>
                         </div>
                         <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 shadow-sm relative group">
-                            <span class="text-[10px] uppercase font-bold text-slate-400 block tracking-wider mb-1.5" contenteditable="true">Dúvidas / Contato:</span>
-                            <span class="text-sm text-slate-700 font-bold block" contenteditable="true">(88) 99999-9999</span>
+                            <div class="text-[10px] uppercase font-bold text-slate-400 block tracking-wider mb-1.5" contenteditable="true">Dúvidas / Contato:</div>
+                            <div class="text-sm text-slate-700 font-bold block" contenteditable="true">(88) 99999-9999</div>
                         </div>
                     </div>
                 </div>
                 <div class="mt-6 pt-4 border-t border-slate-200 text-center">
-                    <span class="text-[11px] text-slate-400 font-bold block" contenteditable="true">Leve este folder em suas consultas!</span>
+                    <div class="text-[11px] text-slate-400 font-bold block" contenteditable="true">Leve este folder em suas consultas!</div>
                 </div>
             </div>
 
@@ -464,15 +463,15 @@
                         </div>
                     </div>
                     
-                    <h1 class="text-3xl md:text-4xl font-black text-slate-800 leading-tight uppercase tracking-tight" contenteditable="true">Mexa-se<br>Com Saúde!</h1>
+                    <div class="text-3xl md:text-4xl font-black text-slate-800 leading-tight uppercase tracking-tight" contenteditable="true">Mexa-se<br>Com Saúde!</div>
                     <div class="w-20 h-2.5 theme-bg mx-auto my-5 rounded-full shadow-sm"></div>
-                    <h2 class="text-sm md:text-base font-black theme-text uppercase tracking-widest" contenteditable="true">Exercícios Domiciliares</h2>
-                    <p class="text-sm text-slate-500 mt-4 max-w-[260px] mx-auto leading-relaxed text-justify font-medium" contenteditable="true">Pequenos hábitos, grandes resultados para o seu dia a dia.</p>
+                    <div class="text-sm md:text-base font-black theme-text uppercase tracking-widest" contenteditable="true">Exercícios Domiciliares</div>
+                    <div class="text-sm text-slate-500 mt-4 max-w-[260px] mx-auto leading-relaxed text-justify font-medium" contenteditable="true">Pequenos hábitos, grandes resultados para o seu dia a dia.</div>
                 </div>
 
                 <div class="border-t border-slate-200 pt-4 flex items-center justify-between text-left text-[11px] text-slate-500 font-bold uppercase tracking-wider">
-                    <div><p contenteditable="true">Apoio: Min. da Saúde</p></div>
-                    <div class="text-right"><p contenteditable="true">Equipe eMulti / NASF</p></div>
+                    <div><div contenteditable="true">Apoio: Min. da Saúde</div></div>
+                    <div class="text-right"><div contenteditable="true">Equipe eMulti / NASF</div></div>
                 </div>
             </div>
         </div>
@@ -484,8 +483,8 @@
                 <div class="flex-1 flex flex-col justify-between transition-all" id="ex-container-1">
                     <div class="flex-1 flex flex-col">
                         <div class="flex items-center gap-1.5 mb-1.5">
-                            <span class="w-6 h-6 rounded-full border-2 theme-border theme-text font-black text-[11px] flex items-center justify-center shrink-0 bg-white" contenteditable="true">1</span>
-                            <h3 class="text-[13px] font-black text-slate-800 uppercase tracking-tight leading-tight" contenteditable="true">Pescoço</h3>
+                            <div class="w-6 h-6 rounded-full border-2 theme-border theme-text font-black text-[11px] flex items-center justify-center shrink-0 bg-white" contenteditable="true">1</div>
+                            <div class="text-[13px] font-black text-slate-800 uppercase tracking-tight leading-tight" contenteditable="true">Pescoço</div>
                         </div>
                         
                         <div class="img-upload-area w-full h-[180px] theme-bg-light rounded-xl mb-1.5 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden transition-all duration-300 relative">
@@ -506,16 +505,16 @@
                             </div>
                         </div>
 
-                        <p class="text-[11px] text-slate-800 leading-snug font-medium mb-1 flex-1 text-justify" contenteditable="true"><strong>Como fazer:</strong> Incline a cabeça lentamente em direção ao ombro. Mantenha os ombros relaxados.</p>
+                        <div class="text-[11px] text-slate-800 leading-snug font-medium mb-1 flex-1 text-justify" contenteditable="true"><strong>Como fazer:</strong> Incline a cabeça lentamente em direção ao ombro. Mantenha os ombros relaxados.</div>
                         
                         <div class="bg-white p-1.5 rounded-lg shadow-sm border border-slate-200 mt-auto">
                             <div class="flex justify-between items-center border-b border-slate-100 pb-1">
-                                <span class="text-[10px] text-slate-500 font-bold uppercase tracking-wider" contenteditable="true">Séries:</span>
-                                <span class="font-black text-slate-800 text-xs" contenteditable="true">3 de 10x</span>
+                                <div class="text-[10px] text-slate-500 font-bold uppercase tracking-wider" contenteditable="true">Séries:</div>
+                                <div class="font-black text-slate-800 text-xs" contenteditable="true">3 de 10x</div>
                             </div>
                             <div class="flex justify-between items-center pt-1">
-                                <span class="text-[10px] text-slate-500 font-bold uppercase tracking-wider" contenteditable="true">Intervalo:</span>
-                                <span class="font-black text-slate-800 text-xs" contenteditable="true">45 segs</span>
+                                <div class="text-[10px] text-slate-500 font-bold uppercase tracking-wider" contenteditable="true">Intervalo:</div>
+                                <div class="font-black text-slate-800 text-xs" contenteditable="true">45 segs</div>
                             </div>
                         </div>
                     </div>
@@ -526,8 +525,8 @@
                 <div class="flex-1 flex flex-col justify-between transition-all" id="ex-container-2">
                     <div class="flex-1 flex flex-col">
                         <div class="flex items-center gap-1.5 mb-1.5">
-                            <span class="w-6 h-6 rounded-full border-2 theme-border theme-text font-black text-[11px] flex items-center justify-center shrink-0 bg-white" contenteditable="true">2</span>
-                            <h3 class="text-[13px] font-black text-slate-800 uppercase tracking-tight leading-tight" contenteditable="true">Girar Ombros</h3>
+                            <div class="w-6 h-6 rounded-full border-2 theme-border theme-text font-black text-[11px] flex items-center justify-center shrink-0 bg-white" contenteditable="true">2</div>
+                            <div class="text-[13px] font-black text-slate-800 uppercase tracking-tight leading-tight" contenteditable="true">Girar Ombros</div>
                         </div>
 
                         <div class="img-upload-area w-full h-[180px] theme-bg-light rounded-xl mb-1.5 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden transition-all duration-300 relative">
@@ -548,16 +547,16 @@
                             </div>
                         </div>
 
-                        <p class="text-[11px] text-slate-800 leading-snug font-medium mb-1 flex-1 text-justify" contenteditable="true"><strong>Como fazer:</strong> Faça movimentos circulares com os ombros para trás e depois para frente, suavemente.</p>
+                        <div class="text-[11px] text-slate-800 leading-snug font-medium mb-1 flex-1 text-justify" contenteditable="true"><strong>Como fazer:</strong> Faça movimentos circulares com os ombros para trás e depois para frente, suavemente.</div>
                         
                         <div class="bg-white p-1.5 rounded-lg shadow-sm border border-slate-200 mt-auto">
                             <div class="flex justify-between items-center border-b border-slate-100 pb-1">
-                                <span class="text-[10px] text-slate-500 font-bold uppercase tracking-wider" contenteditable="true">Séries:</span>
-                                <span class="font-black text-slate-800 text-xs" contenteditable="true">3 de 10x</span>
+                                <div class="text-[10px] text-slate-500 font-bold uppercase tracking-wider" contenteditable="true">Séries:</div>
+                                <div class="font-black text-slate-800 text-xs" contenteditable="true">3 de 10x</div>
                             </div>
                             <div class="flex justify-between items-center pt-1">
-                                <span class="text-[10px] text-slate-500 font-bold uppercase tracking-wider" contenteditable="true">Intervalo:</span>
-                                <span class="font-black text-slate-800 text-xs" contenteditable="true">45 segs</span>
+                                <div class="text-[10px] text-slate-500 font-bold uppercase tracking-wider" contenteditable="true">Intervalo:</div>
+                                <div class="font-black text-slate-800 text-xs" contenteditable="true">45 segs</div>
                             </div>
                         </div>
                     </div>
@@ -569,8 +568,8 @@
                 <div class="flex-1 flex flex-col justify-between transition-all" id="ex-container-3">
                     <div class="flex-1 flex flex-col">
                         <div class="flex items-center gap-1.5 mb-1.5">
-                            <span class="w-6 h-6 rounded-full border-2 theme-border theme-text font-black text-[11px] flex items-center justify-center shrink-0 bg-white" contenteditable="true">3</span>
-                            <h3 class="text-[13px] font-black text-slate-800 uppercase tracking-tight leading-tight" contenteditable="true">Sentar e Levantar</h3>
+                            <div class="w-6 h-6 rounded-full border-2 theme-border theme-text font-black text-[11px] flex items-center justify-center shrink-0 bg-white" contenteditable="true">3</div>
+                            <div class="text-[13px] font-black text-slate-800 uppercase tracking-tight leading-tight" contenteditable="true">Sentar e Levantar</div>
                         </div>
 
                         <div class="img-upload-area w-full h-[180px] theme-bg-light rounded-xl mb-1.5 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden transition-all duration-300 relative">
@@ -591,16 +590,16 @@
                             </div>
                         </div>
 
-                        <p class="text-[11px] text-slate-800 leading-snug font-medium mb-1 flex-1 text-justify" contenteditable="true"><strong>Como fazer:</strong> Cruze os braços à frente do peito. Suba e desça da cadeira devagar usando a força das pernas.</p>
+                        <div class="text-[11px] text-slate-800 leading-snug font-medium mb-1 flex-1 text-justify" contenteditable="true"><strong>Como fazer:</strong> Cruze os braços à frente do peito. Suba e desça da cadeira devagar usando a força das pernas.</div>
                         
                         <div class="bg-white p-1.5 rounded-lg shadow-sm border border-slate-200 mt-auto">
                             <div class="flex justify-between items-center border-b border-slate-100 pb-1">
-                                <span class="text-[10px] text-slate-500 font-bold uppercase tracking-wider" contenteditable="true">Séries:</span>
-                                <span class="font-black text-slate-800 text-xs" contenteditable="true">3 de 10x</span>
+                                <div class="text-[10px] text-slate-500 font-bold uppercase tracking-wider" contenteditable="true">Séries:</div>
+                                <div class="font-black text-slate-800 text-xs" contenteditable="true">3 de 10x</div>
                             </div>
                             <div class="flex justify-between items-center pt-1">
-                                <span class="text-[10px] text-slate-500 font-bold uppercase tracking-wider" contenteditable="true">Intervalo:</span>
-                                <span class="font-black text-slate-800 text-xs" contenteditable="true">45 segs</span>
+                                <div class="text-[10px] text-slate-500 font-bold uppercase tracking-wider" contenteditable="true">Intervalo:</div>
+                                <div class="font-black text-slate-800 text-xs" contenteditable="true">45 segs</div>
                             </div>
                         </div>
                     </div>
@@ -611,8 +610,8 @@
                 <div class="flex-1 flex flex-col justify-between transition-all" id="ex-container-4">
                     <div class="flex-1 flex flex-col">
                         <div class="flex items-center gap-1.5 mb-1.5">
-                            <span class="w-6 h-6 rounded-full border-2 theme-border theme-text font-black text-[11px] flex items-center justify-center shrink-0 bg-white" contenteditable="true">4</span>
-                            <h3 class="text-[13px] font-black text-slate-800 uppercase tracking-tight leading-tight" contenteditable="true">Esticar o Joelho</h3>
+                            <div class="w-6 h-6 rounded-full border-2 theme-border theme-text font-black text-[11px] flex items-center justify-center shrink-0 bg-white" contenteditable="true">4</div>
+                            <div class="text-[13px] font-black text-slate-800 uppercase tracking-tight leading-tight" contenteditable="true">Esticar o Joelho</div>
                         </div>
 
                         <div class="img-upload-area w-full h-[180px] theme-bg-light rounded-xl mb-1.5 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden transition-all duration-300 relative">
@@ -633,16 +632,16 @@
                             </div>
                         </div>
 
-                        <p class="text-[11px] text-slate-800 leading-snug font-medium mb-1 flex-1 text-justify" contenteditable="true"><strong>Como fazer:</strong> Sentado, estique uma perna até o joelho ficar reto. Segure e desça devagar.</p>
+                        <div class="text-[11px] text-slate-800 leading-snug font-medium mb-1 flex-1 text-justify" contenteditable="true"><strong>Como fazer:</strong> Sentado, estique uma perna até o joelho ficar reto. Segure e desça devagar.</div>
                         
                         <div class="bg-white p-1.5 rounded-lg shadow-sm border border-slate-200 mt-auto">
                             <div class="flex justify-between items-center border-b border-slate-100 pb-1">
-                                <span class="text-[10px] text-slate-500 font-bold uppercase tracking-wider" contenteditable="true">Séries:</span>
-                                <span class="font-black text-slate-800 text-xs" contenteditable="true">3 de 10x</span>
+                                <div class="text-[10px] text-slate-500 font-bold uppercase tracking-wider" contenteditable="true">Séries:</div>
+                                <div class="font-black text-slate-800 text-xs" contenteditable="true">3 de 10x</div>
                             </div>
                             <div class="flex justify-between items-center pt-1">
-                                <span class="text-[10px] text-slate-500 font-bold uppercase tracking-wider" contenteditable="true">Intervalo:</span>
-                                <span class="font-black text-slate-800 text-xs" contenteditable="true">45 segs</span>
+                                <div class="text-[10px] text-slate-500 font-bold uppercase tracking-wider" contenteditable="true">Intervalo:</div>
+                                <div class="font-black text-slate-800 text-xs" contenteditable="true">45 segs</div>
                             </div>
                         </div>
                     </div>
@@ -654,8 +653,8 @@
                 <div class="flex-1 flex flex-col justify-between transition-all" id="ex-container-5">
                     <div class="flex-1 flex flex-col">
                         <div class="flex items-center gap-1.5 mb-1.5">
-                            <span class="w-6 h-6 rounded-full border-2 theme-border theme-text font-black text-[11px] flex items-center justify-center shrink-0 bg-white" contenteditable="true">5</span>
-                            <h3 class="text-[13px] font-black text-slate-800 uppercase tracking-tight leading-tight" contenteditable="true">Panturrilha</h3>
+                            <div class="w-6 h-6 rounded-full border-2 theme-border theme-text font-black text-[11px] flex items-center justify-center shrink-0 bg-white" contenteditable="true">5</div>
+                            <div class="text-[13px] font-black text-slate-800 uppercase tracking-tight leading-tight" contenteditable="true">Panturrilha</div>
                         </div>
 
                         <div class="img-upload-area w-full h-[180px] theme-bg-light rounded-xl mb-1.5 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden transition-all duration-300 relative">
@@ -676,16 +675,16 @@
                             </div>
                         </div>
 
-                        <p class="text-[11px] text-slate-800 leading-snug font-medium mb-1 flex-1 text-justify" contenteditable="true"><strong>Como fazer:</strong> Perto da parede para apoio, fique na ponta dos pés o máximo que conseguir e desça o calcanhar.</p>
+                        <div class="text-[11px] text-slate-800 leading-snug font-medium mb-1 flex-1 text-justify" contenteditable="true"><strong>Como fazer:</strong> Perto da parede para apoio, fique na ponta dos pés o máximo que conseguir e desça o calcanhar.</div>
                         
                         <div class="bg-white p-1.5 rounded-lg shadow-sm border border-slate-200 mt-auto">
                             <div class="flex justify-between items-center border-b border-slate-100 pb-1">
-                                <span class="text-[10px] text-slate-500 font-bold uppercase tracking-wider" contenteditable="true">Séries:</span>
-                                <span class="font-black text-slate-800 text-xs" contenteditable="true">3 de 10x</span>
+                                <div class="text-[10px] text-slate-500 font-bold uppercase tracking-wider" contenteditable="true">Séries:</div>
+                                <div class="font-black text-slate-800 text-xs" contenteditable="true">3 de 10x</div>
                             </div>
                             <div class="flex justify-between items-center pt-1">
-                                <span class="text-[10px] text-slate-500 font-bold uppercase tracking-wider" contenteditable="true">Intervalo:</span>
-                                <span class="font-black text-slate-800 text-xs" contenteditable="true">45 segs</span>
+                                <div class="text-[10px] text-slate-500 font-bold uppercase tracking-wider" contenteditable="true">Intervalo:</div>
+                                <div class="font-black text-slate-800 text-xs" contenteditable="true">45 segs</div>
                             </div>
                         </div>
                     </div>
@@ -696,8 +695,8 @@
                 <div class="flex-1 flex flex-col justify-between transition-all" id="ex-container-6">
                     <div class="flex-1 flex flex-col">
                         <div class="flex items-center gap-1.5 mb-1.5">
-                            <span class="w-6 h-6 rounded-full border-2 theme-border theme-text font-black text-[11px] flex items-center justify-center shrink-0 bg-white" contenteditable="true">6</span>
-                            <h3 class="text-[13px] font-black text-slate-800 uppercase tracking-tight leading-tight" contenteditable="true">Caminhada Lateral</h3>
+                            <div class="w-6 h-6 rounded-full border-2 theme-border theme-text font-black text-[11px] flex items-center justify-center shrink-0 bg-white" contenteditable="true">6</div>
+                            <div class="text-[13px] font-black text-slate-800 uppercase tracking-tight leading-tight" contenteditable="true">Caminhada Lateral</div>
                         </div>
 
                         <div class="img-upload-area w-full h-[180px] theme-bg-light rounded-xl mb-1.5 flex items-center justify-center border border-dashed border-slate-300 group overflow-hidden transition-all duration-300 relative">
@@ -718,16 +717,16 @@
                             </div>
                         </div>
 
-                        <p class="text-[11px] text-slate-800 leading-snug font-medium mb-1 flex-1 text-justify" contenteditable="true"><strong>Como fazer:</strong> Apoiando as mãos na beirada de uma mesa ou balcão, dê passos para a lateral.</p>
+                        <div class="text-[11px] text-slate-800 leading-snug font-medium mb-1 flex-1 text-justify" contenteditable="true"><strong>Como fazer:</strong> Apoiando as mãos na beirada de uma mesa ou balcão, dê passos para a lateral.</div>
                         
                         <div class="bg-white p-1.5 rounded-lg shadow-sm border border-slate-200 mt-auto">
                             <div class="flex justify-between items-center border-b border-slate-100 pb-1">
-                                <span class="text-[10px] text-slate-500 font-bold uppercase tracking-wider" contenteditable="true">Séries:</span>
-                                <span class="font-black text-slate-800 text-xs" contenteditable="true">3 de 10x</span>
+                                <div class="text-[10px] text-slate-500 font-bold uppercase tracking-wider" contenteditable="true">Séries:</div>
+                                <div class="font-black text-slate-800 text-xs" contenteditable="true">3 de 10x</div>
                             </div>
                             <div class="flex justify-between items-center pt-1">
-                                <span class="text-[10px] text-slate-500 font-bold uppercase tracking-wider" contenteditable="true">Intervalo:</span>
-                                <span class="font-black text-slate-800 text-xs" contenteditable="true">45 segs</span>
+                                <div class="text-[10px] text-slate-500 font-bold uppercase tracking-wider" contenteditable="true">Intervalo:</div>
+                                <div class="font-black text-slate-800 text-xs" contenteditable="true">45 segs</div>
                             </div>
                         </div>
                     </div>
@@ -1001,13 +1000,29 @@
             window.marcarAlteracao();
         }
 
+        // LÓGICA DE IMPRESSÃO BLINDADA (Força a exibição das duas abas antes do PDF ser gerado)
         function abrirImpressao() { 
-            try { 
-                window.print(); 
-                setTimeout(() => { if(window.innerWidth < 1024) mostrarModalPrint(); }, 800); 
-            } catch(e) { 
-                mostrarModalPrint(); 
-            } 
+            const pagExt = document.getElementById('pagina-externa');
+            const pagInt = document.getElementById('pagina-interna');
+            
+            const extWasHidden = pagExt.classList.contains('hidden');
+            const intWasHidden = pagInt.classList.contains('hidden');
+            
+            pagExt.classList.remove('hidden');
+            pagInt.classList.remove('hidden');
+
+            setTimeout(() => {
+                try { 
+                    window.print(); 
+                } catch(e) { 
+                    console.error("Erro na impressão:", e);
+                } finally {
+                    if(extWasHidden) pagExt.classList.add('hidden');
+                    if(intWasHidden) pagInt.classList.add('hidden');
+                    
+                    if(window.innerWidth < 1024) mostrarModalPrint(); 
+                }
+            }, 100); 
         }
         
         function mostrarModalPrint() {
@@ -1031,8 +1046,8 @@
             const novaDica = document.createElement('div');
             novaDica.className = 'flex gap-2.5 items-start group relative';
             novaDica.innerHTML = `
-                <span class="text-emerald-500 font-black text-sm mt-0.5" contenteditable="true">✓</span>
-                <p class="text-xs text-slate-600 leading-relaxed w-full pr-4 text-justify font-medium" contenteditable="true"><strong>Nova Dica:</strong> Edite este texto livremente.</p>
+                <div class="text-emerald-500 font-black text-sm mt-0.5" contenteditable="true">✓</div>
+                <div class="text-xs text-slate-600 leading-relaxed w-full pr-4 text-justify font-medium" contenteditable="true"><strong>Nova Dica:</strong> Edite este texto livremente.</div>
                 <button onclick="this.parentElement.remove(); window.marcarAlteracao && window.marcarAlteracao();" class="delete-btn no-print hidden group-hover:flex absolute right-0 top-0 text-red-500 hover:text-red-700 text-xs font-black p-1" title="Apagar Dica">✖</button>
             `;
             lista.appendChild(novaDica);
@@ -1269,7 +1284,6 @@
             if (!folderName) {
                 alert("⚠️ Por favor, digite o NOME DO PACIENTE no menu antes de salvar!");
                 
-                // Se o menu estiver fechado, ele abre sozinho para mostrar o input de nome
                 const sidebar = document.getElementById('sidebar-menu');
                 if (sidebar.classList.contains('sidebar-collapsed')) {
                     toggleSidebar();
